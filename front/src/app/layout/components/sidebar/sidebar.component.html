@@ -28,6 +28,10 @@
       <i class="fa fa-th-list"></i>&nbsp;{{ 'Reservations' | translate }}
     </a>
 
+    <a [routerLink]="['/history-page']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isLoggedIn">
+      <i class="fa fa-th-list"></i>&nbsp;{{ 'History' | translate }}
+    </a>
+
     <a [routerLink]="['/admin-users-page']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isAdmin">
       <i class="fa fa-th-list"></i>&nbsp;{{ 'Users' | translate }}
     </a>

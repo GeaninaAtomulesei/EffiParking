@@ -1,9 +1,6 @@
 package com.res.efp.rest;
 
-import com.res.efp.domain.model.Notification;
-import com.res.efp.domain.model.Owner;
-import com.res.efp.domain.model.User;
-import com.res.efp.domain.model.UserRequest;
+import com.res.efp.domain.model.*;
 import com.res.efp.exception.ResourceConflictException;
 import com.res.efp.service.NotificationService;
 import com.res.efp.service.OwnerService;
@@ -181,6 +178,15 @@ public class UserController {
     public ResponseEntity<?> searchByTerm(@RequestParam(value = "term") String term) {
         List<User> foundUsers = userService.findByTerm(term);
         return ResponseEntity.ok(foundUsers);
+    }
+
+    @RequestMapping(value = "/users/getHistory", method = RequestMethod.GET)
+    public ResponseEntity<?> getHistory(@RequestParam(value = "userId") Long userId) {
+        if(userService.findById(userId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+        List<HistoryObject> history = userService.getHistory(userId);
+        return ResponseEntity.ok(history);
     }
 }
 

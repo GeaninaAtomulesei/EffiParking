@@ -11,6 +11,7 @@ const routes: Routes = [
       { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
       { path: 'owner-page', loadChildren: './owner-page/owner-page.module#OwnerPageModule' },
       { path: 'reservations-page', loadChildren: './reservations-page/reservations-page.module#ReservationsPageModule'},
+      { path: 'history-page', loadChildren: './history-page/history-page.module#HistoryPageModule'},
       { path: 'admin-users-page', loadChildren: './admin-users-page/admin-users-page.module#AdminUsersPageModule'},
       { path: 'admin-parkings', loadChildren: './admin-parkings/admin-parkings.module#AdminParkingsModule'},
       { path: 'admin-requests', loadChildren: './admin-requests/admin-requests.module#AdminRequestsModule'},

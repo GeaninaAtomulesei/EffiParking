@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -41,11 +42,11 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Reservation addReservation(Reservation reservation, User user, Parking parking) {
         LocalDateTime currentDate = LocalDateTime.now();
-        if(reservation.getStartDate().isBefore(currentDate)) {
+        if (reservation.getStartDate().isBefore(currentDate)) {
             return null;
         }
         List<Lot> availableLots = lotRepository.findNotReservedLotsPerParking(parking.getId());
-        if((availableLots != null) || (!availableLots.isEmpty())){
+        if ((availableLots != null) || (!availableLots.isEmpty())) {
             Lot lot = availableLots.get(0);
             reservation.setLot(lot);
             lot.getReservations().add(reservation);
@@ -53,10 +54,11 @@ public class ReservationServiceImpl implements ReservationService {
             lotRepository.save(lot);
         } else {
             List<Lot> allLots = lotRepository.findAll();
-            for(Lot lot : allLots) {
+            for (Lot lot : allLots) {
                 List<Reservation> reservations = lot.getReservations();
-                for(Reservation res : reservations ) {
-                    if(reservation.getStartDate().isBefore(res.getEndDate()) && (reservation.getEndDate().isAfter(res.getStartDate()))) {
+                for (Reservation res : reservations) {
+                    if (reservation.getStartDate().isBefore(res.getEndDate()) && (reservation.getEndDate()
+                            .isAfter(res.getStartDate()))) {
                         reservation.setLot(lot);
                         lot.getReservations().add(reservation);
                         lotRepository.save(lot);
@@ -73,6 +75,23 @@ public class ReservationServiceImpl implements ReservationService {
         parking.getReservations().add(reservation);
         reservationRepository.save(reservation);
         parkingRepository.save(parking);
+
+        HistoryObject historyObject = new HistoryObject();
+        historyObject.setDate(LocalDate.now());
+        historyObject.setParkingAreaId(parking.getId());
+        historyObject.setParkingAreaName(parking.getName());
+        historyObject.setParkingAreaLocation(
+                parking.getLocationName() + ", " + parking.getStreet() + " " + parking.getNumber());
+        historyObject.setParkingAreaCity(parking.getCity());
+
+        for (HistoryObject object : user.getHistory()) {
+            if ((object.getParkingAreaName().equals(historyObject.getParkingAreaName())) &&
+                    (object.getParkingAreaLocation().equals(historyObject.getParkingAreaLocation()))) {
+                return reservation;
+            }
+        }
+        user.getHistory().add(historyObject);
+        userRepository.save(user);
         return reservation;
     }
 
@@ -86,11 +105,11 @@ public class ReservationServiceImpl implements ReservationService {
         List<Reservation> reservations = reservationRepository.findByParkingId(id);
         List<Reservation> actualReservations = new ArrayList<>();
 
-        for(Reservation reservation : reservations) {
+        for (Reservation reservation : reservations) {
             LocalDateTime reservationDate = reservation.getEndDate();
             LocalDateTime currentDate = LocalDateTime.now();
 
-            if(reservationDate.getDayOfYear() == currentDate.getDayOfYear()) {
+            if (reservationDate.getDayOfYear() == currentDate.getDayOfYear()) {
                 actualReservations.add(reservation);
             }
         }
@@ -112,10 +131,10 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Reservation updateReservation(Reservation reservation) {
         Reservation currentReservation = reservationRepository.findOne(reservation.getId());
-        if(reservation.getStartDate() != null) {
+        if (reservation.getStartDate() != null) {
             currentReservation.setStartDate(reservation.getStartDate());
         }
-        if(reservation.getEndDate() != null) {
+        if (reservation.getEndDate() != null) {
             currentReservation.setEndDate(reservation.getEndDate());
         }
         return reservationRepository.save(currentReservation);
@@ -129,8 +148,9 @@ public class ReservationServiceImpl implements ReservationService {
         List<Employee> employees = parking.getEmployees();
         Notification notification = new Notification();
         notification.setDate(LocalDateTime.now());
-        notification.setMessage("User " + user.getFirstName() + " " + user.getLastName() + " cancelled their reservation " +
-                "for parking area: " + parking.getName() + ", lot number: " + reservation.getLot().getNumber());
+        notification.setMessage(
+                "User " + user.getFirstName() + " " + user.getLastName() + " cancelled their reservation " +
+                        "for parking area: " + parking.getName() + ", lot number: " + reservation.getLot().getNumber());
 
         Lot lot = reservation.getLot();
         reservation.setUser(null);
@@ -143,7 +163,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.delete(reservation);
 
         notificationService.saveNotification(notification);
-        for(Employee employee : employees) {
+        for (Employee employee : employees) {
             notificationService.pushNotification(notification, employee.getId());
         }
     }
@@ -153,14 +173,14 @@ public class ReservationServiceImpl implements ReservationService {
         List<Reservation> totalReservations = reservationRepository.findByUser(name);
         List<Reservation> currentParkingReservations = new ArrayList<>();
 
-        for(Reservation reservation : totalReservations) {
-            if(reservation.getParking().getId().equals(parkingId)) {
+        for (Reservation reservation : totalReservations) {
+            if (reservation.getParking().getId().equals(parkingId)) {
                 currentParkingReservations.add(reservation);
             }
         }
         List<Reservation> actualReservations = new ArrayList<>();
         for (Reservation reservation : currentParkingReservations) {
-            if(!reservation.getEndDate().isBefore(LocalDateTime.now()) ||
+            if (!reservation.getEndDate().isBefore(LocalDateTime.now()) ||
                     (reservation.getEndDate().getDayOfYear() == LocalDateTime.now().getDayOfYear())) {
                 actualReservations.add(reservation);
             }

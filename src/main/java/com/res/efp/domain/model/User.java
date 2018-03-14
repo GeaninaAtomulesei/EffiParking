@@ -44,6 +44,11 @@ public class User implements UserDetails, Serializable {
     @JsonIgnore
     private List<Notification> notifications = new ArrayList<>();
 
+    @ElementCollection
+    @Column(length = 100000)
+    @JsonIgnore
+    private List<HistoryObject> history = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
@@ -117,6 +122,14 @@ public class User implements UserDetails, Serializable {
 
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
+    }
+
+    public List<HistoryObject> getHistory() {
+        return history;
+    }
+
+    public void setHistory(List<HistoryObject> history) {
+        this.history = history;
     }
 
     @JsonIgnore

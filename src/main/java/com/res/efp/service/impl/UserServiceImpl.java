@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -149,5 +150,12 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public List<HistoryObject> getHistory(Long userId) {
+        List<HistoryObject> history =  userRepository.findOne(userId).getHistory();
+        Collections.reverse(history);
+        return history;
     }
 }

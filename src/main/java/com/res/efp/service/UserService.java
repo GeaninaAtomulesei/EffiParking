@@ -1,5 +1,6 @@
 package com.res.efp.service;
 
+import com.res.efp.domain.model.HistoryObject;
 import com.res.efp.domain.model.User;
 import com.res.efp.domain.model.UserRequest;
 
@@ -18,4 +19,5 @@ public interface UserService {
     void resetCredentials();
     List<User> findAllAdmins();
     boolean deleteUser(Long userId);
+    List<HistoryObject> getHistory(Long userId);
 }

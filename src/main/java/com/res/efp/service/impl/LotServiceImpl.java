@@ -79,14 +79,14 @@ public class LotServiceImpl implements LotService {
 
         List<Lot> addedLots = new ArrayList<>();
         for(int i = lastLotNumber; i < numberOfLots + lastLotNumber; i++) {
-            Lot lot = new Lot();
-            lotRepository.save(lot);
-            lot.setNumber(i + 1);
-            lot.setParking(parking);
-            lot.setVacant(true);
-            lot.setReserved(false);
-            lotRepository.save(lot);
-            addedLots.add(lot);
+            Lot addedLot = new Lot();
+            lotRepository.save(addedLot);
+            addedLot.setNumber(i + 1);
+            addedLot.setParking(parking);
+            addedLot.setVacant(true);
+            addedLot.setReserved(false);
+            lotRepository.save(addedLot);
+            addedLots.add(addedLot);
         }
 
         parking.getLots().addAll(addedLots);

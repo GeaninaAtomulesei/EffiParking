@@ -144,4 +144,11 @@ export class UserService {
         return res;
       })
   }
+
+  getHistory(userId) {
+    return this.apiService.get(this.config.get_history_url + "?userId=" + userId)
+      .map(res => {
+        return res;
+      });
+  }
 }

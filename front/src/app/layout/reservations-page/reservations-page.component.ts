@@ -22,8 +22,6 @@ export class ReservationsPageComponent implements OnInit {
   text: string;
   cancelResTrigger = false;
 
-  //TODO: cancel reservation -> notify employees
-
   constructor(private parkingService: ParkingService,
               private modalService: NgbModal) {
   }

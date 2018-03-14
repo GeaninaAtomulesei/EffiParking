@@ -1,0 +1,40 @@
+<div [@routerTransition]>
+  <app-page-header [heading]="'Parking History'" [icon]="'fa-desktop'"></app-page-header>
+
+  <div class="jumbotron" style="background-color: #222">
+
+    <p *ngIf="history && history.length < 1" style="color:#999">No history.</p>
+    <div class="card mb-3" style="background-color: #343a40 !important; color: #999;" *ngIf="history && history.length > 0">
+      <div class="card-header" style="background-color: #343a40 !important; color: #999; text-align: center;font-size: larger;font-weight: 900;">
+        Parking History
+      </div>
+      <table class="card-body table table-hover">
+        <thead>
+        <tr>
+          <th>Date</th>
+          <th>Parking Area Name</th>
+          <th>Location</th>
+          <th>City</th>
+          <th></th>
+          <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let parking of history">
+          <th scope="row">{{parking.date}}</th>
+          <th scope="row">{{parking.parkingAreaName}}</th>
+          <td>{{parking.parkingAreaLocation}}</td>
+          <td>{{parking.parkingAreaCity}}</td>
+          <td>
+            <button class="btn btn-secondary" [routerLink]="['/parking-page', parking.parkingAreaId]" style="color:#999; background-color: black">View
+            </button>
+          </td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
