@@ -1,0 +1,81 @@
+<div [@routerTransition]>
+  <div class="row">
+    <div class="col-md-12">
+      <ngb-carousel>
+        <ng-template ngbSlide *ngFor="let slider of sliders">
+          <img class="img-fluid mx-auto d-block" [src]="slider.imagePath" alt="Random first slide" width="100%">
+          <div class="carousel-caption">
+            <h3>{{slider.label}}</h3>
+            <p>{{slider.text}}</p>
+          </div>
+        </ng-template>
+      </ngb-carousel>
+    </div>
+  </div>
+  <hr>
+
+  <div class="jumbotron" style="background-color: #222">
+    <h1 style="color: #999">Search for a parking area nearby!</h1>
+    <p style="color: #999">
+      Press search in order to see all the parking areas with available parking lots found near your location! They will
+      be shown in the order of the closest one to your current coordinates.
+    </p>
+    <p>
+      <a (click)="search()" class="btn btn-primary btn-lg" role="button" style="background-color: #999">Search »</a>
+    </p>
+    <br>
+    <br>
+    <div class="row" *ngIf="closestParkingAreas">
+      <div class="col-sm-4" *ngFor="let parking of closestParkingAreas">
+        <div class="card text-white bg-dark mb-3">
+          <div class="card-header" style="color: #999">EffiParking</div>
+          <div class="card-body">
+            <a [routerLink]="['/parking-page', parking.id]">
+              <h4 class="card-title">Name: {{parking.name}}</h4>
+              <p class="card-text">Location : {{parking.locationName}}, {{parking.street}} {{parking.number}}, {{parking.city}}</p>
+              <p class="card-text">Total number of lots: {{parking.totalLots}}</p>
+              <p class="card-text">Available number of lots: {{parking.availableLots}}</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ngb-alert *ngIf="error" [type]="'danger'" (close)="closeAlert()">{{ error }}</ngb-alert>
+  </div>
+
+  <div class="jumbotron" style="background-color: #222">
+    <h1 style="color: #999">Register as an owner</h1>
+    <p style="color: #999">
+      Enter your organisation and press Submit in order to make a request to register as an Owner. As soon as one of our
+      administrators receives your request and approves it, you will receive an e-mail of confirmation and you will be
+      able to access the owners menu.
+    </p>
+
+    <form [formGroup]="ownerForm" (ngSubmit)="ownerReqSubmit()">
+      <div class="form-content">
+        <div class="form-group">
+          <fieldset class="form-group">
+            <input class="form-control" formControlName="organisation" placeholder="Organisation" style="width: 35%">
+          </fieldset>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg" style="background-color: #999; color:black" [disabled]="!ownerForm.valid">Submit</button>
+    </form>
+  </div>
+
+  <div id="modalCont" (click)="open(content)"></div>
+  <ng-template #content let-c="close" let-d="dismiss" id="content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{title}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{text}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+</div>

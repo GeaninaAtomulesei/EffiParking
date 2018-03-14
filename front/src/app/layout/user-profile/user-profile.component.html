@@ -1,0 +1,114 @@
+<div [@routerTransition]>
+  <app-page-header *ngIf="user" [heading]="user.firstName + ' ' + ' ' + user.lastName" [subheading]="role"
+                   [icon]="'fa-desktop'"></app-page-header>
+
+  <div class="jumbotron" style="background-color: #222">
+
+    <div class="row" *ngIf="user">
+      <div class="col col-xl-8 col-lg-12">
+        <div class="card mb-3" style="background-color: #343a40 !important; color: #999; border-color:white">
+          <div class="card-header"
+               style="background-color: #343a40 !important; color: #999; text-align: center;font-size: larger;font-weight: 900;">
+            Information
+          </div>
+          <table class="card-body table table-bordered" style="margin-bottom: 0">
+            <thead>
+            <tr>
+              <th>First Name</th>
+              <th style="width: 70%">{{user.firstName}}</th>
+            </tr>
+            <tr>
+              <th>Last Name</th>
+              <th>{{user.lastName}}</th>
+            </tr>
+            <tr>
+              <th>Username</th>
+              <th>{{user.username}}</th>
+            </tr>
+            <tr>
+              <th>E-mail</th>
+              <th>{{user.email}}</th>
+            </tr>
+            <tr *ngIf="role=='Owner'">
+              <th>Organisation</th>
+              <th>{{user.organisation}}</th>
+            </tr>
+            <tr *ngIf="role=='Owner'">
+              <th>Owned parking areas</th>
+              <th *ngIf="ownedParkingAreas && ownedParkingAreas.length > 0">
+                <a *ngFor="let parking of ownedParkingAreas"[routerLink]="['/parking-page', parking.id]">{{parking.name}}</a>
+              </th>
+              <th *ngIf="ownedParkingAreas && ownedParkingAreas.length < 1">
+                <p>None</p>
+              </th>
+            </tr>
+
+            <tr *ngIf="role=='Employee'">
+              <th>Employer</th>
+              <th>{{user.owner.firstName}} {{user.owner.lastName}}</th>
+            </tr>
+
+            <tr *ngIf="role=='Employee'">
+              <th>Organisation</th>
+              <th>{{user.owner.organisation}}</th>
+            </tr>
+
+            <tr *ngIf="role=='Employee'">
+              <th>Managed parking areas</th>
+              <th *ngIf="assignedParkingAreas && assignedParkingAreas.length > 0">
+                <a *ngFor="let parking of assignedParkingAreas"[routerLink]="['/parking-page', parking.id]">{{parking.name}}</a>
+              </th>
+              <th *ngIf="assignedParkingAreas && assignedParkingAreas.length < 1">
+                <p>None</p>
+              </th>
+            </tr>
+
+            </thead>
+          </table>
+        </div>
+      </div>
+
+      <div class="col col-xl-4 col-lg-8">
+        <img class="img-thumbnail" src="http://placehold.it/400x400" alt="">
+      </div>
+
+    </div>
+    <a class="btn btn-danger btn-lg" role="button" style="color:black" *ngIf="isAdmin" (click)="onDeleteUser()">Delete Account</a>
+  </div>
+
+
+  <div id="modalCont" (click)="open(content)"></div>
+  <ng-template #content let-c="close" let-d="dismiss" id="content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{title}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{text}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('OK')">OK</button>
+    </div>
+  </ng-template>
+
+  <div id="modalContDel" (click)="open2(contentDel)"></div>
+  <ng-template #contentDel let-c="close" let-d="dismiss" id="contentDel">
+    <div class="modal-header">
+      <h4 class="modal-title">{{title}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{text}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('Y')">Yes</button>
+      <button type="button" class="btn btn-secondary" (click)="c('N')">No</button>
+    </div>
+  </ng-template>
+
+
+</div>

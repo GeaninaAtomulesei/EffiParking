@@ -1,0 +1,129 @@
+<div [@routerTransition]>
+  <app-page-header *ngIf="parking" [heading]="parking.name" [icon]="'fa-desktop'"></app-page-header>
+
+  <div class="jumbotron" style="background-color: #222" *ngIf="parking">
+    <p style="color: #999; font-size: large">Total lots : {{parking.totalLots}} </p>
+    <p style="color: #999; font-size: large"> Available lots : {{parking.availableLots}}</p>
+    <p style="color: #999; font-size: large"> Owner : {{parking.owner.firstName}} {{parking.owner.lastName}}</p>
+
+    <br>
+
+    <div class="row" style="text-align: center; margin: auto">
+      <input class="form-control" placeholder="Name" style="width: 47%" [(ngModel)]="username">
+      &nbsp; &nbsp;
+      <button type="submit" class="btn btn-primary btn-lg" style="background-color: #999; color:black"
+              (click)="searchReservation()">Search Reservation
+      </button>
+    </div>
+
+    <br>
+
+    <button type="submit" class="btn btn-primary btn-lg" style="background-color: #999; color:black"
+            (click)="showTodayReservations()">Show Today's Reservations
+    </button>
+
+    <br><br>
+
+    <div class="page-header" *ngIf="todayResTrigger">
+      <h1 style="font-size: xx-large; color:#999">Today's Reservations</h1>
+      <hr>
+    </div>
+    <div class="row" *ngIf="todayResTrigger && todayReservations && todayReservations.length > 0">
+      <div class="col-sm-4" *ngFor="let reservation of todayReservations">
+        <div class="card text-white bg-dark mb-3">
+          <div class="card-header">Reservation</div>
+          <div class="card-body">
+            <p class="card-text">Name : {{reservation.user.firstName}} {{reservation.user.lastName}}</p>
+            <p class="card-text">Arrive : {{reservation.startDate.replace("T", " : ")}}</p>
+            <p class="card-text">Leave : {{reservation.endDate.replace("T", " : ")}}</p>
+            <p class="card-text">Lot number : {{reservation.lot.number}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p *ngIf="todayResTrigger && todayReservations && todayReservations.length < 1" style="color: #999">No reservations
+      yet for today.</p>
+
+    <br>
+
+    <div class="page-header" *ngIf="foundReservations && foundReservations.length > 0 && foundReservationsTrigger">
+      <h1 style="font-size: xx-large; color:#999">Found Reservations</h1>
+      <hr>
+    </div>
+
+    <div class="row" *ngIf="foundReservations && foundReservations.length > 0 && foundReservationsTrigger">
+      <div class="col-sm-4" *ngFor="let reservation of foundReservations">
+        <div class="card text-white bg-dark mb-3">
+          <div class="card-header">Reservation</div>
+          <div class="card-body">
+            <p class="card-text">Name : {{reservation.user.firstName}} {{reservation.user.lastName}}</p>
+            <p class="card-text">Arrive : {{reservation.startDate.replace("T", " : ")}}</p>
+            <p class="card-text">Leave : {{reservation.endDate.replace("T", " : ")}}</p>
+            <p class="card-text">Lot number : {{reservation.lot.number}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <p *ngIf="foundReservations && foundReservations.length < 1 && foundReservationsTrigger" style="color:#999;">No
+      reservations found by this name.</p>
+    <br>
+    <br>
+
+    <div class="card mb-3" *ngIf="parking && parking.lots && parking.lots.length > 0"
+         style="background-color: #343a40 !important; color: #999;">
+
+      <div class="card-header" style="background-color: #343a40 !important; color: #999; text-align: center">Parking
+        Lots
+      </div>
+      <table class="card-body table table-hover">
+        <thead>
+        <tr>
+          <th>Number</th>
+          <th>Reserved</th>
+          <th>Vacant</th>
+          <th></th>
+          <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let lot of parking.lots">
+          <th scope="row">{{lot.number}}</th>
+          <td>{{lot.reserved ? "Yes" : "No"}}</td>
+          <td>{{lot.vacant ? "Yes" : "No"}}</td>
+          <td>
+            <button class="btn btn-secondary" style="color:#999; background-color: black" [disabled]="!lot.vacant"
+                    (click)="setLotOccupied(lot.id)">Set occupied
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-secondary" style="color:#999; background-color: black" [disabled]="lot.vacant"
+                    (click)="setLotVacant(lot.id)">Set vacant
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <br>
+  </div>
+
+
+  <div id="modalCont" (click)="open(content)"></div>
+  <ng-template #content let-c="close" let-d="dismiss" id="content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{title}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{text}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('OK')">OK</button>
+    </div>
+  </ng-template>
+</div>

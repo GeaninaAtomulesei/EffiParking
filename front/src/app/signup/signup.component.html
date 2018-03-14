@@ -1,0 +1,56 @@
+<div class="login-page" [@routerTransition]>
+  <div class="row justify-content-md-center">
+    <div class="col-md-4">
+      <img class="user-avatar" src="assets/images/logo.png" width="150px"/>
+      <h1>EffiParking</h1>
+      <p [class]="notification.msgType" *ngIf="notification">{{notification.msgBody}}</p>
+      <form *ngIf="!submitted" [formGroup]="signUpForm" (ngSubmit)="onSubmit()" #regForm="ngForm">
+        <div class="form-content">
+          <div class="form-group">
+            <input type="text" class="form-control input-underline input-lg" formControlName="firstName"
+                   placeholder="First Name">
+          </div>
+
+          <div class="form-group">
+            <input type="text" class="form-control input-underline input-lg" formControlName="lastName"
+                   placeholder="Last Name">
+          </div>
+
+          <div class="form-group">
+            <input type="text" class="form-control input-underline input-lg" formControlName="username"
+                   placeholder="Username">
+          </div>
+
+          <div class="form-group">
+            <input type="password" class="form-control input-underline input-lg" formControlName="password"
+                   placeholder="Password">
+          </div>
+
+          <div class="form-group">
+            <input type="text" class="form-control input-underline input-lg" formControlName="email"
+                   placeholder="Email">
+          </div>
+        </div>
+        <button class="btn rounded-btn" type="submit" [disabled]="!signUpForm.valid"> Register</button>
+        &nbsp;
+        <a class="btn rounded-btn" [routerLink]="['/login']"> Log in </a>
+      </form>
+    </div>
+  </div>
+
+  <div id="modalCont" (click)="open(content)"></div>
+  <ng-template #content let-c="close" let-d="dismiss" id="content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{modalTitle}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{text}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,98 @@
+<div [@routerTransition]>
+  <app-page-header [heading]="'Reservations'" [icon]="'fa-desktop'"></app-page-header>
+
+  <div class="jumbotron" style="background-color: #222">
+    <hr style="border-top: 1px solid #999">
+    <div class="page-header">
+      <h1 style="font-size: xx-large; color: #999">Today's reservations</h1>
+      <hr style="border-top: 1px solid #999">
+    </div>
+    <p *ngIf="todaysReservations && todaysReservations.length < 1" style="color: #999">No reservations for today.</p>
+
+    <div class="row" *ngIf="todaysReservations && todaysReservations.length > 0">
+      <div class="col-sm-4" *ngFor="let res of todaysReservations">
+        <div class="card text-white bg-dark mb-3">
+          <div class="card-header">Reservation</div>
+          <div class="card-body">
+            <p class="card-text">Parking Area Name: {{res.parking.name}}</p>
+            <p class="card-text">Parking Area Location: {{res.parking.locationName}} - {{res.parking.street}}
+              {{res.parking.number}}, {{res.parking.city}}</p>
+            <p class="card-text">Arrive Time: {{res.startDate.replace("T", " -- ")}}</p>
+            <p class="card-text">Leave Time: {{res.endDate.replace("T", " -- ")}}</p>
+            <p class="card-text">Lot number: {{res.lot.number}}</p>
+            <button type="button" class="btn btn-danger" style="color:black" (click)="onCancelReservation(res.id)">
+              Cancel reservation
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div class="page-header">
+      <hr style="border-top: 1px solid #999">
+      <h1 style="font-size: xx-large; color:#999">Upcoming reservations</h1>
+      <hr style="border-top: 1px solid #999">
+    </div>
+
+    <p *ngIf="upcomingReservations && upcomingReservations.length < 1" style="color: #999">No upcoming reservations.</p>
+
+    <div class="row" *ngIf="upcomingReservations && upcomingReservations.length > 0">
+      <div class="col-sm-4" *ngFor="let res of upcomingReservations">
+        <div class="card text-white bg-dark mb-3">
+          <div class="card-header">Reservation</div>
+          <div class="card-body">
+            <p class="card-text">Parking Area Name: {{res.parking.name}}</p>
+            <p class="card-text">Parking Area Location: {{res.parking.locationName}} - {{res.parking.street}}
+              {{res.parking.number}}, {{res.parking.city}}</p>
+            <p class="card-text">Arrive Time: {{res.startDate.replace("T", " -- ")}}</p>
+            <p class="card-text">Leave Time: {{res.endDate.replace("T", " -- ")}}</p>
+            <p class="card-text">Lot number: {{res.lot.number}}</p>
+            <button type="button" class="btn btn-danger" style="color:black" (click)="onCancelReservation(res.id)">
+              Cancel reservation
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="modalCont" (click)="open(content)"></div>
+  <ng-template #content let-c="close" let-d="dismiss" id="content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{title}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{text}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('OK')">OK</button>
+    </div>
+  </ng-template>
+
+  <div id="modalContDel" (click)="open2(contentDel)"></div>
+  <ng-template #contentDel let-c="close" let-d="dismiss" id="contentDel">
+    <div class="modal-header">
+      <h4 class="modal-title">{{title}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{text}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('Y')">Yes</button>
+      <button type="button" class="btn btn-secondary" (click)="c('N')">No</button>
+    </div>
+  </ng-template>
+
+</div>

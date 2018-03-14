@@ -1,0 +1,373 @@
+<div [@routerTransition]>
+  <app-page-header *ngIf="parking" [heading]="parking.name" [icon]="'fa-desktop'"></app-page-header>
+
+  <div *ngIf="parking">
+    <agm-map [latitude]="currentLat" [longitude]="currentLng">
+      <agm-marker [latitude]="parking.latitude" [longitude]="parking.longitude"></agm-marker>
+    </agm-map>
+  </div>
+
+  <br>
+  <div class="jumbotron" style="background-color: #222" *ngIf="parking">
+    <p style="color: #999; text-align: center; font-size: x-large"> Location : {{parking.locationName}} </p>
+    <p style="color: #999; text-align: center; font-size: x-large">Address : {{parking.street}} {{parking.number}},
+      {{parking.city}} </p>
+    <p style="color: #999; text-align: center; font-size: x-large">Total lots : {{parking.totalLots}} </p>
+    <p style="color: #999; text-align: center; font-size: x-large"> Available lots : {{parking.availableLots}}</p>
+    <p style="text-align: center">
+      <a class="btn btn-primary btn-lg" role="button" style="background-color: #999" (click)="showForm()">Make
+        Reservation »</a>
+    </p>
+
+    <p style="text-align: center" *ngIf="parking && isOwner">
+      <button type="button" class="btn btn-lg btn-primary" (click)="onEdit()"
+              style="color:black; background-color: #999">Edit
+      </button>
+      &nbsp;
+      <button type="button" class="btn btn-lg btn-primary" (click)="onAddLots()"
+              style="color:black; background-color: #999">Add Lots
+      </button>
+      &nbsp;
+      <button type="button" class="btn btn-lg btn-primary" (click)="onRemoveLots()"
+              style="color:black; background-color: #999">Remove Lots
+      </button>
+      &nbsp;
+      <button type="button" class="btn btn-lg btn-danger" (click)="onDeleteParking()" style="color:black">Delete
+      </button>
+    </p>
+
+    <p style="text-align: center" *ngIf="parking && isAdmin">
+      <button type="button" class="btn btn-lg btn-danger" (click)="onDeleteParking()" style="color:black">Delete
+      </button>
+    </p>
+
+    <div *ngIf="showReservationForm">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="card bg-dark">
+            <div class="card-header" style="color: #999"><b>Start Date</b></div>
+            <div class="card-body">
+              <form class="form-inline mb-3">
+                <div class="form-group">
+                  <div class="input-group datepicker-input">
+                    <input class="form-control" placeholder="yyyy-mm-dd"
+                           name="dp" [(ngModel)]="startDate" ngbDatepicker #d1="ngbDatepicker" [minDate]="minDate">
+                    <button class="input-group-addon" (click)="d1.toggle()" type="button">
+                      <span class="fa fa-calendar"></span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+
+
+        <div class="col-sm-6">
+          <div class="card bg-dark">
+            <div class="card-header" style="color: #999"><b>Leave Date</b></div>
+            <div class="card-body">
+              <form class="form-inline mb-3">
+                <div class="form-group">
+                  <div class="input-group datepicker-input">
+                    <input class="form-control" placeholder="yyyy-mm-dd"
+                           name="dp" [(ngModel)]="endDate" ngbDatepicker #d2="ngbDatepicker" [minDate]="minDate">
+                    <button class="input-group-addon" (click)="d2.toggle()" type="button">
+                      <span class="fa fa-calendar"></span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="card bg-dark">
+            <div class="card-header" style="color: #999"><b>Start Time</b></div>
+            <div class="card-body">
+              <ngb-timepicker [(ngModel)]="startTime"></ngb-timepicker>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-sm-6">
+          <div class="card bg-dark">
+            <div class="card-header" style="color: #999"><b>Leave Time</b></div>
+            <div class="card-body">
+              <ngb-timepicker [(ngModel)]="endTime"></ngb-timepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <p style="text-align: center" id="reservationForm">
+        <a class="btn btn-primary btn-lg" role="button" style="background-color: #999" (click)="submitReservation()">Submit
+          Reservation</a>
+      </p>
+    </div>
+
+
+    <div class="row" *ngIf="addLotsTrigger" style="text-align: center; color: #999">
+      <div class="col-lg-6" *ngIf="parking" style="margin: auto">
+        <form [formGroup]="addLotsForm" (ngSubmit)="onSubmitAddLots()">
+          <br>
+          <div class="form-content" style="text-align: left">
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Number of lots</label>
+                <input class="form-control" formControlName="numberOfAddedLots">
+              </fieldset>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black">Add
+          </button>
+        </form>
+      </div>
+    </div>
+
+
+    <div class="row" *ngIf="removeLotsTrigger" style="text-align: center; color: #999">
+      <div class="col-lg-6" *ngIf="parking" style="margin: auto">
+        <form [formGroup]="removeLotsForm" (ngSubmit)="onSubmitRemoveLots()">
+          <br>
+          <div class="form-content" style="text-align: left">
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Number of lots</label>
+                <input class="form-control" formControlName="numberOfRemovedLots">
+              </fieldset>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black">Remove</button>
+        </form>
+      </div>
+    </div>
+
+
+    <div class="row" *ngIf="editTrigger" style="text-align: center; color: #999">
+      <div class="col-lg-6" *ngIf="parking" style="margin: auto">
+
+        <form [formGroup]="editParkingAreaForm" (ngSubmit)="onSubmitEditForm()">
+          <br>
+          <div class="form-content" style="text-align: left">
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Name</label>
+                <input class="form-control" formControlName="name" placeholder="{{parking.name}}">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Location name</label>
+                <input class="form-control" formControlName="locationName" placeholder="{{parking.locationName}}">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>City</label>
+                <input class="form-control" formControlName="city" placeholder="{{parking.city}}">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Street</label>
+                <input class="form-control" formControlName="street" placeholder="{{parking.street}}">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Number</label>
+                <input class="form-control" formControlName="number" placeholder="{{parking.number}}">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Latitude</label>
+                <input class="form-control" formControlName="latitude" placeholder="{{parking.latitude}}">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Longitude</label>
+                <input class="form-control" formControlName="longitude" placeholder="{{parking.longitude}}">
+              </fieldset>
+            </div>
+
+          </div>
+          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <br>
+    <br>
+    <div class="page-header" *ngIf="parking && isOwner">
+      <hr style="border-top: 1px solid #999">
+      <h1 style="color:#999">Employees</h1>
+      <hr style="border-top: 1px solid #999">
+    </div>
+
+    <div style="background-color: #222" *ngIf="parking && isOwner">
+
+      <p *ngIf="parking && (!parking.employees || parking.employees.length < 1)" style="color:#999">No employees
+        assigned.</p>
+
+      <div class="card mb-3" *ngIf="parking && parking.employees && parking.employees.length > 0"
+           style="background-color: #343a40 !important; color: #999;">
+
+        <div class="card-header" style="background-color: #343a40 !important; color: #999; text-align: center">Assigned
+          employees
+        </div>
+        <table class="card-body table table-hover">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Username</th>
+            <th></th>
+            <th></th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr *ngFor="let employee of parking.employees">
+            <th scope="row">{{employee.id}}</th>
+            <td>{{employee.firstName}} {{employee.lastName}}</td>
+            <td>{{employee.username}}</td>
+            <td>
+              <button [routerLink]="['/user-profile', employee.id]" class="btn btn-secondary"
+                      style="color:#999; background-color: black">View
+                Profile
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-secondary" style="color:black; background-color: #dc3545"
+                      (click)="removeEmployee(employee.id)">Remove from this parking area
+              </button>
+            </td>
+          </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <button type="button" class="btn btn-lg btn-primary" (click)="onAddEmployee()"
+              style="color:black; background-color: #999">Add Employee
+      </button>
+
+      <div *ngIf="addEmployeeTrigger">
+        <br>
+        <br>
+        <form [formGroup]="searchEmployeeForm" (ngSubmit)="onSearchEmployeeSubmit()">
+          <div class="form-content">
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label style="color: #999">Term:</label>
+                <input class="form-control" formControlName="term" placeholder="First name, last name or username..."
+                       style="width: 35%">
+              </fieldset>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-secondary" [disabled]="!searchEmployeeForm.valid" style="color:black">
+            Search
+          </button>
+        </form>
+
+
+        <div *ngIf="searchEmployeesResult">
+          <br>
+          <br>
+
+          <div class="card mb-3" *ngIf="searchEmployeesResult.length > 0"
+               style="background-color: #343a40 !important; color: #999;">
+            <div class="card-header" style="text-align: center">Found employees</div>
+            <table class="card-body table table-hover">
+              <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th></th>
+                <th></th>
+              </tr>
+              </thead>
+
+              <tbody>
+              <tr *ngFor="let employee of searchEmployeesResult">
+                <th scope="row">{{employee.id}}</th>
+                <td>{{employee.firstName}} {{employee.lastName}}</td>
+                <td>{{employee.username}}</td>
+                <td>
+                  <button [routerLink]="['/user-profile', employee.id]" class="btn btn-secondary"
+                          style="color:#999; background-color: black">
+                    View Profile
+                  </button>
+                </td>
+                <td>
+                  <button class="btn btn-secondary" style="color:#999; background-color: black"
+                          (click)="assignEmployee(employee.id)">Assign to
+                    this parking area
+                  </button>
+                </td>
+              </tr>
+
+              </tbody>
+            </table>
+          </div>
+
+          <p *ngIf="searchTrigger && searchEmployeesResult.length < 1" style="color:#999">No employees found by this
+            name. Please try again.</p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="modalCont" (click)="open(content)"></div>
+  <ng-template #content let-c="close" let-d="dismiss" id="content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{title}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{text}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" *ngIf="closeButton" (click)="c('C')">Close</button>
+      <button type="button" class="btn btn-secondary" *ngIf="okButton" (click)="c('OK')">OK</button>
+    </div>
+  </ng-template>
+
+  <div id="modalContDel" (click)="open2(contentDel)"></div>
+  <ng-template #contentDel let-c="close" let-d="dismiss" id="contentDel">
+    <div class="modal-header">
+      <h4 class="modal-title">{{title}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{text}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('Y')">Yes</button>
+      <button type="button" class="btn btn-secondary" (click)="c('N')">No</button>
+    </div>
+  </ng-template>
+
+</div>

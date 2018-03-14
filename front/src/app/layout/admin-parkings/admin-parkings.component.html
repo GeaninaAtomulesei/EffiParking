@@ -1,0 +1,104 @@
+<div [@routerTransition]>
+  <app-page-header [heading]="'Parking Areas'" [icon]="'fa-desktop'"></app-page-header>
+
+
+  <div class="jumbotron" style="background-color: #222">
+
+    <button type="button" class="btn btn-primary btn-lg" style="background-color: #999; color:black" (click)="onShowAll()">Show All</button>
+    <br><br><br><br>
+
+    <p *ngIf="showAllTrigger && allParkings && allParkings.length < 1" style="color:#999">No parking areas found.</p>
+    <div class="card mb-3" style="background-color: #343a40 !important; color: #999;" *ngIf="showAllTrigger && allParkings && allParkings.length > 0">
+      <div class="card-header" style="background-color: #343a40 !important; color: #999; text-align: center;font-size: larger;font-weight: 900;">
+        All parking areas
+      </div>
+      <table class="card-body table table-hover">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Owner</th>
+          <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let parking of allParkings">
+          <th scope="row">{{parking.id}}</th>
+          <th scope="row">{{parking.name}}</th>
+          <td>{{parking.locationName}}, {{parking.street}} {{parking.number}}, {{parking.city}}</td>
+          <td>{{parking.owner.firstName}} {{parking.owner.lastName}}</td>
+          <td>
+            <button class="btn btn-secondary" [routerLink]="['/parking-page', parking.id]" style="color:#999; background-color: black">View
+            </button>
+          </td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <br>
+    <div class="form-group">
+      <fieldset class="form-group">
+        <input class="form-control" id="searchField" placeholder="Search..." [(ngModel)]="searchTerm" style="width: 35%">
+      </fieldset>
+    </div>
+    <button type="button" class="btn btn-primary" style="background-color: #999; color:black" (click)="onSearchParkingAreas()">Search</button>
+
+    <br><br><br>
+
+    <p *ngIf="searchParkingTrigger && foundParkings && foundParkings.length < 1" style="color:#999">No parking areas found by this term. Please try again.</p>
+    <div class="card mb-3" style="background-color: #343a40 !important; color: #999;" *ngIf="searchParkingTrigger && foundParkings && foundParkings.length > 0">
+      <div class="card-header" style="background-color: #343a40 !important; color: #999; text-align: center;font-size: larger;font-weight: 900;">
+        Found parking areas
+      </div>
+      <table class="card-body table table-hover">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Owner</th>
+          <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let parking of foundParkings">
+          <th scope="row">{{parking.id}}</th>
+          <th scope="row">{{parking.name}}</th>
+          <td>{{parking.locationName}}, {{parking.street}} {{parking.number}}, {{parking.city}}</td>
+          <td>{{parking.owner.firstName}} {{parking.owner.lastName}}</td>
+          <td>
+            <button class="btn btn-secondary" [routerLink]="['/parking-page', parking.id]" style="color:#999; background-color: black">View
+            </button>
+          </td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+
+  <div id="modalCont" (click)="open(content)"></div>
+  <ng-template #content let-c="close" let-d="dismiss" id="content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{title}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{text}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('OK')">OK</button>
+    </div>
+  </ng-template>
+
+
+</div>

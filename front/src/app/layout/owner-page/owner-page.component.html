@@ -1,0 +1,225 @@
+<div [@routerTransition]>
+  <app-page-header [heading]="'Owner Page'" [icon]="'fa-desktop'"></app-page-header>
+
+  <div class="jumbotron" style="background-color: #222">
+    <div class="row" style="display: table-cell">
+      <button type="button" class="btn btn-primary btn-lg" style="background-color: #999; color:black" (click)="onAddNew()">Add New Parking
+        Area
+      </button>
+      &nbsp;
+      <button type="button" class="btn btn-primary btn-lg" style="background-color: #999; color:black" (click)="onAddEmployee()">Add New
+        Employee
+      </button>
+    </div>
+
+    <div class="row" *ngIf="addNewTrigger" style="color: #999">
+      <div class="col-lg-6">
+
+        <form [formGroup]="addParkingAreaForm" (ngSubmit)="onSubmit()">
+          <br>
+          <div class="form-content">
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Name</label>
+                <input class="form-control" formControlName="name">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Number of lots</label>
+                <input class="form-control" formControlName="totalLots">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Location name</label>
+                <input class="form-control" formControlName="locationName">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>City</label>
+                <input class="form-control" formControlName="city">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Street</label>
+                <input class="form-control" formControlName="street">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Number</label>
+                <input class="form-control" formControlName="number">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Latitude</label>
+                <input class="form-control" formControlName="latitude" (autocomplete)="setCurrentLocation"
+                       autocomplete="currentLat">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Longitude</label>
+                <input class="form-control" formControlName="longitude" (autocomplete)="setCurrentLocation"
+                       autocomplete="currentLng">
+              </fieldset>
+            </div>
+
+          </div>
+
+          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black"
+                  [disabled]="!addParkingAreaForm.valid">Submit
+          </button>
+        </form>
+        <br>
+        <button class="btn btn-secondary" style="background-color: #999; color:black" (click)="onSetCoordinates()">Set Current
+          Coordinates
+        </button>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="addNewEmployeeTrigger" style="color: #999">
+      <div class="col-lg-6">
+
+        <p [class]="notification.msgType" *ngIf="notification">{{notification.msgBody}}</p>
+
+        <form [formGroup]="addEmployeeForm" (ngSubmit)="onSubmitNewEmployee()">
+          <br>
+          <div class="form-content">
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>First Name</label>
+                <input class="form-control" formControlName="firstName">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Last Name</label>
+                <input class="form-control" formControlName="lastName">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Email</label>
+                <input class="form-control" formControlName="email">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Username</label>
+                <input class="form-control" formControlName="username">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Password</label>
+                <input class="form-control" formControlName="password">
+              </fieldset>
+            </div>
+
+          </div>
+
+          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black"
+                  [disabled]="!addEmployeeForm.valid">Submit
+          </button>
+        </form>
+      </div>
+    </div>
+
+
+    <br>
+    <br>
+
+    <div class="page-header" >
+      <hr style="border-top: 1px solid #999">
+      <h1 style="color:#999">Owned parking areas</h1>
+      <hr style="border-top: 1px solid #999">
+    </div>
+
+    <div class="row" *ngIf="ownedParkingAreas">
+      <!-- /.col-sm-4 -->
+      <div class="col-sm-4" *ngFor="let parking of ownedParkingAreas">
+        <div class="card text-white bg-dark mb-3">
+          <div class="card-header" style="color:#999">EffiParking</div>
+          <div class="card-body">
+            <a [routerLink]="['/parking-page', parking.id]">
+              <h4 class="card-title">Name: {{parking.name}}</h4>
+              <p class="card-text">Location : {{parking.locationName}}, {{parking.street}} {{parking.number}},
+                {{parking.city}}</p>
+              <p class="card-text">Total number of lots: {{parking.totalLots}}</p>
+              <p class="card-text">Available number of lots: {{parking.availableLots}}</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="page-header" >
+      <hr style="border-top: 1px solid #999">
+      <h1 style="color:#999">Registered Employees</h1>
+      <hr style="border-top: 1px solid #999">
+    </div>
+
+    <div class="row" *ngIf="registeredEmployees">
+      <div class="col col-xl-6 col-lg-12">
+        <div class="card-header" style="background-color: #343a40 !important; color: #999;">
+          <table class="card-body table table-hover">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr *ngFor="let employee of registeredEmployees">
+              <th scope="row">{{employee.id}}</th>
+              <td>{{employee.firstName}} {{employee.lastName}}</td>
+              <td>
+                <button [routerLink]="['/user-profile', employee.id]" class="btn btn-secondary"
+                        style="color:#999; background-color: black">
+                  View Profile
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalCont" (click)="open(content)"></div>
+  <ng-template #content let-c="close" let-d="dismiss" id="content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{title}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{text}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+</div>
