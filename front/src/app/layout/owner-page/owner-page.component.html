@@ -147,11 +147,12 @@
 
     <div class="page-header" >
       <hr style="border-top: 1px solid #999">
-      <h1 style="color:#999">Owned parking areas</h1>
+      <h1 style="color:#999; font-size: x-large">Owned parking areas</h1>
       <hr style="border-top: 1px solid #999">
     </div>
 
-    <div class="row" *ngIf="ownedParkingAreas">
+    <p style="color:#999" *ngIf="!ownedParkingAreas">No owned parking areas.</p>
+    <div class="row" *ngIf="ownedParkingAreas && ownedParkingAreas.length > 0">
       <!-- /.col-sm-4 -->
       <div class="col-sm-4" *ngFor="let parking of ownedParkingAreas">
         <div class="card text-white bg-dark mb-3">
@@ -174,11 +175,12 @@
 
     <div class="page-header" >
       <hr style="border-top: 1px solid #999">
-      <h1 style="color:#999">Registered Employees</h1>
+      <h1 style="color:#999; font-size: x-large">Registered Employees</h1>
       <hr style="border-top: 1px solid #999">
     </div>
 
-    <div class="row" *ngIf="registeredEmployees">
+    <p style="color:#999" *ngIf="registeredEmployees && registeredEmployees.length < 1">No registered employees.</p>
+    <div class="row" *ngIf="registeredEmployees && registeredEmployees.length > 0">
       <div class="col col-xl-6 col-lg-12">
         <div class="card-header" style="background-color: #343a40 !important; color: #999;">
           <table class="card-body table table-hover">
@@ -186,6 +188,7 @@
             <tr>
               <th>#</th>
               <th>Name</th>
+              <th></th>
             </tr>
             </thead>
 
