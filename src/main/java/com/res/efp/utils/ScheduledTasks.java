@@ -5,6 +5,7 @@ import com.res.efp.domain.model.Parking;
 import com.res.efp.domain.model.Reservation;
 import com.res.efp.domain.repository.LotRepository;
 import com.res.efp.domain.repository.ParkingRepository;
+import com.res.efp.domain.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,9 @@ public class ScheduledTasks {
     @Autowired
     private ParkingRepository parkingRepository;
 
+    @Autowired
+    private ReservationRepository reservationRepository;
+
     @Scheduled(fixedRate = 30000)
     public void updateAvailableLots() {
         List<Parking> allParkingAreas = parkingRepository.findAll();
@@ -32,14 +36,6 @@ public class ScheduledTasks {
             setAvailableLotsPerParking(parking);
         }
         System.out.println("++++++++++++++   Finished updating vacant lots   ++++++++++++++++");
-    }
-
-
-    private void setAvailableLotsPerParking(Parking parking) {
-        List<Lot> vacantLots = lotRepository.findVacantLotsPerParking(parking.getId());
-        parking.setAvailableLots(vacantLots.size());
-        parkingRepository.save(parking);
-        System.out.println("------------   Updating vacant lots for parking area " + parking.getName() + " --------------------");
     }
 
     @Scheduled(fixedRate = 30000)
@@ -68,5 +64,27 @@ public class ScheduledTasks {
             }
         }
         System.out.println("++++++++++++++++++++ Finished updating reserved lots +++++++++++++++++++++++");
+    }
+
+    @Scheduled(cron = "0 1 0 * * ?")
+    public void deleteOldReservations() {
+        System.out.println("++++++++++++++++++++++++++ Started to delete old reservations +++++++++++++++++++++++++");
+        List<Reservation> reservationList = reservationRepository.findAll();
+        List<Reservation> oldReservations = new ArrayList<>();
+        LocalDateTime currentDate = LocalDateTime.now();
+        for(Reservation reservation : reservationList) {
+            if((reservation.getEndDate().getYear() == currentDate.getYear()) && (reservation.getEndDate().getDayOfYear() < currentDate.getDayOfYear())) {
+                oldReservations.add(reservation);
+            }
+        }
+        reservationRepository.delete(oldReservations);
+        System.out.println("++++++++++++++++++++ Finished deleting old reservations ++++++++++++++++++++");
+    }
+
+    private void setAvailableLotsPerParking(Parking parking) {
+        List<Lot> vacantLots = lotRepository.findVacantLotsPerParking(parking.getId());
+        parking.setAvailableLots(vacantLots.size());
+        parkingRepository.save(parking);
+        System.out.println("------------   Updating vacant lots for parking area " + parking.getName() + " --------------------");
     }
 }
