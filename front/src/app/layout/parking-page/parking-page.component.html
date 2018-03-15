@@ -2,7 +2,7 @@
   <app-page-header *ngIf="parking" [heading]="parking.name" [icon]="'fa-desktop'"></app-page-header>
 
   <div *ngIf="parking">
-    <agm-map [latitude]="currentLat" [longitude]="currentLng">
+    <agm-map [latitude]="parking.latitude" [longitude]="parking.longitude" [zoom]="15">
       <agm-marker [latitude]="parking.latitude" [longitude]="parking.longitude"></agm-marker>
     </agm-map>
   </div>

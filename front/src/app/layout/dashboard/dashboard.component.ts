@@ -61,18 +61,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
-        let latitude = position.coords.latitude;
-        let longitude = position.coords.longitude;
-        console.log("lat: " + latitude + " lng: " + longitude);
-        sessionStorage.setItem("currentLatitude", latitude.toString());
-        sessionStorage.setItem("currentLongitude", longitude.toString());
-
-        this.currentLatitude = latitude;
-        this.currentLongitude = longitude;
-      });
-    }
 
     if(localStorage.getItem("closestParkingAreas")) {
       this.closestParkingAreas = JSON.parse(localStorage.getItem("closestParkingAreas"));
@@ -92,8 +80,20 @@ export class DashboardComponent implements OnInit {
   }
 
   search() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        let latitude = position.coords.latitude;
+        let longitude = position.coords.longitude;
+        console.log("lat: " + latitude + " lng: " + longitude);
+        localStorage.setItem("currentLatitude", latitude.toString());
+        localStorage.setItem("currentLongitude", longitude.toString());
+      });
+    }
+
     //noinspection TypeScriptUnresolvedFunction
     this.searchTrigger = true;
+    this.currentLatitude = parseFloat(localStorage.getItem("currentLatitude"));
+    this.currentLongitude = parseFloat(localStorage.getItem("currentLongitude"));
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.getClosest(this.currentLatitude, this.currentLongitude)
       .subscribe(parkings => {

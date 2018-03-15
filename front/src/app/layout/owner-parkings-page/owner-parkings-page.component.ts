@@ -25,8 +25,6 @@ export class OwnerParkingsPageComponent implements OnInit {
   private currentUser;
   title: string;
   text: string;
-  currentLat: number;
-  currentLng: number;
   error: any;
   private foundParkingsTrigger: boolean = false;
   private searchTerm: string;
@@ -40,8 +38,6 @@ export class OwnerParkingsPageComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    this.currentLat = parseFloat(sessionStorage.getItem("currentLatitude"));
-    this.currentLng = parseFloat(sessionStorage.getItem("currentLongitude"));
 
     this.addParkingAreaForm = this.formBuilder.group({
       name: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
@@ -67,8 +63,12 @@ export class OwnerParkingsPageComponent implements OnInit {
   }
 
   onSetCoordinates() {
-    this.addParkingAreaForm.get("latitude").setValue(this.currentLat);
-    this.addParkingAreaForm.get("longitude").setValue(this.currentLng);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.addParkingAreaForm.get("latitude").setValue(position.coords.latitude);
+        this.addParkingAreaForm.get("longitude").setValue(position.coords.longitude);
+      });
+    }
   }
 
   onAddNew() {
