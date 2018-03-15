@@ -25,7 +25,7 @@
     </p>
     <br>
     <br>
-    <div class="row" *ngIf="closestParkingAreas" style="margin-right: -626px">
+    <div class="row" *ngIf="closestParkingAreas">
       <div class="col-sm-4" *ngFor="let parking of closestParkingAreas">
         <div class="card text-white bg-dark mb-3">
           <div class="card-header" style="color: #999">EffiParking</div>
@@ -62,7 +62,7 @@
     <br>
 
     <p style="color: #999" *ngIf="searchByTermTrigger && foundParkingAreas && foundParkingAreas.length < 1">No parking areas found by this criteria. Please try again!</p>
-    <div class="row" *ngIf="foundParkingAreas && foundParkingAreas.length > 0" style="margin-right: -626px">
+    <div class="row" *ngIf="foundParkingAreas && foundParkingAreas.length > 0">
       <div class="col-sm-4" *ngFor="let parking of foundParkingAreas">
         <div class="card text-white bg-dark mb-3">
           <div class="card-header" style="color: #999">EffiParking</div>

@@ -91,7 +91,6 @@ export class DashboardComponent implements OnInit {
     }
 
     //noinspection TypeScriptUnresolvedFunction
-    this.searchTrigger = true;
     this.currentLatitude = parseFloat(localStorage.getItem("currentLatitude"));
     this.currentLongitude = parseFloat(localStorage.getItem("currentLongitude"));
     //noinspection TypeScriptUnresolvedFunction
@@ -105,6 +104,7 @@ export class DashboardComponent implements OnInit {
           console.log(error);
           this.error = error.error;
         });
+    this.searchTrigger = true;
   }
 
   searchByTerm() {
