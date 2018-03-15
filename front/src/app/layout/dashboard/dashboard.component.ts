@@ -23,19 +23,20 @@ export class DashboardComponent implements OnInit {
   private currentLatitude;
   private currentLongitude;
   private closestParkingAreas = [];
+  private foundParkingAreas = [];
   private error: string;
   submitted = false;
   notification: DisplayMessage;
   ownerForm: FormGroup;
+  searchForm: FormGroup;
   title: string = "Owner Registration Success";
   text: string = "You have successfully sent your owner registration request!";
-  closeResult: string;
   searchTrigger = false;
+  searchByTermTrigger = false;
 
   constructor(private parkingService: ParkingService,
               private formBuilder: FormBuilder,
               private userService: UserService,
-              private authService: AuthService,
               private modalService: NgbModal) {
 
     this.sliders.push(
@@ -77,8 +78,16 @@ export class DashboardComponent implements OnInit {
       this.closestParkingAreas = JSON.parse(localStorage.getItem("closestParkingAreas"));
     }
 
+    if(localStorage.getItem("dashFoundParkingAreas")) {
+      this.foundParkingAreas = JSON.parse(localStorage.getItem("dashFoundParkingAreas"));
+    }
+
     this.ownerForm = this.formBuilder.group({
       organisation: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])]
+    });
+
+    this.searchForm = this.formBuilder.group({
+      term: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])]
     });
   }
 
@@ -96,6 +105,22 @@ export class DashboardComponent implements OnInit {
           console.log(error);
           this.error = error.error;
         });
+  }
+
+  searchByTerm() {
+    this.searchByTermTrigger = true;
+    //noinspection TypeScriptUnresolvedFunction
+    this.parkingService.searchByTerm(this.searchForm.value.term)
+      .delay(1000)
+      .subscribe(response => {
+        if(response) {
+          this.foundParkingAreas = response;
+          localStorage.setItem("dashFoundParkingAreas", JSON.stringify(this.foundParkingAreas));
+        }
+      }, error => {
+        console.log(error);
+        this.error = error;
+      });
   }
 
   ownerReqSubmit() {
@@ -124,19 +149,10 @@ export class DashboardComponent implements OnInit {
   open(content) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(content).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
+
     }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+
     });
   }
 
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
 }

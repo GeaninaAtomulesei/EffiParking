@@ -15,9 +15,9 @@
   <hr>
 
   <div class="jumbotron" style="background-color: #222">
-    <h1 style="color: #999">Search for a parking area nearby!</h1>
+    <h1 style="color: #999">Search for a parking area nearby</h1>
     <p style="color: #999">
-      Press search in order to see all the parking areas with available parking lots found near your location! They will
+      Press Search in order to see all the parking areas with available parking lots found near your location! They will
       be shown in the order of the closest one to your current coordinates.
     </p>
     <p>
@@ -25,22 +25,59 @@
     </p>
     <br>
     <br>
-    <div class="row" *ngIf="closestParkingAreas">
+    <div class="row" *ngIf="closestParkingAreas" style="margin-right: -626px">
       <div class="col-sm-4" *ngFor="let parking of closestParkingAreas">
         <div class="card text-white bg-dark mb-3">
           <div class="card-header" style="color: #999">EffiParking</div>
           <div class="card-body">
             <a [routerLink]="['/parking-page', parking.id]">
-              <h4 class="card-title">Name: {{parking.name}}</h4>
-              <p class="card-text">Location : {{parking.locationName}}, {{parking.street}} {{parking.number}}, {{parking.city}}</p>
-              <p class="card-text">Total number of lots: {{parking.totalLots}}</p>
-              <p class="card-text">Available number of lots: {{parking.availableLots}}</p>
+              <h4 class="card-title">{{parking.name}}</h4>
+              <p class="card-text">{{parking.locationName}}, {{parking.street}} {{parking.number}}, {{parking.city}}</p>
+              <p class="card-text">Total lots: {{parking.totalLots}}</p>
+              <p class="card-text">Available lots: {{parking.availableLots}}</p>
             </a>
           </div>
         </div>
       </div>
     </div>
     <ngb-alert *ngIf="error" [type]="'danger'" (close)="closeAlert()">{{ error }}</ngb-alert>
+  </div>
+
+  <div class="jumbotron" style="background-color: #222">
+    <h1 style="color: #999">Search for a parking area by name or address</h1>
+    <p style="color: #999">
+      Enter your search term and press Search in order to see all the matching parking areas.
+    </p>
+    <form [formGroup]="searchForm" (ngSubmit)="searchByTerm()">
+      <div class="form-content">
+        <div class="form-group">
+          <fieldset class="form-group">
+            <input class="form-control" formControlName="term" placeholder="Name, Location, City..." style="width: 35%">
+          </fieldset>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg" style="background-color: #999; color:black">Search »</button>
+    </form>
+    <br>
+    <br>
+
+    <p style="color: #999" *ngIf="searchByTermTrigger && foundParkingAreas && foundParkingAreas.length < 1">No parking areas found by this criteria. Please try again!</p>
+    <div class="row" *ngIf="foundParkingAreas && foundParkingAreas.length > 0" style="margin-right: -626px">
+      <div class="col-sm-4" *ngFor="let parking of foundParkingAreas">
+        <div class="card text-white bg-dark mb-3">
+          <div class="card-header" style="color: #999">EffiParking</div>
+          <div class="card-body">
+            <a [routerLink]="['/parking-page', parking.id]">
+              <h4 class="card-title">{{parking.name}}</h4>
+              <p class="card-text">{{parking.locationName}}, {{parking.street}} {{parking.number}}, {{parking.city}}</p>
+              <p class="card-text">Total lots: {{parking.totalLots}}</p>
+              <p class="card-text">Available lots: {{parking.availableLots}}</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <div class="jumbotron" style="background-color: #222">
