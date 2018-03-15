@@ -148,4 +148,11 @@ export class ParkingService {
         return res;
       });
   }
+
+  searchByTermAndOwner(term, ownerId) {
+    return this.apiService.get(this.config.get_parkings_by_term_owner_url + "?term=" + term + "&ownerId=" + ownerId)
+      .map(res => {
+        return res;
+      });
+  }
 }

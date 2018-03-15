@@ -73,7 +73,58 @@
       </div>
 
     </div>
-    <a class="btn btn-danger btn-lg" role="button" style="color:black" *ngIf="isAdmin" (click)="onDeleteUser()">Delete Account</a>
+    <a class="btn btn-primary btn-lg" role="button" style="color:black; background-color: #999" *ngIf="isOwner" (click)="onEditEmployee()">Edit</a>
+    &nbsp;
+    <a class="btn btn-danger btn-lg" role="button" style="color:black" *ngIf="isAdmin || isOwner" (click)="onDeleteUser()">Delete Account</a>
+
+    <br><br>
+
+    <div class="row" *ngIf="editEmployeeTrigger" style="text-align: center; color: #999">
+      <div class="col-lg-6" *ngIf="user" style="margin: auto">
+
+        <form [formGroup]="editEmployeeForm" (ngSubmit)="onSubmitEditEmployeeForm()">
+          <br>
+          <div class="form-content" style="text-align: left">
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>First Name</label>
+                <input class="form-control" formControlName="firstName" placeholder="{{user.firstName}}">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Last name</label>
+                <input class="form-control" formControlName="lastName" placeholder="{{user.lastName}}">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Email</label>
+                <input class="form-control" formControlName="email" placeholder="{{user.email}}">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Username</label>
+                <input class="form-control" formControlName="username" placeholder="{{user.username}}">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Password</label>
+                <input class="form-control" formControlName="password" placeholder="{{user.password}}">
+              </fieldset>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black">Submit</button>
+        </form>
+      </div>
+    </div>
+
   </div>
 
 

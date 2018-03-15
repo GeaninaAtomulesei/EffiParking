@@ -20,8 +20,12 @@
       </li>
     </div>
 
-    <a [routerLink]="['/owner-page']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isOwner">
-      <i class="fa fa-th-list"></i>&nbsp;{{ 'Owner Page' | translate }}
+    <a [routerLink]="['/owner-parkings-page']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isOwner">
+      <i class="fa fa-th-list"></i>&nbsp;{{ 'Owned Parking Areas' | translate }}
+    </a>
+
+    <a [routerLink]="['/owner-employees-page']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isOwner">
+      <i class="fa fa-th-list"></i>&nbsp;{{ 'Employees' | translate }}
     </a>
 
     <a [routerLink]="['/reservations-page']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isLoggedIn">

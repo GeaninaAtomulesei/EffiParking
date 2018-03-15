@@ -1,0 +1,221 @@
+<div [@routerTransition]>
+  <app-page-header [heading]="'Owned Parking Areas'" [icon]="'fa-desktop'"></app-page-header>
+
+
+
+  <div class="jumbotron" style="background-color: #222; padding: 1rem 2rem">
+
+    <div class="page-header" >
+      <hr style="border-top: 1px solid #999">
+      <h1 style="color:#999; font-size: x-large">Search Parking Areas</h1>
+      <hr style="border-top: 1px solid #999">
+    </div>
+
+    <div class="form-group">
+      <fieldset class="form-group">
+        <input class="form-control" id="searchField" placeholder="Name, Location, Address..." [(ngModel)]="searchTerm" style="width: 35%">
+      </fieldset>
+    </div>
+    <button type="button" class="btn btn-primary" style="background-color: #999; color:black" (click)="onSearchParking()">Search</button>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <p *ngIf="foundParkingsTrigger && foundParkings && foundParkings.length < 1" style="color:#999">No parking areas found by this term. Please try again.</p>
+    <div class="card mb-3" style="background-color: #343a40 !important; color: #999;" *ngIf="foundParkingsTrigger && foundParkings && foundParkings.length > 0">
+      <div class="card-header" style="background-color: #343a40 !important; color: #999; text-align: center;font-size: larger;font-weight: 900;">
+        Found parking areas
+      </div>
+      <table class="card-body table table-hover">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Address</th>
+          <th></th>
+          <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let parking of foundParkings">
+          <th scope="row">{{parking.id}}</th>
+          <th scope="row">{{parking.name}}</th>
+          <td>{{parking.locationName}}</td>
+          <td>{{parking.street}} {{parking.number}}, {{parking.city}}</td>
+          <td>
+            <button class="btn btn-secondary" [routerLink]="['/parking-page', parking.id]" style="color:#999; background-color: black">View Page
+            </button>
+          </td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="jumbotron" style="background-color: #222">
+
+    <div class="row" style="display: table-cell">
+      <button type="button" class="btn btn-primary btn-lg" style="background-color: #999; color:black"
+              (click)="onAddNew()">Add New Parking
+        Area
+      </button>
+    </div>
+
+    <div class="row" *ngIf="addNewTrigger" style="color: #999">
+      <div class="col-lg-6">
+
+        <form [formGroup]="addParkingAreaForm" (ngSubmit)="onSubmit()">
+          <br>
+          <div class="form-content">
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Name</label>
+                <input class="form-control" formControlName="name">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Number of lots</label>
+                <input class="form-control" formControlName="totalLots">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Location name</label>
+                <input class="form-control" formControlName="locationName">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>City</label>
+                <input class="form-control" formControlName="city">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Street</label>
+                <input class="form-control" formControlName="street">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Number</label>
+                <input class="form-control" formControlName="number">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Latitude</label>
+                <input class="form-control" formControlName="latitude" (autocomplete)="setCurrentLocation"
+                       autocomplete="currentLat">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Longitude</label>
+                <input class="form-control" formControlName="longitude" (autocomplete)="setCurrentLocation"
+                       autocomplete="currentLng">
+              </fieldset>
+            </div>
+
+          </div>
+
+          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black"
+                  [disabled]="!addParkingAreaForm.valid">Submit
+          </button>
+        </form>
+        <br>
+        <button class="btn btn-secondary" style="background-color: #999; color:black" (click)="onSetCoordinates()">Set
+          Current
+          Coordinates
+        </button>
+      </div>
+    </div>
+
+
+    <br>
+    <br>
+
+    <div class="page-header">
+      <hr style="border-top: 1px solid #999">
+      <h1 style="color:#999; font-size: x-large">Owned parking areas</h1>
+      <hr style="border-top: 1px solid #999">
+    </div>
+
+
+
+  <p *ngIf="!ownedParkingAreas" style="color:#999">No owned parking areas.</p>
+  <div class="card mb-3" style="background-color: #343a40 !important; color: #999;" *ngIf="ownedParkingAreas && ownedParkingAreas.length > 0">
+    <div class="card-header" style="background-color: #343a40 !important; color: #999; text-align: center;font-size: larger;font-weight: 900;">
+    </div>
+    <table class="card-body table table-hover">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Address</th>
+        <th></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr *ngFor="let parking of ownedParkingAreas">
+        <th scope="row">{{parking.id}}</th>
+        <td>{{parking.name}}</td>
+        <td>{{parking.locationName}}</td>
+        <td>{{parking.street}} {{parking.number}}, {{parking.city}}</td>
+        <td>
+          <button [routerLink]="['/parking-page', parking.id]" class="btn btn-secondary"
+                  style="color:#999; background-color: black">
+            View Page
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  </div>
+
+  <div id="modalCont" (click)="open(content)"></div>
+  <ng-template #content let-c="close" let-d="dismiss" id="content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{title}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{text}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+
+</div>
+

@@ -7,6 +7,9 @@ import {UserService} from "../../shared/services/user.service";
 import {ParkingService} from "../../shared/services/parking.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Router} from "@angular/router";
+import {FormGroup} from "@angular/forms";
+import {FormBuilder} from "@angular/forms";
+import {Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-user-profile',
@@ -24,15 +27,20 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   private assignedParkingAreas: any = [];
   private currentUser: any;
   private isAdmin: boolean = false;
+  private isOwner: boolean = false;
   private returnTrigger: boolean = false;
   private deletedTrigger: boolean = false;
   private title: string;
   private text: string;
+  private editEmployeeTrigger: boolean = false;
+  private editEmployeeForm: FormGroup;
+  private reloadTrigger: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
               private modalService: NgbModal,
               private router: Router,
+              private formBuilder: FormBuilder,
               private parkingService: ParkingService) {
   }
 
@@ -58,7 +66,16 @@ export class UserProfileComponent implements OnInit, OnDestroy {
             //noinspection TypeScriptUnresolvedFunction
             this.parkingService.getByEmployee(this.user.id).subscribe(response => {
               this.assignedParkingAreas = response;
-            })
+            });
+            if (localStorage.getItem("currentUser")) {
+              this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+              if (this.currentUser.authorities[0].authority == "ROLE_OWNER") {
+                if(this.user.owner.id == this.currentUser.id) {
+                  this.isOwner = true;
+                  console.log("IS OWNER");
+                }
+              }
+            }
           } else if (auth.authority == "ROLE_ADMIN") {
             this.role = "Administrator";
           } else {
@@ -76,6 +93,38 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         console.log("IS ADMIN");
       }
     }
+
+    this.editEmployeeForm = this.formBuilder.group({
+      firstName: [''],
+      lastName: [''],
+      email: [''],
+      username: [''],
+      password: ['']
+    });
+  }
+
+  onSubmitEditEmployeeForm() {
+    this.userService.updateEmployee(this.editEmployeeForm.value, this.id)
+      .subscribe(response => {
+        if(response) {
+          this.title = "Edit Employee Success";
+          this.text = "You have successfully edited this employee's information!";
+          this.deletedTrigger = false;
+          this.reloadTrigger = true;
+          document.getElementById('modalCont').click();
+        }
+      }, error => {
+        console.log(error);
+        this.title = "Edit Employee Error";
+        this.text = "An unexpected error occurred. Please try again!";
+        this.deletedTrigger = false;
+        this.reloadTrigger = false;
+        document.getElementById('modalCont').click();
+      });
+  }
+
+  onEditEmployee() {
+    this.editEmployeeTrigger = !this.editEmployeeTrigger;
   }
 
   onDeleteUser() {
@@ -85,6 +134,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   onApproveDeleteUser() {
+    //noinspection TypeScriptUnresolvedFunction
     this.userService.deleteUser(this.id).subscribe(res => {
       if (res) {
         this.title = "Delete Account Success";
@@ -109,6 +159,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       if (result == "OK") {
         if (this.deletedTrigger == true) {
           this.router.navigate(['/admin-users-page']);
+        } else if(this.reloadTrigger == true) {
+          window.location.reload();
         } else {
           return;
         }

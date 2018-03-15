@@ -166,6 +166,11 @@ public class ParkingServiceImpl implements ParkingService {
         return parkingRepository.findByTerm(term);
     }
 
+    @Override
+    public List<Parking> findByTermAndOwner(String term, Long ownerId) {
+        return parkingRepository.findByTermAndOwner(term , ownerId);
+    }
+
     private static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
         List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
         list.sort(Comparator.comparing(o -> (o.getValue())));

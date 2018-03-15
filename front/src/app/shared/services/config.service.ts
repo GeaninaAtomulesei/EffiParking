@@ -48,6 +48,7 @@ export class ConfigService {
   private _search_parkings_by_term = this.api_url + '/parkings/searchByTerm';
   private _get_all_parkings_url = this.api_url + '/parkings/all';
   private _get_history_url = this.api_url + '/users/getHistory';
+  private _get_parkings_by_term_owner_url = this.api_url + '/parkings/searchByTermAndOwner';
 
   get api_url(): string {
     return this._api_url;
@@ -231,5 +232,9 @@ export class ConfigService {
 
   get get_history_url(): string {
     return this._get_history_url;
+  }
+
+  get get_parkings_by_term_owner_url(): string {
+    return this._get_parkings_by_term_owner_url;
   }
 }

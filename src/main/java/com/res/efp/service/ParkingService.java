@@ -25,4 +25,5 @@ public interface ParkingService {
     Parking addEmployee(Parking parking, Employee employee);
     Map<String, Double> getClosestParkingAreas(double latitude, double longitude);
     List<Parking> findByTerm(String term);
+    List<Parking> findByTermAndOwner(String term, Long ownerId);
 }

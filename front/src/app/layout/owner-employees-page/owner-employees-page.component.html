@@ -1,0 +1,169 @@
+<div [@routerTransition]>
+  <app-page-header [heading]="'Registered Employees'" [icon]="'fa-desktop'"></app-page-header>
+
+  <div class="jumbotron" style="background-color: #222; padding: 1rem 2rem">
+
+    <div class="page-header" >
+      <hr style="border-top: 1px solid #999">
+      <h1 style="color:#999; font-size: x-large">Search Employee</h1>
+      <hr style="border-top: 1px solid #999">
+    </div>
+
+    <div class="form-group">
+      <fieldset class="form-group">
+        <input class="form-control" id="searchField" placeholder="Name or username..." [(ngModel)]="searchTerm" style="width: 35%">
+      </fieldset>
+    </div>
+    <button type="button" class="btn btn-primary" style="background-color: #999; color:black" (click)="onSearchEmployee()">Search</button>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <p *ngIf="foundEmployeesTrigger && foundEmployees && foundEmployees.length < 1" style="color:#999">No employees found by this term. Please try again.</p>
+    <div class="card mb-3" style="background-color: #343a40 !important; color: #999;" *ngIf="foundEmployeesTrigger && foundEmployees && foundEmployees.length > 0">
+      <div class="card-header" style="background-color: #343a40 !important; color: #999; text-align: center;font-size: larger;font-weight: 900;">
+        Found employees
+      </div>
+      <table class="card-body table table-hover">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Username</th>
+          <th></th>
+          <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let employee of foundEmployees">
+          <th scope="row">{{employee.id}}</th>
+          <th scope="row">{{employee.firstName}} {{employee.lastName}}</th>
+          <td>{{employee.username}}</td>
+          <td>
+            <button class="btn btn-secondary" style="color:#999; background-color: black" [routerLink]="['/user-profile', employee.id]">View Profile
+            </button>
+          </td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+  </div>
+
+  <div class="jumbotron" style="background-color: #222">
+    <div class="row" style="display: table-cell">
+      <button type="button" class="btn btn-primary btn-lg" style="background-color: #999; color:black" (click)="onAddEmployee()">Add New
+        Employee
+      </button>
+    </div>
+
+    <div class="row" *ngIf="addNewEmployeeTrigger" style="color: #999">
+      <div class="col-lg-6">
+
+        <p [class]="notification.msgType" *ngIf="notification">{{notification.msgBody}}</p>
+
+        <form [formGroup]="addEmployeeForm" (ngSubmit)="onSubmitNewEmployee()">
+          <br>
+          <div class="form-content">
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>First Name</label>
+                <input class="form-control" formControlName="firstName">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Last Name</label>
+                <input class="form-control" formControlName="lastName">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Email</label>
+                <input class="form-control" formControlName="email">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Username</label>
+                <input class="form-control" formControlName="username">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Password</label>
+                <input class="form-control" formControlName="password">
+              </fieldset>
+            </div>
+
+          </div>
+
+          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black"
+                  [disabled]="!addEmployeeForm.valid">Submit
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="page-header" >
+      <hr style="border-top: 1px solid #999">
+      <h1 style="color:#999; font-size: x-large">Registered Employees</h1>
+      <hr style="border-top: 1px solid #999">
+    </div>
+
+    <p *ngIf="!registeredEmployees || registeredEmployees.length < 1" style="color:#999">No registered employees.</p>
+    <div class="card mb-3" style="background-color: #343a40 !important; color: #999;" *ngIf="registeredEmployees && registeredEmployees.length > 0">
+      <div class="card-header" style="background-color: #343a40 !important; color: #999; text-align: center;font-size: larger;font-weight: 900;">
+      </div>
+      <table class="card-body table table-hover">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let employee of registeredEmployees">
+          <th scope="row">{{employee.id}}</th>
+          <td>{{employee.firstName}} {{employee.lastName}}</td>
+          <td>
+            <button [routerLink]="['/user-profile', employee.id]" class="btn btn-secondary"
+                    style="color:#999; background-color: black">
+              View Profile
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  <div id="modalCont" (click)="open(content)"></div>
+  <ng-template #content let-c="close" let-d="dismiss" id="content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{title}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{text}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+</div>

@@ -10,31 +10,30 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {UserService} from "../../shared/services/user.service";
 
 @Component({
-  selector: 'app-owner-page',
-  templateUrl: './owner-page.component.html',
-  styleUrls: ['./owner-page.component.scss'],
+  selector: 'app-owner-parkings-page',
+  templateUrl: './owner-parkings-page.component.html',
+  styleUrls: ['./owner-parkings-page.component.scss'],
   animations: [routerTransition()]
 })
-export class OwnerPageComponent implements OnInit {
+export class OwnerParkingsPageComponent implements OnInit {
 
   private ownedParkingAreas: any[];
-  private registeredEmployees: any[];
   private addNewTrigger: boolean = false;
-  private addNewEmployeeTrigger: boolean = false;
   addParkingAreaForm: FormGroup;
-  addEmployeeForm: FormGroup;
   submitted = false;
   notification: DisplayMessage;
-  closeResult: string;
   private currentUser;
-  title: string = "Parking Area Add Success";
-  text: string = "You have successfully added a new parking area!";
+  title: string;
+  text: string;
   currentLat: number;
   currentLng: number;
   error: any;
+  private foundParkingsTrigger: boolean = false;
+  private searchTerm: string;
+  private foundParkings: any = [];
+  private returnTrigger: boolean = false;
 
   constructor(private parkingService: ParkingService,
-              private userService: UserService,
               private formBuilder: FormBuilder,
               private modalService: NgbModal) {
   }
@@ -55,14 +54,6 @@ export class OwnerPageComponent implements OnInit {
       longitude: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])]
     });
 
-    this.addEmployeeForm = this.formBuilder.group({
-      firstName: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
-      lastName: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
-      email: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64), Validators.email])],
-      username: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
-    });
-
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.getByOwner(this.currentUser.username)
       .subscribe(parkings => {
@@ -73,17 +64,6 @@ export class OwnerPageComponent implements OnInit {
           console.log(error);
           this.error = error.error;
         });
-
-    //noinspection TypeScriptUnresolvedFunction
-    this.userService.getEmployeesByOwner(this.currentUser.id)
-      .subscribe(employees => {
-        this.registeredEmployees = employees;
-        console.log("employees: " + this.registeredEmployees);
-      },
-      error => {
-        console.log(error);
-        this.error = error.error;
-      });
   }
 
   onSetCoordinates() {
@@ -92,13 +72,23 @@ export class OwnerPageComponent implements OnInit {
   }
 
   onAddNew() {
-    this.addNewEmployeeTrigger = false;
     this.addNewTrigger = !this.addNewTrigger;
   }
 
-  onAddEmployee() {
-    this.addNewTrigger = false;
-    this.addNewEmployeeTrigger = !this.addNewEmployeeTrigger;
+  onSearchParking() {
+    //noinspection TypeScriptUnresolvedFunction
+    this.parkingService.searchByTermAndOwner(this.searchTerm, this.currentUser.id)
+      .subscribe(response => {
+        if(response) {
+          this.foundParkings = response;
+          this.foundParkingsTrigger = true;
+        }
+      }, error => {
+        this.title = "Search Parking Error";
+        this.text = "An unexpected error occurred. Please try again!";
+        this.returnTrigger = true;
+        document.getElementById('modalCont').click();
+      })
   }
 
   onSubmit() {
@@ -110,59 +100,30 @@ export class OwnerPageComponent implements OnInit {
       .subscribe(res => {
           console.log(res);
           if (res) {
+            this.title = "Parking Area Add Success";
+            this.text = "You have successfully added a new parking area!";
             this.addParkingAreaForm.reset();
             document.getElementById('modalCont').click();
           }
         },
         error => {
-          this.submitted = false;
-          console.log("Registration error " + JSON.stringify(error));
-          this.notification = {msgType: 'error', msgBody: error['error'].errorMessage};
-        });
-  }
-
-  onSubmitNewEmployee() {
-    this.notification = undefined;
-    this.submitted = true;
-
-    //noinspection TypeScriptUnresolvedFunction
-    this.userService.addNewEmployee(this.addEmployeeForm.value, this.currentUser.id)
-      .delay(1000)
-      .subscribe(res => {
-        console.log(res);
-        if(res) {
-          this.title = "Employee Registration Success";
-          this.text = "You have successfully added a new user!";
-          this.addEmployeeForm.reset();
+          this.title = "Search Parking Error";
+          this.text = "An unexpected error occurred. Please try again!";
+          this.returnTrigger = true;
           document.getElementById('modalCont').click();
-        }
-      },
-      error => {
-        this.submitted = false;
-        console.log("Add Employee Error " + JSON.stringify(error));
-        this.notification = {msgType: 'error', msgBody: error['error'].errorMessage};
-      });
+        });
   }
 
   open(content) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(content).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-      window.location.reload();
+      if(this.returnTrigger) {
+        return;
+      } else {
+        window.location.reload();
+      }
     }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      window.location.reload();
+      return;
     });
   }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
-
 }

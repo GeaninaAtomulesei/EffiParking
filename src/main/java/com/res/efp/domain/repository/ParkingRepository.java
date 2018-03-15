@@ -32,4 +32,18 @@ public interface ParkingRepository extends JpaRepository<Parking, Long> {
             "concat(p.street, ' ', p.number, ' ', p.city) like %:term% or " +
             "concat(p.locationName, ' ', p.city) like %:term% ")
     List<Parking> findByTerm(@Param("term") String term);
+
+    @Query(value = "select distinct p from Parking as p where " +
+            "(p.name like %:term% or " +
+            "p.locationName like %:term% or " +
+            "p.street like %:term% or " +
+            "p.city like %:term% or " +
+            "concat(p.name, ' ', p.locationName) like %:term% or " +
+            "concat(p.name, ' ', p.street) like %:term% or " +
+            "concat(p.street, ' ', p.number) like %:term% or " +
+            "concat(p.street, ' ', p.number, ' ', p.city) like %:term% or " +
+            "concat(p.locationName, ' ', p.city) like %:term%) " +
+            "and p.owner.id = :ownerId")
+    List<Parking> findByTermAndOwner(@Param("term") String term, @Param("ownerId") Long ownerId);
+
 }

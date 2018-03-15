@@ -34,10 +34,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     private ParkingRepository parkingRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private OwnerRepository ownerRepository;
 
     @Autowired
-    private OwnerRepository ownerRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Employee findById(Long id) {
@@ -112,7 +112,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         if(employee.getUsername() != null & !employee.getUsername().isEmpty()) {
             currentEmployee.setUsername(employee.getUsername());
         }
-
+        if(employee.getPassword() != null & !employee.getPassword().isEmpty()) {
+            currentEmployee.setPassword(passwordEncoder.encode(employee.getPassword()));
+        }
         return employeeRepository.save(currentEmployee);
     }
 

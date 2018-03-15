@@ -306,4 +306,14 @@ public class ParkingController {
         List<Parking> foundParkings = parkingService.findByTerm(term);
         return ResponseEntity.ok(foundParkings);
     }
+
+    @RequestMapping(value = "/searchByTermAndOwner", method = RequestMethod.GET)
+    public ResponseEntity<?> searchByTermAndOwner(@RequestParam("term") String term,
+                                                  @RequestParam("ownerId") Long ownerId) {
+        if(ownerService.findById(ownerId) == null) {
+            return ResponseEntity.badRequest().body(new ObjectError("owner", "Owner not found!"));
+        }
+        List<Parking> foundParkings = parkingService.findByTermAndOwner(term, ownerId);
+        return ResponseEntity.ok(foundParkings);
+    }
 }

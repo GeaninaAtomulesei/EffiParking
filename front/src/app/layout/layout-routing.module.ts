@@ -9,7 +9,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard' },
       { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
-      { path: 'owner-page', loadChildren: './owner-page/owner-page.module#OwnerPageModule' },
+      { path: 'owner-parkings-page', loadChildren: './owner-parkings-page/owner-parkings-page.module#OwnerParkingsPageModule' },
+      { path: 'owner-employees-page', loadChildren: './owner-employees-page/owner-employees-page.module#OwnerEmployeesPageModule' },
       { path: 'reservations-page', loadChildren: './reservations-page/reservations-page.module#ReservationsPageModule'},
       { path: 'history-page', loadChildren: './history-page/history-page.module#HistoryPageModule'},
       { path: 'admin-users-page', loadChildren: './admin-users-page/admin-users-page.module#AdminUsersPageModule'},
