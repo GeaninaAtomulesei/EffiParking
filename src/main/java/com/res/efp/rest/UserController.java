@@ -97,7 +97,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/createAdmin", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/createAdmin", method = RequestMethod.POST)
     public ResponseEntity<?> createAdmin(@RequestBody UserRequest adminRequest, UriComponentsBuilder ucBuilder) {
         User existingUser = this.userService.findByUsername(adminRequest.getUsername());
         if (existingUser != null) {
@@ -109,12 +109,12 @@ public class UserController {
         return new ResponseEntity<>(admin, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/whoami")
+    @RequestMapping(value = "/users/whoami")
     public User user() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    @RequestMapping(value = "/registerAsOwner", method = RequestMethod.POST)
+    @RequestMapping(value = "/users/registerAsOwner", method = RequestMethod.POST)
     public ResponseEntity<?> registerAsOwner(@RequestParam(value = "id") Long id, @RequestBody String organisation) {
 
         User user = userService.findById(id);
@@ -127,7 +127,7 @@ public class UserController {
         return ResponseEntity.ok(id);
     }
 
-    @RequestMapping(value = "/activateOwner", method = RequestMethod.PUT)
+    @RequestMapping(value = "/users/activateOwner", method = RequestMethod.PUT)
     public ResponseEntity<?> activateOwner(@RequestParam(value = "userId") Long id,
                                            @RequestParam(value = "organisation") String organisation) {
         User user = userService.findById(id);
@@ -135,7 +135,7 @@ public class UserController {
         return ResponseEntity.ok(owner);
     }
 
-    @RequestMapping(value = "/getNotifications", method = RequestMethod.GET)
+    @RequestMapping(value = "/users/getNotifications", method = RequestMethod.GET)
     public ResponseEntity<?> getNotifications(@RequestParam(value = "userId") Long userId) {
         if (userService.findById(userId) == null) {
             return ResponseEntity.notFound().build();
@@ -144,7 +144,7 @@ public class UserController {
         return ResponseEntity.ok(notifications);
     }
 
-    @RequestMapping(value = "/deleteNotification", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/users/deleteNotification", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteNotification(@RequestParam(value = "notificationId") Long notificationId) {
         Notification notification = notificationService.getById(notificationId);
         if(notification == null) {

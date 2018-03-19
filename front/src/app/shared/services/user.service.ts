@@ -31,10 +31,6 @@ export class UserService {
     return promise;
   }
 
-  resetCredentials() {
-    return this.apiService.get(this.config.reset_credentials_url);
-  }
-
   getMyInfo() {
     return this.apiService.get(this.config.whoami_url).map(user => {
       this.currentUser = user;
@@ -43,7 +39,10 @@ export class UserService {
   }
 
   getAll() {
-    return this.apiService.get(this.config.users_url);
+    return this.apiService.get(this.config.get_all_users_url)
+      .map(response => {
+        return response;
+      });
   }
 
   registerAsOwner(id, organisation) {
@@ -75,13 +74,6 @@ export class UserService {
       });
   }
 
-  getEmployeeById(employeeId) {
-    return this.apiService.get(this.config.get_employee_by_id_url + "?employeeId=" + employeeId)
-      .map(res => {
-        return res;
-      });
-  }
-
   getEmployeeByTerm(ownerId, term) {
     return this.apiService.get(this.config.search_employee_by_term_url + "?ownerId=" + ownerId + "&term=" + term)
       .map(res => {
@@ -91,13 +83,6 @@ export class UserService {
 
   updateEmployee(employee, employeeId) {
     return this.apiService.put(this.config.update_employee_url + "?employeeId=" + employeeId, employee)
-      .map(res => {
-        return res;
-      });
-  }
-
-  deleteEmployee(employeeId) {
-    return this.apiService.delete(this.config.delete_employee_url + "?employeeId=" + employeeId)
       .map(res => {
         return res;
       });
