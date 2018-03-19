@@ -5,12 +5,17 @@ import com.res.efp.exception.ResourceConflictException;
 import com.res.efp.service.NotificationService;
 import com.res.efp.service.OwnerService;
 import com.res.efp.service.UserService;
+import com.res.efp.service.impl.StorageService;
+import com.res.efp.utils.StringResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
@@ -33,6 +38,9 @@ public class UserController {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private StorageService storageService;
 
     @PostConstruct
     public void initAdmin() {
@@ -187,6 +195,58 @@ public class UserController {
         }
         List<HistoryObject> history = userService.getHistory(userId);
         return ResponseEntity.ok(history);
+    }
+
+    @RequestMapping(value = "/users/update", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateUser(@RequestBody UserRequest userRequest,
+                                        @RequestParam(value = "userId") Long userId) {
+        if(userService.findById(userId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with id " + userId + " not found.");
+        }
+        User updatedUser = userService.updateUser(userRequest, userId);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @RequestMapping(value = "/users/uploadPhoto", method = RequestMethod.POST)
+    public ResponseEntity<?> handleFileUpload(@RequestParam(value = "file") MultipartFile file,
+                                              @RequestParam(value = "userId") Long userId) {
+        if(userService.findById(userId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+        String message;
+        try {
+            storageService.store(file, userId);
+            message = file.getOriginalFilename() + " successfully uploaded!";
+            return ResponseEntity.ok(message);
+        } catch(Exception e) {
+            message = "Failed to upload " + file.getOriginalFilename();
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+        }
+    }
+
+    @RequestMapping(value = "/users/getPhoto/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getPhoto(@PathVariable String userId) {
+        User user = userService.findById(Long.parseLong(userId));
+        if(user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        if(user.getPhoto() == null) {
+            return ResponseEntity.status(HttpStatus.OK).body("No photo");
+        }
+
+        String userPhoto = MvcUriComponentsBuilder.fromMethodName(UserController.class, "getFile", user.getPhoto()).build().toString();
+        StringResponse response = new StringResponse();
+        response.setResponse(userPhoto);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @RequestMapping(value = "/users/files/{filename:.+}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+        Resource file = storageService.loadFile(filename);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
     }
 }
 

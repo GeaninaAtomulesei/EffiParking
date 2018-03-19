@@ -151,4 +151,11 @@ export class UserService {
         return res;
       });
   }
+
+  updateUser(user, userId) {
+    return this.apiService.put(this.config.update_user_url + "?userId=" + userId, user)
+      .map(res => {
+        return res;
+      });
+  }
 }

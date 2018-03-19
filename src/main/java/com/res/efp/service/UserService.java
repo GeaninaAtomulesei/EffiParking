@@ -20,4 +20,5 @@ public interface UserService {
     List<User> findAllAdmins();
     boolean deleteUser(Long userId);
     List<HistoryObject> getHistory(Long userId);
+    User updateUser(UserRequest userRequest, Long userId);
 }

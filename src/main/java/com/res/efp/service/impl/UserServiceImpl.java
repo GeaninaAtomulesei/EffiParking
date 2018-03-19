@@ -158,4 +158,27 @@ public class UserServiceImpl implements UserService {
         Collections.reverse(history);
         return history;
     }
+
+    @Override
+    public User updateUser(UserRequest userRequest, Long userId) {
+        User currentUser = userRepository.findOne(userId);
+
+        if(userRequest.getFirstName() != null && !userRequest.getFirstName().isEmpty()) {
+            currentUser.setFirstName(userRequest.getFirstName());
+        }
+        if(userRequest.getLastName() != null && !userRequest.getLastName().isEmpty()) {
+            currentUser.setLastName(userRequest.getLastName());
+        }
+        if(userRequest.getEmail() != null && !userRequest.getEmail().isEmpty()) {
+            currentUser.setEmail(userRequest.getEmail());
+        }
+        if(userRequest.getUsername() != null && !userRequest.getUsername().isEmpty()) {
+            currentUser.setUsername(userRequest.getUsername());
+        }
+        if(userRequest.getPassword() != null && !userRequest.getPassword().isEmpty()) {
+            currentUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        }
+        return userRepository.save(currentUser);
+    }
+
 }

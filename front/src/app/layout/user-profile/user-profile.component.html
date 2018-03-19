@@ -34,12 +34,12 @@
               <th>{{user.organisation}}</th>
             </tr>
             <tr *ngIf="role=='Owner'">
-              <th>Owned parking areas</th>
+              <th><p style="display:block">Owned parking areas</p></th>
               <th *ngIf="ownedParkingAreas && ownedParkingAreas.length > 0">
-                <a *ngFor="let parking of ownedParkingAreas"[routerLink]="['/parking-page', parking.id]">{{parking.name}}</a>
+                <a style="display: block" *ngFor="let parking of ownedParkingAreas" [routerLink]="['/parking-page', parking.id]">{{parking.name}}</a>
               </th>
               <th *ngIf="ownedParkingAreas && ownedParkingAreas.length < 1">
-                <p>None</p>
+                <p style="display: block">None</p>
               </th>
             </tr>
 
@@ -54,12 +54,12 @@
             </tr>
 
             <tr *ngIf="role=='Employee'">
-              <th>Managed parking areas</th>
+              <th><p style="display: block"> Managed parking areas</p></th>
               <th *ngIf="assignedParkingAreas && assignedParkingAreas.length > 0">
-                <a *ngFor="let parking of assignedParkingAreas"[routerLink]="['/parking-page', parking.id]">{{parking.name}}</a>
+                <a style="display: block" *ngFor="let parking of assignedParkingAreas"[routerLink]="['/parking-page', parking.id]">{{parking.name}}</a>
               </th>
               <th *ngIf="assignedParkingAreas && assignedParkingAreas.length < 1">
-                <p>None</p>
+                <p style="display: block">None</p>
               </th>
             </tr>
 
@@ -69,15 +69,80 @@
       </div>
 
       <div class="col col-xl-4 col-lg-8">
-        <img class="img-thumbnail" src="http://placehold.it/400x400" alt="">
+        <img *ngIf="this.photo" class="img-thumbnail" src="{{photo}}" alt="{{photo}}">
+        <img *ngIf="!this.photo" src="../../../assets/images/no_avatar.jpg" class="img-thumbnail" />
       </div>
+
+      <br><br>
 
     </div>
     <a class="btn btn-primary btn-lg" role="button" style="color:black; background-color: #999" *ngIf="isOwner" (click)="onEditEmployee()">Edit</a>
     &nbsp;
-    <a class="btn btn-danger btn-lg" role="button" style="color:black" *ngIf="isAdmin || isOwner" (click)="onDeleteUser()">Delete Account</a>
+    <a class="btn btn-danger btn-lg" role="button" style="color:black" *ngIf="(isAdmin || isOwner) && !isMyProfile" (click)="onDeleteUser()">Delete Account</a>
+
+    <a class="btn btn-primary btn-lg" role="button" style="color:black; background-color: #999" *ngIf="isMyProfile" (click)="onEditMyProfile()">Edit My Profile</a>
+    &nbsp;
+    <button class="btn btn-primary btn-lg" style="color:black; background-color: #999" *ngIf="isMyProfile" (click)="onAddPhoto()">Add Photo</button>
+    &nbsp;
+    <a class="btn btn-danger btn-lg" role="button" style="color:black" *ngIf="isMyProfile" (click)="onDeleteUser()">Delete My Account</a>
+
+    <br> <br> <br>
+    <a class="btn btn-primary btn-lg" style="color:black; background-color: #999" *ngIf="isMyProfile && addPhotoTrigger">
+      <input type="file" style="color:black" (change)="selectFile($event)">
+    </a>
+    &nbsp;
+    <button class="btn btn-primary btn-lg" style="color:black; background-color: #999" *ngIf="isMyProfile && addPhotoTrigger" [disabled]="!selectedFile" (click)="upload()">Upload Photo</button>
 
     <br><br>
+
+    <div class="row" *ngIf="editMyProfileTrigger" style="text-align: center; color: #999">
+      <div class="col-lg-6" *ngIf="user" style="margin: auto">
+
+        <form [formGroup]="editMyProfileForm" (ngSubmit)="onSubmitEditMyProfileForm()">
+          <br>
+          <div class="form-content" style="text-align: left">
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>First Name</label>
+                <input class="form-control" formControlName="firstName" placeholder="{{user.firstName}}">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Last name</label>
+                <input class="form-control" formControlName="lastName" placeholder="{{user.lastName}}">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Email</label>
+                <input class="form-control" formControlName="email" placeholder="{{user.email}}">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Username</label>
+                <input class="form-control" formControlName="username" placeholder="{{user.username}}">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Password</label>
+                <input class="form-control" formControlName="password">
+              </fieldset>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black">Submit</button>
+        </form>
+      </div>
+    </div>
+
+
+
 
     <div class="row" *ngIf="editEmployeeTrigger" style="text-align: center; color: #999">
       <div class="col-lg-6" *ngIf="user" style="margin: auto">

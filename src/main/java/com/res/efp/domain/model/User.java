@@ -30,6 +30,8 @@ public class User implements UserDetails, Serializable {
 
     private String email;
 
+    private String photo;
+
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority",
                joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -130,6 +132,14 @@ public class User implements UserDetails, Serializable {
 
     public void setHistory(List<HistoryObject> history) {
         this.history = history;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     @JsonIgnore

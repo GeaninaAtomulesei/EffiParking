@@ -10,6 +10,7 @@ import {UserService} from "../../shared/services/user.service";
 import {APP_INITIALIZER} from "@angular/core";
 import {initUserFactory} from "../../app.module";
 import {NgModule} from "@angular/core";
+import {UploadService} from "../../shared/services/upload.service";
 @NgModule({
   imports: [
     CommonModule,
@@ -25,6 +26,7 @@ import {NgModule} from "@angular/core";
   providers: [
     ParkingService,
     UserService,
+    UploadService,
     {
       'provide': APP_INITIALIZER,
       'useFactory': initUserFactory,
