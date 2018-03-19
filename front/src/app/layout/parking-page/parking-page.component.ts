@@ -13,6 +13,7 @@ import {FormBuilder} from "@angular/forms";
 import {Router} from "@angular/router";
 import {Validators} from "@angular/forms";
 import {UserService} from "../../shared/services/user.service";
+import {AppConstants} from "../../shared/constants";
 
 @Component({
   selector: 'app-parking-page',
@@ -22,39 +23,39 @@ import {UserService} from "../../shared/services/user.service";
 })
 export class ParkingPageComponent implements OnInit, OnDestroy {
   private sub: any;
-  id: number;
-  parking: any;
-  currentUser: any;
-  isOwner: boolean = false;
-  isAdmin: boolean = false;
-  currentLat: number;
-  currentLng: number;
-  startDate: any;
-  startTime: any;
-  endDate: any;
-  endTime: any;
-  reservation: any;
-  showReservationForm: boolean = false;
-  reservedLotId: number;
-  notification: DisplayMessage;
-  title: string;
-  text: string;
-  minDate: NgbDateStruct;
-  editTrigger: boolean = false;
-  editParkingAreaForm: FormGroup;
-  addLotsForm: FormGroup;
-  removeLotsForm: FormGroup;
-  searchEmployeeForm: FormGroup;
-  submitted = false;
-  closeButton = false;
-  okButton = false;
-  addLotsTrigger = false;
-  removeLotsTrigger = false;
-  addEmployeeTrigger = false;
-  searchEmployeesResult = [];
-  searchTrigger = false;
-  returnTrigger = false;
-  resSuccessTrigger = false;
+  private id: number;
+  private parking: any;
+  private currentUser: any;
+  private isOwner: boolean = false;
+  private isAdmin: boolean = false;
+  private currentLat: number;
+  private currentLng: number;
+  private startDate: any;
+  private startTime: any;
+  private endDate: any;
+  private endTime: any;
+  private reservation: any;
+  private showReservationForm: boolean = false;
+  private reservedLotId: number;
+  private notification: DisplayMessage;
+  private title: string;
+  private text: string;
+  private minDate: NgbDateStruct;
+  private editTrigger: boolean = false;
+  private editParkingAreaForm: FormGroup;
+  private addLotsForm: FormGroup;
+  private removeLotsForm: FormGroup;
+  private searchEmployeeForm: FormGroup;
+  private submitted = false;
+  private closeButton = false;
+  private okButton = false;
+  private addLotsTrigger = false;
+  private removeLotsTrigger = false;
+  private addEmployeeTrigger = false;
+  private searchEmployeesResult = [];
+  private searchTrigger = false;
+  private returnTrigger = false;
+  private resSuccessTrigger = false;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -72,14 +73,14 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
       this.id = +params['id'];
       console.log(this.id);
     });
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.getById(this.id).subscribe(parking => {
       this.parking = parking;
       if (this.currentUser.id == this.parking.owner.id) {
         this.isOwner = true;
       }
-      if(this.currentUser.authorities[0].authority == "ROLE_ADMIN") {
+      if(this.currentUser.authorities[0].authority == AppConstants.ADMIN_ROLE) {
         this.isAdmin = true;
       }
     });
@@ -115,17 +116,16 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
   }
 
   showForm() {
-    if(localStorage.getItem("isLoggedIn")) {
+    if(localStorage.getItem(AppConstants.LOGGED_IN)) {
       this.showReservationForm = !this.showReservationForm;
     } else {
-      this.title = "Not Permitted";
-      this.text = "You have to be logged in to make a reservation!";
+      this.title = AppConstants.NOT_PERMITTED_TITLE;
+      this.text = AppConstants.NOT_PERMITTED_TEXT;
       this.okButton = true;
       this.closeButton = false;
       this.returnTrigger = true;
-      document.getElementById('modalCont').click();
+      document.getElementById(AppConstants.MODAL_CONTENT).click();
     }
-
   }
 
   submitReservation() {
@@ -137,36 +137,36 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
     let currentTime = new Date();
     if (this.startDate.year == this.minDate.year && this.startDate.month == this.minDate.month && this.startDate.day == this.minDate.day) {
       if (currentTime.getHours() > this.startTime.hour) {
-        this.title = "Incorrect Time Value";
-        this.text = "You cannot set a time in the past for your reservation!";
+        this.title = AppConstants.INVALID_TIME_TITLE;
+        this.text = AppConstants.INVALID_PAST_TIME_TEXT;
         this.returnTrigger = true;
         this.closeButton = false;
         this.okButton = true;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
         return;
       } else if (currentTime.getHours() == this.startTime.hour) {
         if (currentTime.getMinutes() > this.startTime.minute) {
-          this.title = "Incorrect Time Value";
-          this.text = "You cannot set a time in the past for your reservation!";
+          this.title = AppConstants.INVALID_TIME_TITLE;
+          this.text = AppConstants.INVALID_PAST_TIME_TEXT;
           this.returnTrigger = true;
-          document.getElementById('modalCont').click();
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
           return;
         }
       }
     }
 
     if (this.startTime.hour > this.endTime.hour) {
-      this.title = "Incorrect Time Value";
-      this.text = "Your leaving time is before your start time!";
+      this.title = AppConstants.INVALID_TIME_TITLE;
+      this.text = AppConstants.INVALID_LEAVE_TIME_TEXT;
       this.returnTrigger = true;
-      document.getElementById('modalCont').click();
+      document.getElementById(AppConstants.MODAL_CONTENT).click();
       return;
     } else if (this.startTime.hour == this.endTime.hour) {
       if (this.startTime.minute > this.endTime.minute) {
-        this.title = "Incorrect Time Value";
-        this.text = "Your leaving time is before your start time!";
+        this.title = AppConstants.INVALID_TIME_TITLE;
+        this.text = AppConstants.INVALID_LEAVE_TIME_TEXT;
         this.returnTrigger = true;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
         return;
       }
     }
@@ -208,22 +208,21 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
       .subscribe(res => {
           if (res) {
             this.reservedLotId = res;
-            this.title = "Reservation Success";
-            this.text = "You have successfully reserved lot number " + this.reservedLotId + " !";
+            this.title = AppConstants.SUCCESS_TITLE;
+            this.text = AppConstants.RESERVATION_TEXT + this.reservedLotId + " !";
             this.returnTrigger = false;
             this.okButton = true;
             this.closeButton = false;
             this.resSuccessTrigger = true;
-            document.getElementById('modalCont').click();
+            document.getElementById(AppConstants.MODAL_CONTENT).click();
           }
         },
         error => {
-          console.log("Submit error " + JSON.stringify(error));
-          this.title = "Reservation Error";
-          this.text = "An unexpected error occurred. Please try again!";
+          this.title = AppConstants.ERROR_TITLE;
+          this.text = AppConstants.ERROR_TEXT;
           this.returnTrigger = true;
           this.okButton = true;
-          document.getElementById('modalCont').click();
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
         })
   }
 
@@ -261,21 +260,20 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
           console.log(res);
           if (res) {
             this.editParkingAreaForm.reset();
-            this.title = "Update Success";
-            this.text = "You have successfully updated the parking area!";
+            this.title = AppConstants.SUCCESS_TITLE;
+            this.text = AppConstants.EDIT_PARKING_TEXT;
             this.closeButton = true;
             this.returnTrigger = false;
-            document.getElementById('modalCont').click();
+            document.getElementById(AppConstants.MODAL_CONTENT).click();
           }
         },
         error => {
           this.submitted = false;
-          console.log("Update error " + JSON.stringify(error));
-          this.title = "Update Error";
-          this.text = "An unexpected error occurred. Please try again!";
+          this.title = AppConstants.ERROR_TITLE;
+          this.text = AppConstants.ERROR_TEXT;
           this.okButton = true;
           this.returnTrigger = true;
-          document.getElementById('modalCont').click();
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
         });
   }
 
@@ -288,17 +286,15 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
           this.searchEmployeeForm.reset();
           this.searchEmployeesResult = res;
           this.searchTrigger = true;
-          localStorage.setItem("foundEmployees", JSON.stringify(this.searchEmployeesResult));
         }
       },
       error => {
         this.submitted = false;
-        console.log("Search by term Error: " + JSON.stringify(error));
-        this.title = "Search Error";
-        this.text = "An unexpected error occurred. Please try again!";
+        this.title = AppConstants.ERROR_TITLE;
+        this.text = AppConstants.ERROR_TEXT;
         this.returnTrigger = true;
         this.okButton = true;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       });
   }
 
@@ -308,21 +304,20 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
     this.parkingService.addLots(this.id, this.addLotsForm.value.numberOfAddedLots)
       .subscribe(res => {
         if (res) {
-          this.title = "Add Lots Success";
-          this.text = "You have successfully added " + this.addLotsForm.value.numberOfAddedLots + " lots!";
+          this.title = AppConstants.SUCCESS_TITLE;
+          this.text = AppConstants.ADD_LOTS_TEXT + this.addLotsForm.value.numberOfAddedLots + " lots!";
           this.okButton = false;
           this.closeButton = true;
           this.returnTrigger = false;
-          document.getElementById('modalCont').click();
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
         }
       }, error => {
         this.submitted = false;
-        console.log("Add Lots error " + JSON.stringify(error));
-        this.title = "Add Lots Error";
-        this.text = "An unexpected error occurred. Please try again!";
+        this.title = AppConstants.ERROR_TITLE;
+        this.text = AppConstants.ERROR_TEXT;
         this.returnTrigger = true;
         this.okButton = true;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       });
   }
 
@@ -332,48 +327,47 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
     this.parkingService.removeLots(this.id, this.removeLotsForm.value.numberOfRemovedLots)
       .subscribe(res => {
           if (res) {
-            this.title = "Remove Lots Success";
-            this.text = "You have successfully removed " + this.removeLotsForm.value.numberOfRemovedLots + " lots!";
+            this.title = AppConstants.SUCCESS_TITLE;
+            this.text = AppConstants.REMOVE_LOTS_TEXT + this.removeLotsForm.value.numberOfRemovedLots + " lots!";
             this.okButton = false;
             this.closeButton = true;
             this.returnTrigger = false;
-            document.getElementById('modalCont').click();
+            document.getElementById(AppConstants.MODAL_CONTENT).click();
           }
         }, error => {
           this.submitted = false;
-          console.log("Remove Lots error " + JSON.stringify(error));
-          this.title = "Remove Lots Error";
-          this.text = "An unexpected error occurred. Please try again!";
+          this.title = AppConstants.ERROR_TITLE;
+          this.text = AppConstants.ERROR_TEXT;
           this.returnTrigger = true;
           this.okButton = true;
-          document.getElementById('modalCont').click();
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
         });
   }
 
   onDeleteParking() {
-    this.title = "Parking Area Removal";
-    this.text = "Are you sure you want to permanently delete this parking area?";
-    document.getElementById('modalContDel').click();
+    this.title = AppConstants.CONFIRM_TITLE;
+    this.text = AppConstants.DELETE_PARKING_CONFIRM_TEXT;
+    document.getElementById(AppConstants.MODAL_CONTENT_DEL).click();
   }
 
   onApproveDeleteParking() {
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.deleteParkingArea(this.id).subscribe(res => {
       if (res) {
-        this.title = "Parking Area Removal Success";
-        this.text = "You have successfully deleted the parking area!";
+        this.title = AppConstants.SUCCESS_TITLE;
+        this.text = AppConstants.DELETE_PARKING_TEXT;
         this.closeButton = false;
         this.okButton = true;
         this.returnTrigger = false;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       }
     }, error => {
-      this.title = "Parking Area Removal Error";
-      this.text = "An unexpected error occurred. Please try again!";
+      this.title = AppConstants.ERROR_TITLE;
+      this.text = AppConstants.ERROR_TEXT;
       this.closeButton = false;
       this.okButton = true;
       this.returnTrigger = true;
-      document.getElementById('modalCont').click();
+      document.getElementById(AppConstants.MODAL_CONTENT).click();
     });
   }
 
@@ -381,20 +375,20 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.addEmployee(this.id, employeeId).subscribe(res => {
       if(res) {
-        this.title = "Employee Assignment Success";
-        this.text = "You have successfully assigned the user to this parking area!";
+        this.title = AppConstants.SUCCESS_TITLE;
+        this.text = AppConstants.ASSIGN_EMPLOYEE_TEXT;
         this.closeButton = true;
         this.okButton = false;
         this.returnTrigger = false;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       }
     }, error => {
-      this.title = "Employee Assignment Error";
-      this.text = "An unexpected error occurred. Please try again!";
+      this.title = AppConstants.ERROR_TITLE;
+      this.text = AppConstants.ERROR_TEXT;
       this.closeButton = false;
       this.okButton = true;
       this.returnTrigger = true;
-      document.getElementById('modalCont').click();
+      document.getElementById(AppConstants.MODAL_CONTENT).click();
     });
   }
 
@@ -402,29 +396,29 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.removeEmployee(this.id, employeeId).subscribe(res => {
       if(res) {
-        this.title = "Employee Removal Success";
-        this.text = "You have successfully removed the user from this parking area!";
+        this.title = AppConstants.SUCCESS_TITLE;
+        this.text = AppConstants.REMOVE_EMPLOYEE_TEXT;
         this.closeButton = true;
         this.okButton = false;
         this.returnTrigger = false;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       }
     }, error => {
-      this.title = "Employee Removal Error";
-      this.text = "An unexpected error occurred. Please try again!";
+      this.title = AppConstants.ERROR_TITLE;
+      this.text = AppConstants.ERROR_TEXT;
       this.closeButton = false;
       this.okButton = true;
       this.returnTrigger = true;
-      document.getElementById('modalCont').click();
+      document.getElementById(AppConstants.MODAL_CONTENT).click();
     });
   }
 
   open(content) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(content).result.then((result) => {
-      if (result == 'C') {
+      if (result == AppConstants.CLOSE) {
         window.location.reload();
-      } else if (result == "OK") {
+      } else if (result == AppConstants.OK) {
         if(this.returnTrigger == true) {
           return;
         } else if(this.resSuccessTrigger == true) {
@@ -442,7 +436,7 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
   open2(contentDel) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(contentDel).result.then((result) => {
-      if (result == "Y") {
+      if (result == AppConstants.YES) {
         this.onApproveDeleteParking();
       } else {
         return;

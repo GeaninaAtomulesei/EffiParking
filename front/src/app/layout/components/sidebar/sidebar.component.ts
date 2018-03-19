@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router, NavigationEnd} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {ParkingService} from "../../../shared/services/parking.service";
+import {AppConstants} from "../../../shared/constants";
 
 @Component({
   selector: 'app-sidebar',
@@ -13,12 +14,12 @@ export class SidebarComponent {
   isActive: boolean = false;
   showMenu: string = '';
   pushRightClass: string = 'push-right';
-  private currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  private isOwner: boolean = false;
-  private isEmployee: boolean = false;
+  currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
+  isOwner: boolean = false;
+  isEmployee: boolean = false;
   assignedParkingAreas = [];
-  private isLoggedIn: boolean = false;
-  private isAdmin: boolean = false;
+  isLoggedIn: boolean = false;
+  isAdmin: boolean = false;
 
   constructor(private translate: TranslateService, public router: Router,
               private parkingService: ParkingService) {
@@ -40,11 +41,11 @@ export class SidebarComponent {
     if (this.currentUser) {
       if (this.currentUser.authorities) {
         this.currentUser.authorities.forEach(auth => {
-          if (auth.authority == "ROLE_OWNER") {
+          if (auth.authority == AppConstants.OWNER_ROLE) {
             this.isOwner = true;
-          } else if (auth.authority == "ROLE_EMPLOYEE") {
+          } else if (auth.authority == AppConstants.EMPLOYEE_ROLE) {
             this.isEmployee = true;
-          } else if(auth.authority == "ROLE_ADMIN") {
+          } else if(auth.authority == AppConstants.ADMIN_ROLE) {
             this.isAdmin = true;
           }
         });
@@ -63,7 +64,7 @@ export class SidebarComponent {
         });
     }
 
-    if(localStorage.getItem("isLoggedIn")) {
+    if(localStorage.getItem(AppConstants.LOGGED_IN)) {
       this.isLoggedIn = true;
     }
   }
@@ -100,6 +101,6 @@ export class SidebarComponent {
   }
 
   onLoggedout() {
-    localStorage.removeItem('isLoggedin');
+    localStorage.removeItem(AppConstants.LOGGED_IN);
   }
 }

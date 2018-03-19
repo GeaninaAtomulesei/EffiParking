@@ -5,6 +5,7 @@ import {OnDestroy} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 import {ParkingService} from "../../shared/services/parking.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {AppConstants} from "../../shared/constants";
 
 @Component({
   selector: 'app-emp-parking-page',
@@ -15,17 +16,16 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
 
   private sub: any;
-  id: any;
-  parking: any;
-  reloadTrigger = false;
-  title: string;
-  text: string;
-  username: string;
-  foundReservations: any = [];
-  foundReservationsTrigger: boolean;
-  todayReservations = [];
-  todayResTrigger: boolean;
-
+  private id: any;
+  private parking: any;
+  private reloadTrigger = false;
+  private title: string;
+  private text: string;
+  private username: string;
+  private foundReservations: any = [];
+  private foundReservationsTrigger: boolean;
+  private todayReservations = [];
+  private todayResTrigger: boolean;
 
   constructor(private route: ActivatedRoute,
               private modalService: NgbModal,
@@ -60,16 +60,16 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.setLotVacant(lotId).subscribe(res => {
       if(res) {
-        this.title = "Success";
-        this.text = "You have successfully set lot number " + lotId + " as vacant!";
+        this.title = AppConstants.SUCCESS_TITLE;
+        this.text = AppConstants.UPDATE_LOT_VACANT_TEXT;
         this.reloadTrigger = true;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       }
     }, error => {
-      this.title = "Error";
-      this.text = "An unexpected error occurred. Please try again!";
+      this.title = AppConstants.ERROR_TITLE;
+      this.text = AppConstants.ERROR_TEXT;
       this.reloadTrigger = false;
-      document.getElementById('modalCont').click();
+      document.getElementById(AppConstants.MODAL_CONTENT).click();
     })
   }
 
@@ -77,16 +77,16 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.setLotOccupied(lotId).subscribe(res => {
       if(res) {
-        this.title = "Success";
-        this.text = "You have successfully set lot number " + lotId + " as occupied!";
+        this.title = AppConstants.SUCCESS_TITLE;
+        this.text = AppConstants.UPDATE_LOT_OCCUPIED_TEXT;
         this.reloadTrigger = true;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       }
     }, error => {
-      this.title = "Error";
-      this.text = "An unexpected error occurred. Please try again!";
+      this.title = AppConstants.ERROR_TITLE;
+      this.text = AppConstants.ERROR_TEXT;
       this.reloadTrigger = false;
-      document.getElementById('modalCont').click();
+      document.getElementById(AppConstants.MODAL_CONTENT).click();
     })
   }
 
@@ -99,17 +99,17 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
           this.foundReservationsTrigger = true;
         }
       }, error => {
-        this.title = "Error";
-        this.text = "An unexpected error occurred. Please try again!";
+        this.title = AppConstants.ERROR_TITLE;
+        this.text = AppConstants.ERROR_TEXT;
         this.reloadTrigger = false;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       });
   }
 
   open(content) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(content).result.then((result) => {
-      if (result == "OK") {
+      if (result == AppConstants.OK) {
         if(this.reloadTrigger == true) {
           window.location.reload();
         } else {
@@ -125,6 +125,4 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
-
-
 }

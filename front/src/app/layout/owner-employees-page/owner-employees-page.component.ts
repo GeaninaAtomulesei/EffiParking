@@ -1,13 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {routerTransition} from "../../router.animations";
-import {ParkingService} from "../../shared/services/parking.service";
 import {FormGroup} from "@angular/forms";
 import {FormBuilder} from "@angular/forms";
 import {Validators} from "@angular/forms";
 import {DisplayMessage} from "../../shared/models/display-message";
-import {ModalDismissReasons} from "@ng-bootstrap/ng-bootstrap";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {UserService} from "../../shared/services/user.service";
+import {AppConstants} from "../../shared/constants";
 
 @Component({
   selector: 'app-owner-employees-page',
@@ -19,13 +18,13 @@ export class OwnerEmployeesPageComponent implements OnInit {
 
   private registeredEmployees: any[];
   private addNewEmployeeTrigger: boolean = false;
-  addEmployeeForm: FormGroup;
-  submitted = false;
-  notification: DisplayMessage;
+  private addEmployeeForm: FormGroup;
+  private submitted = false;
+  private notification: DisplayMessage;
   private currentUser;
-  title: string;
-  text: string;
-  error: any;
+  private title: string;
+  private text: string;
+  private error: any;
   private foundEmployeesTrigger: boolean = false;
   private searchTerm: string;
   private foundEmployees: any = [];
@@ -36,7 +35,7 @@ export class OwnerEmployeesPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
 
     this.addEmployeeForm = this.formBuilder.group({
       firstName: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
@@ -50,7 +49,6 @@ export class OwnerEmployeesPageComponent implements OnInit {
     this.userService.getEmployeesByOwner(this.currentUser.id)
       .subscribe(employees => {
           this.registeredEmployees = employees;
-          console.log("employees: " + this.registeredEmployees);
         },
         error => {
           console.log(error);
@@ -70,10 +68,9 @@ export class OwnerEmployeesPageComponent implements OnInit {
         },
         error => {
           this.submitted = false;
-          console.log("Search by term Error: " + JSON.stringify(error));
-          this.title = "Search Error";
-          this.text = "An unexpected error occurred. Please try again!";
-          document.getElementById('modalCont').click();
+          this.title = AppConstants.ERROR_TITLE;
+          this.text = AppConstants.ERROR_TEXT;
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
         });
   }
 
@@ -88,20 +85,19 @@ export class OwnerEmployeesPageComponent implements OnInit {
     this.userService.addNewEmployee(this.addEmployeeForm.value, this.currentUser.id)
       .delay(1000)
       .subscribe(res => {
-          console.log(res);
           if (res) {
             this.submitted = true;
-            this.title = "Employee Registration Success";
-            this.text = "You have successfully registered a new employee!";
+            this.title = AppConstants.SUCCESS_TITLE;
+            this.text = AppConstants.ADD_EMPLOYEE_TEXT;
             this.addEmployeeForm.reset();
-            document.getElementById('modalCont').click();
+            document.getElementById(AppConstants.MODAL_CONTENT).click();
           }
         },
         error => {
           this.submitted = false;
-          this.title = "Employee Registration Error";
-          this.text = "An unexpected error occurred. Please try again!";
-          document.getElementById('modalCont').click();
+          this.title = AppConstants.ERROR_TITLE;
+          this.text = AppConstants.ERROR_TEXT;
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
         });
   }
 

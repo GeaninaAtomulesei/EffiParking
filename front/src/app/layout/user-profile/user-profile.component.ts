@@ -14,6 +14,7 @@ import {UploadService} from "../../shared/services/upload.service";
 import {HttpEventType} from "@angular/common/http";
 import {HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {AppConstants} from "../../shared/constants";
 
 @Component({
   selector: 'app-user-profile',
@@ -46,7 +47,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   private selectedFile: FileList;
   private currentFileUpload: File;
   private progress: {percentage: number} = {percentage: 0};
-  private photo: string;
+  private photo: any;
   private addPhotoTrigger: boolean = false;
 
   constructor(private route: ActivatedRoute,
@@ -61,47 +62,45 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
-      console.log("curr user-profile id: " + this.id);
     });
 
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
 
     //noinspection TypeScriptUnresolvedFunction
     this.userService.getById(this.id).subscribe(user => {
       this.user = user;
       if (this.user.authorities) {
         this.user.authorities.forEach(auth => {
-          if (auth.authority == "ROLE_OWNER") {
-            this.role = "Owner";
+          if (auth.authority == AppConstants.OWNER_ROLE) {
+            this.role = AppConstants.OWNER;
             //noinspection TypeScriptUnresolvedFunction
             this.parkingService.getByOwner(this.user.username).subscribe(response => {
               this.ownedParkingAreas = response;
             });
-          } else if (auth.authority == "ROLE_EMPLOYEE") {
-            this.role = "Employee";
+          } else if (auth.authority == AppConstants.EMPLOYEE_ROLE) {
+            this.role = AppConstants.EMPLOYEE;
             //noinspection TypeScriptUnresolvedFunction
             this.parkingService.getByEmployee(this.user.id).subscribe(response => {
               this.assignedParkingAreas = response;
             });
 
-            if (this.currentUser.authorities[0].authority == "ROLE_OWNER") {
+            if (this.currentUser.authorities[0].authority == AppConstants.OWNER_ROLE) {
               if (this.user.owner.id == this.currentUser.id) {
                 this.isOwner = true;
                 console.log("IS OWNER");
               }
             }
-          } else if (auth.authority == "ROLE_ADMIN") {
-            this.role = "Administrator";
+          } else if (auth.authority == AppConstants.ADMIN_ROLE) {
+            this.role = AppConstants.ADMIN;
           } else {
-            this.role = "User";
+            this.role = AppConstants.USER;
           }
         });
       }
-      console.log("curr user-profile: " + JSON.stringify(this.user));
     });
 
-    if (localStorage.getItem("currentUser")) {
-      if (this.currentUser.authorities[0].authority == "ROLE_ADMIN") {
+    if (localStorage.getItem(AppConstants.CURRENT_USER)) {
+      if (this.currentUser.authorities[0].authority == AppConstants.ADMIN_ROLE) {
         this.isAdmin = true;
         console.log("IS ADMIN");
       }
@@ -142,19 +141,19 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.userService.updateUser(this.editMyProfileForm.value, this.id)
       .subscribe(response => {
         if (response) {
-          this.title = "Edit Profile Success";
-          this.text = "You have successfully edited your profile!";
+          this.title = AppConstants.SUCCESS_TITLE;
+          this.text = AppConstants.EDIT_PROFILE_TEXT;
           this.deletedTrigger = false;
           this.reloadTrigger = true;
-          document.getElementById('modalCont').click();
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
         }
       }, error => {
         console.log(error);
-        this.title = "Edit Profile Error";
-        this.text = "An unexpected error occurred. Please try again!";
+        this.title = AppConstants.ERROR_TITLE;
+        this.text = AppConstants.ERROR_TEXT;
         this.deletedTrigger = false;
         this.reloadTrigger = false;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       });
   }
 
@@ -163,19 +162,19 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.userService.updateEmployee(this.editEmployeeForm.value, this.id)
       .subscribe(response => {
         if (response) {
-          this.title = "Edit Employee Success";
-          this.text = "You have successfully edited this employee's information!";
+          this.title = AppConstants.SUCCESS_TITLE;
+          this.text = AppConstants.EDIT_EMPLOYEE_PROFILE_TEXT;
           this.deletedTrigger = false;
           this.reloadTrigger = true;
-          document.getElementById('modalCont').click();
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
         }
       }, error => {
         console.log(error);
-        this.title = "Edit Employee Error";
-        this.text = "An unexpected error occurred. Please try again!";
+        this.title = AppConstants.ERROR_TITLE;
+        this.text = AppConstants.ERROR_TEXT;
         this.deletedTrigger = false;
         this.reloadTrigger = false;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       });
   }
 
@@ -185,13 +184,13 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   onDeleteUser() {
     if (this.isMyProfile) {
-      this.title = "Account Deletion";
-      this.text = "Are you sure you want to permanently delete your account?";
+      this.title = AppConstants.CONFIRM_TITLE;
+      this.text = AppConstants.DELETE_MY_ACCOUNT_CONFIRM_TEXT;
     } else {
-      this.title = "User Account Removal";
-      this.text = "Are you sure you want to permanently delete this user's account?";
+      this.title = AppConstants.CONFIRM_TITLE;
+      this.text = AppConstants.DELETE_USER_ACCOUNT_CONFIRM_TEXT;
     }
-    document.getElementById('modalContDel').click();
+    document.getElementById(AppConstants.MODAL_CONTENT_DEL).click();
   }
 
   onApproveDeleteUser() {
@@ -199,27 +198,27 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.userService.deleteUser(this.id).subscribe(res => {
       if (res) {
         if (this.isMyProfile) {
-          this.title = "Delete Account Success";
-          this.text = "You have successfully deleted your account!";
+          this.title = AppConstants.SUCCESS_TITLE;
+          this.text = AppConstants.DELETE_MY_ACCOUNT_TEXT;
           this.returnTrigger = false;
           this.deletedTrigger = false;
           this.loginTrigger = true;
         } else {
-          this.title = "Delete Account Success";
-          this.text = "You have successfully deleted the user's account!";
+          this.title = AppConstants.SUCCESS_TITLE;
+          this.text = AppConstants.DELETE_USER_ACCOUNT_TEXT;
           this.returnTrigger = false;
           this.deletedTrigger = true;
           this.loginTrigger = false;
         }
 
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       }
     }, error => {
-      this.title = "Delete Account Error";
-      this.text = "An unexpected error occurred. Please try again!";
+      this.title = AppConstants.ERROR_TITLE;
+      this.text = AppConstants.ERROR_TEXT;
       this.returnTrigger = true;
       this.deletedTrigger = false;
-      document.getElementById('modalCont').click();
+      document.getElementById(AppConstants.MODAL_CONTENT).click();
     });
   }
 
@@ -228,13 +227,13 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     if (file.type.match('image.*')) {
       this.selectedFile = event.target.files;
     } else {
-      this.title = "Invalid Photo Format";
-      this.text = "The format of the file you have chosen is invalid. Please choose an image file!"
+      this.title = AppConstants.INVALID_PHOTO_TITLE;
+      this.text = AppConstants.INVALID_PHOTO_TEXT;
       this.returnTrigger = true;
       this.deletedTrigger = false;
       this.reloadTrigger = false;
       this.loginTrigger = false;
-      document.getElementById('modalCont').click();
+      document.getElementById(AppConstants.MODAL_CONTENT).click();
     }
   }
 
@@ -250,14 +249,13 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         //noinspection TypeScriptUnresolvedVariable
         this.progress.percentage = Math.round(100 * event.loaded / event.total);
       } else if (event instanceof HttpResponse) {
-        console.log("File is completely uploaded!");
-        this.title = "Upload Success!";
-        this.text = "You have successfully uploaded your photo!";
+        this.title = AppConstants.SUCCESS_TITLE;
+        this.text = AppConstants.PHOTO_UPLOAD_TEXT;
         this.reloadTrigger = true;
         this.returnTrigger = false;
         this.deletedTrigger = false;
         this.loginTrigger = false;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       }
     });
     this.selectedFile = undefined;
@@ -266,7 +264,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   open(content) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(content).result.then((result) => {
-      if (result == "OK") {
+      if (result == AppConstants.OK) {
         if (this.deletedTrigger == true) {
           this.router.navigate(['/admin-users-page']);
         } else if (this.reloadTrigger == true) {
@@ -292,7 +290,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   open2(contentDel) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(contentDel).result.then((result) => {
-      if (result == "Y") {
+      if (result == AppConstants.YES) {
         this.onApproveDeleteUser();
       } else {
         return;

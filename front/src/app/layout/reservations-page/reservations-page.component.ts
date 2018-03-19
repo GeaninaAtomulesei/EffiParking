@@ -3,6 +3,7 @@ import {routerTransition} from "../../router.animations";
 import {OnInit} from "@angular/core";
 import {ParkingService} from "../../shared/services/parking.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {AppConstants} from "../../shared/constants";
 
 @Component({
   selector: 'app-reservations-page',
@@ -12,22 +13,22 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 })
 export class ReservationsPageComponent implements OnInit {
 
-  currentUser: any;
-  reservations: any;
-  todaysReservations: any = [];
-  upcomingReservations: any = [];
-  reservationId: number;
-  error: any;
-  title: string;
-  text: string;
-  cancelResTrigger = false;
+  private currentUser: any;
+  private reservations: any;
+  private todaysReservations: any = [];
+  private upcomingReservations: any = [];
+  private reservationId: number;
+  private error: any;
+  private title: string;
+  private text: string;
+  private cancelResTrigger = false;
 
   constructor(private parkingService: ParkingService,
               private modalService: NgbModal) {
   }
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
 
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.getUserReservations(this.currentUser.id)
@@ -54,10 +55,10 @@ export class ReservationsPageComponent implements OnInit {
   }
 
   onCancelReservation(reservationId) {
-    this.title = "Cancel Reservation Confirmation";
-    this.text = "Are you sure you want to cancel this reservation?";
+    this.title = AppConstants.CONFIRM_TITLE;
+    this.text = AppConstants.CANCEL_RESERVATION_CONFIRM_TEXT;
     this.reservationId = reservationId;
-    document.getElementById("modalContDel").click();
+    document.getElementById(AppConstants.MODAL_CONTENT_DEL).click();
   }
 
   onConfirmCancelReservation(reservationId) {
@@ -66,17 +67,17 @@ export class ReservationsPageComponent implements OnInit {
       .subscribe(res => {
         if(res) {
           this.reservationId = null;
-          this.title = "Cancel Reservation Success";
-          this.text = "You have successfully cancelled the reservation!";
+          this.title = AppConstants.SUCCESS_TITLE;
+          this.text = AppConstants.CANCEL_RESERVATION_TEXT;
           this.cancelResTrigger = true;
-          document.getElementById("modalCont").click();
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
         }
       }, error => {
         console.log(error);
-        this.title = "Cancel Reservation Error";
-        this.text = "An unexpected error occurred. Please try again!";
+        this.title = AppConstants.ERROR_TITLE;
+        this.text = AppConstants.ERROR_TEXT;
         this.cancelResTrigger = false;
-        document.getElementById("modalCont").click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       });
   }
 
@@ -84,7 +85,7 @@ export class ReservationsPageComponent implements OnInit {
   open(content) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(content).result.then((result) => {
-      if(result == "OK") {
+      if(result == AppConstants.OK) {
         if(this.cancelResTrigger == true) {
           window.location.reload();
         } else {
@@ -99,7 +100,7 @@ export class ReservationsPageComponent implements OnInit {
   open2(contentDel) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(contentDel).result.then((result) => {
-      if (result == "Y") {
+      if (result == AppConstants.YES) {
         this.onConfirmCancelReservation(this.reservationId);
       } else {
         return;

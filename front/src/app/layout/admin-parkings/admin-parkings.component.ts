@@ -3,6 +3,7 @@ import {Component} from "@angular/core";
 import {OnInit} from "@angular/core";
 import {ParkingService} from "../../shared/services/parking.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {AppConstants} from "../../shared/constants";
 
 @Component({
   selector: 'app-admin-parkings',
@@ -36,9 +37,9 @@ export class AdminParkingsComponent implements OnInit {
       }
     }, error => {
       console.log(error);
-      this.title = "Search Error";
-      this.text = "An unexpected error occurred. Please try again!";
-      document.getElementById('modalCont').click();
+      this.title = AppConstants.ERROR_TITLE;
+      this.text = AppConstants.ERROR_TEXT;
+      document.getElementById(AppConstants.MODAL_CONTENT).click();
     });
   }
 
@@ -51,16 +52,16 @@ export class AdminParkingsComponent implements OnInit {
       }
     }, error => {
       console.log(error);
-      this.title = "Search Error";
-      this.text = "An unexpected error occurred. Please try again!";
-      document.getElementById('modalCont').click();
+      this.title = AppConstants.ERROR_TITLE;
+      this.text = AppConstants.ERROR_TEXT;
+      document.getElementById(AppConstants.MODAL_CONTENT).click();
     });
   }
 
   open(content) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(content).result.then((result) => {
-      if(result == "OK") {
+      if(result == AppConstants.OK) {
         return;
       }
     }, (reason) => {

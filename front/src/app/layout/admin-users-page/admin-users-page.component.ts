@@ -3,10 +3,10 @@ import {routerTransition} from "../../router.animations";
 import {Component} from "@angular/core";
 import {UserService} from "../../shared/services/user.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {Router} from "@angular/router";
 import {FormGroup} from "@angular/forms";
 import {FormBuilder} from "@angular/forms";
 import {Validators} from "@angular/forms";
+import {AppConstants} from "../../shared/constants";
 
 @Component({
   selector: 'app-admin-users-page',
@@ -43,13 +43,13 @@ export class AdminUsersPageComponent implements OnInit {
       response.forEach(user => {
         if (user.authorities) {
           user.authorities.forEach(auth => {
-            if (auth.authority == "ROLE_ADMIN") {
+            if (auth.authority == AppConstants.ADMIN_ROLE) {
               this.admins.push(user);
-            } else if (auth.authority == "ROLE_OWNER") {
+            } else if (auth.authority == AppConstants.OWNER_ROLE) {
               this.owners.push(user);
-            } else if (auth.authority == "ROLE_USER") {
+            } else if (auth.authority == AppConstants.USER_ROLE) {
               this.users.push(user);
-            } else if (auth.authority == "ROLE_EMPLOYEE") {
+            } else if (auth.authority == AppConstants.EMPLOYEE_ROLE) {
               this.employees.push(user);
             }
           });
@@ -74,17 +74,17 @@ export class AdminUsersPageComponent implements OnInit {
       .delay(1000)
       .subscribe(res => {
         if(res) {
-          this.title = "Admin Creation Success";
-          this.text = "You have successfully added a new Administrator!";
+          this.title = AppConstants.SUCCESS_TITLE;
+          this.text = AppConstants.ADMIN_CREATE_TEXT;
           this.addAdminForm.reset();
           this.returnTrigger = false;
-          document.getElementById('modalCont').click();
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
         }
       }, error => {
-        this.title = "Admin Creation Error";
-        this.text = "An unexpected error occurred. Please try again!";
+        this.title = AppConstants.ERROR_TITLE;
+        this.text = AppConstants.ERROR_TEXT;
         this.returnTrigger = true;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       });
   }
 
@@ -130,9 +130,9 @@ export class AdminUsersPageComponent implements OnInit {
 
   onDeleteUser(userId) {
     this.deletedUserId = userId;
-    this.title = "User Account Removal";
-    this.text = "Are you sure you want to permanently delete this user's account?";
-    document.getElementById('modalContDel').click();
+    this.title = AppConstants.CONFIRM_TITLE;
+    this.text = AppConstants.DELETE_USER_CONFIRM_TEXT;
+    document.getElementById(AppConstants.MODAL_CONTENT_DEL).click();
   }
 
   onAddAdmin() {
@@ -143,16 +143,16 @@ export class AdminUsersPageComponent implements OnInit {
     //noinspection TypeScriptUnresolvedFunction
     this.userService.deleteUser(this.deletedUserId).subscribe(res => {
       if (res) {
-        this.title = "Delete Account Success";
-        this.text = "You have successfully deleted the user's account!";
+        this.title = AppConstants.SUCCESS_TITLE;
+        this.text = AppConstants.DELETE_USER_TEXT;
         this.returnTrigger = false;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       }
     }, error => {
-      this.title = "Delete Account Error";
-      this.text = "An unexpected error occurred. Please try again!";
+      this.title = AppConstants.ERROR_TITLE;
+      this.text = AppConstants.ERROR_TEXT;
       this.returnTrigger = true;
-      document.getElementById('modalCont').click();
+      document.getElementById(AppConstants.MODAL_CONTENT).click();
     })
   }
 
@@ -160,7 +160,7 @@ export class AdminUsersPageComponent implements OnInit {
   open(content) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(content).result.then((result) => {
-      if (result == "OK") {
+      if (result == AppConstants.OK) {
         if (this.returnTrigger == true) {
           return;
         } else {
@@ -176,7 +176,7 @@ export class AdminUsersPageComponent implements OnInit {
   open2(contentDel) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(contentDel).result.then((result) => {
-      if (result == "Y") {
+      if (result == AppConstants.YES) {
         this.onApproveDeleteUser();
       } else {
         return;

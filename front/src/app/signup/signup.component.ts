@@ -4,7 +4,6 @@ import {OnDestroy} from "@angular/core";
 import {FormGroup} from "@angular/forms";
 import {DisplayMessage} from "../shared/models/display-message";
 import {Subject} from "rxjs";
-import {UserService} from "../shared/services/user.service";
 import {AuthService} from "../shared/services/auth.service";
 import {Router} from "@angular/router";
 import {ActivatedRoute} from "@angular/router";
@@ -13,7 +12,7 @@ import {Validators} from "@angular/forms";
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/delay';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {ModalDismissReasons} from "@ng-bootstrap/ng-bootstrap";
+import {AppConstants} from "../shared/constants";
 
 @Component({
     selector: 'app-signup',
@@ -23,19 +22,16 @@ import {ModalDismissReasons} from "@ng-bootstrap/ng-bootstrap";
 })
 export class SignUpComponent implements OnInit, OnDestroy {
 
-  title = "Sign up";
-  signUpForm: FormGroup;
-  submitted = false;
-  notification: DisplayMessage;
-  returnUrl: string;
+  private signUpForm: FormGroup;
+  private submitted = false;
+  private notification: DisplayMessage;
+  private returnUrl: string;
   private ngUnsubscribe: Subject<void> = new Subject<void>();
-  success: boolean = false;
-  modalTitle: string = "Sign Up Success";
-  text: string = "You have successfully signed up! You can now log in with your credentials.";
-  closeResult: string;
+  private success: boolean = false;
+  private title: string;
+  private text: string;
 
-  constructor(private userService: UserService,
-              private authService: AuthService,
+  constructor(private authService: AuthService,
               public router: Router,
               private route: ActivatedRoute,
               private formBuilder: FormBuilder,
@@ -70,19 +66,14 @@ export class SignUpComponent implements OnInit, OnDestroy {
     this.authService.signUp(this.signUpForm.value)
       .delay(1000)
       .subscribe(data => {
-        console.log(data);
-        // //noinspection TypeScriptUnresolvedFunction
-        //   this.authService.login(this.signUpForm.value).subscribe(data => {
-        //   //noinspection TypeScriptUnresolvedFunction
-        //   this.userService.getMyInfo().subscribe();
-        // });
         this.success = true;
-        document.getElementById('modalCont').click();
+        this.title = AppConstants.SUCCESS_TITLE;
+        this.text = AppConstants.SIGNUP_TEXT;
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
         this.router.navigate(['/login']);
       },
       error => {
         this.submitted = false;
-        console.log("Sign up error " + JSON.stringify(error));
         this.notification = {msgType: 'error', msgBody: error['error'].errorMessage};
       });
   }
@@ -90,19 +81,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
   open(content) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(content).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 }

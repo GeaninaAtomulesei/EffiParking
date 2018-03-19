@@ -5,9 +5,8 @@ import {FormGroup} from "@angular/forms";
 import {FormBuilder} from "@angular/forms";
 import {Validators} from "@angular/forms";
 import {DisplayMessage} from "../../shared/models/display-message";
-import {ModalDismissReasons} from "@ng-bootstrap/ng-bootstrap";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {UserService} from "../../shared/services/user.service";
+import {AppConstants} from "../../shared/constants";
 
 @Component({
   selector: 'app-owner-parkings-page',
@@ -19,13 +18,13 @@ export class OwnerParkingsPageComponent implements OnInit {
 
   private ownedParkingAreas: any[];
   private addNewTrigger: boolean = false;
-  addParkingAreaForm: FormGroup;
-  submitted = false;
-  notification: DisplayMessage;
+  private addParkingAreaForm: FormGroup;
+  private submitted = false;
+  private notification: DisplayMessage;
   private currentUser;
-  title: string;
-  text: string;
-  error: any;
+  private title: string;
+  private text: string;
+  private error: any;
   private foundParkingsTrigger: boolean = false;
   private searchTerm: string;
   private foundParkings: any = [];
@@ -37,7 +36,7 @@ export class OwnerParkingsPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
 
     this.addParkingAreaForm = this.formBuilder.group({
       name: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
@@ -54,7 +53,6 @@ export class OwnerParkingsPageComponent implements OnInit {
     this.parkingService.getByOwner(this.currentUser.username)
       .subscribe(parkings => {
           this.ownedParkingAreas = parkings;
-          console.log("p areas: " + this.ownedParkingAreas);
         },
         error => {
           console.log(error);
@@ -84,10 +82,10 @@ export class OwnerParkingsPageComponent implements OnInit {
           this.foundParkingsTrigger = true;
         }
       }, error => {
-        this.title = "Search Parking Error";
-        this.text = "An unexpected error occurred. Please try again!";
+        this.title = AppConstants.ERROR_TITLE;
+        this.text = AppConstants.ERROR_TEXT;
         this.returnTrigger = true;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       })
   }
 
@@ -98,19 +96,18 @@ export class OwnerParkingsPageComponent implements OnInit {
     this.parkingService.addNewParkingArea(this.addParkingAreaForm.value, this.currentUser.username)
       .delay(1000)
       .subscribe(res => {
-          console.log(res);
           if (res) {
-            this.title = "Parking Area Add Success";
-            this.text = "You have successfully added a new parking area!";
+            this.title = AppConstants.SUCCESS_TITLE;
+            this.text = AppConstants.ADD_PARKING_TEXT;
             this.addParkingAreaForm.reset();
-            document.getElementById('modalCont').click();
+            document.getElementById(AppConstants.MODAL_CONTENT).click();
           }
         },
         error => {
-          this.title = "Search Parking Error";
-          this.text = "An unexpected error occurred. Please try again!";
+          this.title = AppConstants.ERROR_TITLE;
+          this.text = AppConstants.ERROR_TEXT;
           this.returnTrigger = true;
-          document.getElementById('modalCont').click();
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
         });
   }
 

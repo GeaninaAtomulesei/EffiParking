@@ -22,7 +22,7 @@ export class UploadService {
     return this.http.request(request);
   }
 
-  getPhoto(userId: string) : Observable<string> {
+  getPhoto(userId: string) : Observable<any> {
     return this.http.get('/api/users/getPhoto/' + userId)
   }
 

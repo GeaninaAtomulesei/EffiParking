@@ -3,7 +3,7 @@ import {Router, NavigationEnd} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {UserService} from "../../../shared/services/user.service";
 import {AuthService} from "../../../shared/services/auth.service";
-import {Observable} from "rxjs";
+import {AppConstants} from "../../../shared/constants";
 
 @Component({
   selector: 'app-header',
@@ -43,21 +43,22 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    console.log("user in header" + this.currentUser);
+    this.currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
     this.getNotifications();
   }
 
   getNotifications() {
-    //noinspection TypeScriptUnresolvedFunction
-    this.userService.getNotifications(this.currentUser.id)
-      .subscribe(notifications => {
-        if (notifications) {
-          this.notifications = notifications;
-        }
-      }, error => {
-        console.log(error);
-      });
+    if(this.currentUser) {
+      //noinspection TypeScriptUnresolvedFunction
+      this.userService.getNotifications(this.currentUser.id)
+        .subscribe(notifications => {
+          if (notifications) {
+            this.notifications = notifications;
+          }
+        }, error => {
+          console.log(error);
+        });
+    }
   }
 
   isToggled(): boolean {

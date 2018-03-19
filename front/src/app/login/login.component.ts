@@ -12,6 +12,7 @@ import {FormBuilder} from "@angular/forms";
 import {Validators} from "@angular/forms";
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/delay';
+import {AppConstants} from "../shared/constants";
 
 @Component({
   selector: 'app-login',
@@ -20,11 +21,11 @@ import 'rxjs/add/operator/delay';
   animations: [routerTransition()]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  title = 'Login';
-  loginForm: FormGroup;
-  submitted = false;
-  notification: DisplayMessage;
-  returnUrl: string;
+  private title = 'Login';
+  private loginForm: FormGroup;
+  private submitted = false;
+  private notification: DisplayMessage;
+  private returnUrl: string;
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(public router: Router,
@@ -60,13 +61,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.login(this.loginForm.value)
       .delay(1000)
       .subscribe(data => {
+          //noinspection TypeScriptUnresolvedFunction
           this.userService.getMyInfo().subscribe();
-          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem(AppConstants.LOGGED_IN, 'true');
           this.router.navigate([this.returnUrl]);
         },
         error => {
           this.submitted = false;
-          this.notification = {msgType: 'error', msgBody: 'Incorrect username or password.'};
+          this.notification = {msgType: 'error', msgBody: AppConstants.LOGIN_FAIL};
         });
   }
 }

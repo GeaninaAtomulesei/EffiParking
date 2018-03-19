@@ -4,7 +4,7 @@
       <i class="fa fa-fw fa-dashboard"></i>&nbsp;{{ 'Dashboard' | translate }}
     </a>
 
-    <a [routerLink]="['/user-profile', currentUser.id]" [routerLinkActive]="['router-link-active']" class="list-group-item">
+    <a *ngIf="isLoggedIn" [routerLink]="['/user-profile', currentUser.id]" [routerLinkActive]="['router-link-active']" class="list-group-item">
       <i class="fa fa-th-list"></i>&nbsp;{{ 'My Profile' | translate }}
     </a>
 

@@ -3,6 +3,7 @@ import {Component} from "@angular/core";
 import {OnInit} from "@angular/core";
 import {UserService} from "../../shared/services/user.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {AppConstants} from "../../shared/constants";
 
 @Component({
   selector: 'app-admin-requests',
@@ -27,12 +28,12 @@ export class AdminRequestsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (localStorage.getItem("currentUser")) {
-      this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (localStorage.getItem(AppConstants.CURRENT_USER)) {
+      this.currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
       console.log(JSON.stringify(this.currentUser));
     }
 
-    if (this.currentUser && this.currentUser.authorities[0].authority == "ROLE_ADMIN") {
+    if (this.currentUser && this.currentUser.authorities[0].authority == AppConstants.ADMIN_ROLE) {
       //noinspection TypeScriptUnresolvedFunction
       this.userService.getNotifications(this.currentUser.id).subscribe(res => {
         if (res) {
@@ -50,7 +51,6 @@ export class AdminRequestsComponent implements OnInit {
               this.pastRequests.push(request);
             }
           });
-          console.log(" requests" + JSON.stringify(this.requests));
         }
       }, error => {
         console.log(error);
@@ -60,9 +60,9 @@ export class AdminRequestsComponent implements OnInit {
 
   onDeleteRequest(notificationId) {
     this.notificationId = notificationId;
-    this.title = "Delete Request Confirmation";
-    this.text = "Are you sure you want to delete this owner request?";
-    document.getElementById('modalContDel').click();
+    this.title = AppConstants.CONFIRM_TITLE
+    this.text = AppConstants.DELETE_REQ_CONFIRM_TEXT;
+    document.getElementById(AppConstants.MODAL_CONTENT_DEL).click();
   }
 
   onDeleteRequestApproval() {
@@ -70,16 +70,16 @@ export class AdminRequestsComponent implements OnInit {
     this.userService.deleteNotification(this.notificationId)
       .subscribe(response => {
         if(response) {
-          this.title = "Delete Request Success";
-          this.text = "You have successfully deleted this owner request!";
+          this.title = AppConstants.CONFIRM_TITLE;
+          this.text = AppConstants.DELETE_REQ_TEXT;
           this.reloadTrigger = true;
-          document.getElementById('modalCont').click();
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
         }
       }, error => {
-        this.title = "Delete Request Error";
-        this.text = "An unexpected error occurred. Please try again!";
+        this.title = AppConstants.ERROR_TITLE;
+        this.text = AppConstants.ERROR_TEXT;
         this.reloadTrigger = false;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       });
   }
 
@@ -88,26 +88,26 @@ export class AdminRequestsComponent implements OnInit {
     this.userService.activateOwner(userId, organisation)
       .subscribe(response => {
         if(response) {
-          this.title = "Owner Activation Success";
-          this.text = "You have successfully approved this owner request!";
+          this.title = AppConstants.SUCCESS_TITLE;
+          this.text = AppConstants.OWNER_ACTIV_TEXT;
           this.reloadTrigger = false;
           this.approvalTrigger = true;
           this.notificationId = requestId;
-          document.getElementById('modalCont').click();
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
         }
       }, error => {
-        this.title = "Owner Activation Error";
-        this.text = "An unexpected error occurred. Please try again!";
+        this.title = AppConstants.ERROR_TITLE;
+        this.text = AppConstants.ERROR_TEXT;
         this.reloadTrigger = false;
         this.approvalTrigger = false;
-        document.getElementById('modalCont').click();
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
       });
   }
 
   open(content) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(content).result.then((result) => {
-      if(result == "OK") {
+      if(result == AppConstants.OK) {
         if(this.reloadTrigger) {
           window.location.reload();
         } else if(this.approvalTrigger) {
@@ -128,7 +128,7 @@ export class AdminRequestsComponent implements OnInit {
   open2(contentDel) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(contentDel).result.then((result) => {
-      if (result == "Y") {
+      if (result == AppConstants.YES) {
         this.onDeleteRequestApproval();
       } else {
         return;

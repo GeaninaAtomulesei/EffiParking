@@ -2,6 +2,7 @@ import {OnInit} from "@angular/core";
 import {routerTransition} from "../../router.animations";
 import {Component} from "@angular/core";
 import {UserService} from "../../shared/services/user.service";
+import {AppConstants} from "../../shared/constants";
 
 @Component({
   selector: 'app-history-page',
@@ -17,8 +18,9 @@ export class HistoryPageComponent implements OnInit {
   constructor(private userService: UserService) {}
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
 
+    //noinspection TypeScriptUnresolvedFunction
     this.userService.getHistory(this.currentUser.id)
       .subscribe(response => {
         this.history = response;

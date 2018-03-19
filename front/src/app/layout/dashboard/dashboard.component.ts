@@ -10,6 +10,7 @@ import 'rxjs/add/operator/delay';
 import {ModalDismissReasons} from "@ng-bootstrap/ng-bootstrap";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../shared/services/auth.service";
+import {AppConstants} from "../../shared/constants";
 
 @Component({
   selector: 'app-dashboard',
@@ -25,14 +26,14 @@ export class DashboardComponent implements OnInit {
   private closestParkingAreas = [];
   private foundParkingAreas = [];
   private error: string;
-  submitted = false;
-  notification: DisplayMessage;
-  ownerForm: FormGroup;
-  searchForm: FormGroup;
-  title: string = "Owner Registration Success";
-  text: string = "You have successfully sent your owner registration request!";
-  searchTrigger = false;
-  searchByTermTrigger = false;
+  private submitted = false;
+  private notification: DisplayMessage;
+  private ownerForm: FormGroup;
+  private searchForm: FormGroup;
+  private title: string;
+  private text: string;
+  private searchTrigger = false;
+  private searchByTermTrigger = false;
 
   constructor(private parkingService: ParkingService,
               private formBuilder: FormBuilder,
@@ -60,14 +61,14 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
 
-    if(localStorage.getItem("closestParkingAreas")) {
-      this.closestParkingAreas = JSON.parse(localStorage.getItem("closestParkingAreas"));
+    if (localStorage.getItem(AppConstants.CLOSEST_PARKINGS)) {
+      this.closestParkingAreas = JSON.parse(localStorage.getItem(AppConstants.CLOSEST_PARKINGS));
     }
 
-    if(localStorage.getItem("dashFoundParkingAreas")) {
-      this.foundParkingAreas = JSON.parse(localStorage.getItem("dashFoundParkingAreas"));
+    if (localStorage.getItem(AppConstants.FOUND_PARKINGS)) {
+      this.foundParkingAreas = JSON.parse(localStorage.getItem(AppConstants.FOUND_PARKINGS));
     }
 
     this.ownerForm = this.formBuilder.group({
@@ -84,21 +85,19 @@ export class DashboardComponent implements OnInit {
       navigator.geolocation.getCurrentPosition(position => {
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
-        console.log("lat: " + latitude + " lng: " + longitude);
-        localStorage.setItem("currentLatitude", latitude.toString());
-        localStorage.setItem("currentLongitude", longitude.toString());
+        localStorage.setItem(AppConstants.CURRENT_LAT, latitude.toString());
+        localStorage.setItem(AppConstants.CURRENT_LNG, longitude.toString());
       });
     }
 
     //noinspection TypeScriptUnresolvedFunction
-    this.currentLatitude = parseFloat(localStorage.getItem("currentLatitude"));
-    this.currentLongitude = parseFloat(localStorage.getItem("currentLongitude"));
+    this.currentLatitude = parseFloat(localStorage.getItem(AppConstants.CURRENT_LAT));
+    this.currentLongitude = parseFloat(localStorage.getItem(AppConstants.CURRENT_LNG));
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.getClosest(this.currentLatitude, this.currentLongitude)
       .subscribe(parkings => {
           this.closestParkingAreas = parkings;
-          localStorage.setItem("closestParkingAreas", JSON.stringify(this.closestParkingAreas));
-          console.log("p areas: " + this.closestParkingAreas);
+          localStorage.setItem(AppConstants.CLOSEST_PARKINGS, JSON.stringify(this.closestParkingAreas));
         },
         error => {
           console.log(error);
@@ -113,9 +112,9 @@ export class DashboardComponent implements OnInit {
     this.parkingService.searchByTerm(this.searchForm.value.term)
       .delay(1000)
       .subscribe(response => {
-        if(response) {
+        if (response) {
           this.foundParkingAreas = response;
-          localStorage.setItem("dashFoundParkingAreas", JSON.stringify(this.foundParkingAreas));
+          localStorage.setItem(AppConstants.FOUND_PARKINGS, JSON.stringify(this.foundParkingAreas));
         }
       }, error => {
         console.log(error);
@@ -132,12 +131,13 @@ export class DashboardComponent implements OnInit {
       .subscribe(res => {
           console.log(JSON.parse(res));
           if (res) {
-            document.getElementById('modalCont').click();
+            this.title = AppConstants.SUCCESS_TITLE;
+            this.text = AppConstants.OWNER_REQUEST_TEXT;
+            document.getElementById(AppConstants.MODAL_CONTENT).click();
           }
         },
         error => {
           this.submitted = false;
-          console.log("Registration error " + JSON.stringify(error));
           this.notification = {msgType: 'error', msgBody: error['error'].errorMessage};
         });
   }
@@ -149,9 +149,7 @@ export class DashboardComponent implements OnInit {
   open(content) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(content).result.then((result) => {
-
     }, (reason) => {
-
     });
   }
 
