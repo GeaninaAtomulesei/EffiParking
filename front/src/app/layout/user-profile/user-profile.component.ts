@@ -104,9 +104,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         this.isAdmin = true;
         console.log("IS ADMIN");
       }
-      if (this.currentUser.id == this.id) {
-        this.isMyProfile = true;
-      }
+      this.isMyProfile = this.currentUser.id == this.id;
     }
 
     this.uploadService.getPhoto(this.id.toString())
