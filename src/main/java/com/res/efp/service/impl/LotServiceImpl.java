@@ -107,10 +107,6 @@ public class LotServiceImpl implements LotService {
         return addedLots;
     }
 
-    private void setLots(int lastLotNumber, int numberOfLots) {
-
-    }
-
     @Override
     public List<Lot> findByParkingId(Long parkingId) {
         return lotRepository.findByParkingId(parkingId);
@@ -165,5 +161,10 @@ public class LotServiceImpl implements LotService {
             return null;
         }
         return availableToday;
+    }
+
+    @Override
+    public Lot findByParkingAndNumber(Long parkingId, int number) {
+        return lotRepository.findByNumberAndParking(parkingId, number);
     }
 }

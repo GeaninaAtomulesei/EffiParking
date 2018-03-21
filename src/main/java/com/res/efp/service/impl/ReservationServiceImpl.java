@@ -129,18 +129,6 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Reservation updateReservation(Reservation reservation) {
-        Reservation currentReservation = reservationRepository.findOne(reservation.getId());
-        if (reservation.getStartDate() != null) {
-            currentReservation.setStartDate(reservation.getStartDate());
-        }
-        if (reservation.getEndDate() != null) {
-            currentReservation.setEndDate(reservation.getEndDate());
-        }
-        return reservationRepository.save(currentReservation);
-    }
-
-    @Override
     public void deleteReservation(Reservation reservation) {
         User user = reservation.getUser();
         Parking parking = reservation.getParking();
@@ -187,5 +175,11 @@ public class ReservationServiceImpl implements ReservationService {
         }
         actualReservations.sort(Comparator.comparing(Reservation::getStartDate));
         return actualReservations;
+    }
+
+    @Override
+    public List<Reservation> findByParkingAndLot(Long parkingId, int lotNumber) {
+        Lot lot = lotRepository.findByNumberAndParking(parkingId, lotNumber);
+        return lot.getReservations();
     }
 }

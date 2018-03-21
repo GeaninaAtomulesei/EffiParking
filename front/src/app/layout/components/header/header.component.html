@@ -41,7 +41,7 @@
                     </li>
 
                   <li class="dropdown-divider"></li>
-                  <a href="javascript:void(0)" class="dropdown-item">
+                  <a [routerLink]="['/all-notifications', currentUser.id]" class="dropdown-item">
                     {{ 'View All' | translate }}
                   </a>
 

@@ -3,6 +3,7 @@ package com.res.efp.rest;
 import com.res.efp.domain.model.Parking;
 import com.res.efp.domain.model.Reservation;
 import com.res.efp.domain.model.User;
+import com.res.efp.service.LotService;
 import com.res.efp.service.ParkingService;
 import com.res.efp.service.ReservationService;
 import com.res.efp.service.UserService;
@@ -10,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -29,6 +33,9 @@ public class ReservationController {
 
     @Autowired
     private ParkingService parkingService;
+
+    @Autowired
+    private LotService lotService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> getAllReservations() {
@@ -87,5 +94,18 @@ public class ReservationController {
 
         List<Reservation> reservations = reservationService.findByUsername(parkingId, name);
         return ResponseEntity.ok(reservations);
+    }
+
+    @RequestMapping(value = "/getByLotAndParking", method = RequestMethod.GET)
+    public ResponseEntity<?> getByLotAndParking(@RequestParam(value = "parkingId") Long parkingId,
+                                             @RequestParam(value = "lotNumber") int lotNumber) {
+        if(parkingService.findById(parkingId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Parking with id " + parkingId + " not found!");
+        }
+        if(lotService.findByParkingAndNumber(parkingId, lotNumber) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lot not found.");
+        }
+        List<Reservation> reservationList = reservationService.findByParkingAndLot(parkingId, lotNumber);
+        return ResponseEntity.ok(reservationList);
     }
 }

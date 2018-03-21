@@ -15,7 +15,7 @@ public interface ReservationService {
     List<Reservation> findByParkingArea(Long id);
     List<Reservation> findByUser(Long userId);
     List<Reservation> getAllReservations();
-    Reservation updateReservation(Reservation reservation);
     void deleteReservation(Reservation reservation);
     List<Reservation> findByUsername(Long parkingId, String name);
+    List<Reservation> findByParkingAndLot(Long parkingId, int lotNumber);
 }

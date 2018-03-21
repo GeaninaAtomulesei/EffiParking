@@ -65,11 +65,6 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     @Override
-    public List<Parking> findByCity(String city) {
-        return parkingRepository.findByCity(city);
-    }
-
-    @Override
     public List<Parking> findByStreet(String street) {
         return parkingRepository.findByStreet(street);
     }
@@ -169,6 +164,11 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public List<Parking> findByTermAndOwner(String term, Long ownerId) {
         return parkingRepository.findByTermAndOwner(term , ownerId);
+    }
+
+    @Override
+    public Parking findById(Long parkingId) {
+        return parkingRepository.findOne(parkingId);
     }
 
     private static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {

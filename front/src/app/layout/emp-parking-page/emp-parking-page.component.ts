@@ -22,10 +22,14 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
   private title: string;
   private text: string;
   private username: string;
+  private lotNumber: number;
   private foundReservations: any = [];
   private foundReservationsTrigger: boolean;
   private todayReservations = [];
   private todayResTrigger: boolean;
+  private foundLot: any;
+  private searchLotTrigger: boolean;
+  private foundLotReservations: any = [];
 
   constructor(private route: ActivatedRoute,
               private modalService: NgbModal,
@@ -53,6 +57,7 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
   }
 
   showTodayReservations() {
+    this.foundReservationsTrigger = false;
     this.todayResTrigger = !this.todayResTrigger;
   }
 
@@ -96,6 +101,7 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
       .subscribe(reservations => {
         if(reservations) {
           this.foundReservations = reservations;
+          this.todayResTrigger = false;
           this.foundReservationsTrigger = true;
         }
       }, error => {
@@ -104,6 +110,33 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
         this.reloadTrigger = false;
         document.getElementById(AppConstants.MODAL_CONTENT).click();
       });
+  }
+
+  searchLot() {
+    this.searchLotTrigger = true;
+    //noinspection TypeScriptUnresolvedFunction
+    this.parkingService.getLotByParkingAndNumber(this.parking.id, this.lotNumber)
+      .subscribe(response => {
+        if(response) {
+          this.foundLot = response;
+          this.parkingService.getReservationsByParkingAndLot(this.parking.id, this.foundLot.number).subscribe(response => {
+            if(response) {
+              this.foundLotReservations = response;
+            }
+          }, error => {
+            console.log(error);
+          })
+        } else {
+          this.foundLot = null;
+        }
+        this.todayResTrigger = false;
+        this.foundReservationsTrigger = false;
+      }, error => {
+        this.title = AppConstants.ERROR_TITLE;
+        this.text = AppConstants.ERROR_TEXT;
+        this.reloadTrigger = false;
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
+      })
   }
 
   open(content) {

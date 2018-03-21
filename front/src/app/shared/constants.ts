@@ -59,4 +59,5 @@ export class AppConstants {
   public static readonly PHOTO_UPLOAD_TEXT = "You have successfully uploaded your photo!";
   public static readonly LOGIN_FAIL = 'Incorrect username or password.';
   public static readonly SIGNUP_TEXT = "You have successfully signed up! You can now log in with your credentials.";
+  public static readonly DELETE_NOTIF_SUCCESS_TEXT = "You have successfully deleted the notification!";
 }

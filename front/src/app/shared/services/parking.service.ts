@@ -155,4 +155,18 @@ export class ParkingService {
         return res;
       });
   }
+
+  getLotByParkingAndNumber(parkingId, lotNumber) {
+    return this.apiService.get(this.config.get_lot_by_parking_and_number_url + "?parkingId=" + parkingId + "&lotNumber=" + lotNumber)
+      .map(res => {
+        return res;
+      });
+  }
+
+  getReservationsByParkingAndLot(parkingId, lotNumber) {
+    return this.apiService.get(this.config.get_reservations_by_parking_and_lot_url + "?parkingId=" + parkingId + "&lotNumber=" + lotNumber)
+      .map(res => {
+        return res;
+      });
+  }
 }

@@ -9,20 +9,77 @@
     <br>
 
     <div class="row" style="text-align: center; margin: auto">
-      <input class="form-control" placeholder="Name" style="width: 47%" [(ngModel)]="username">
+      <input class="form-control" placeholder="Lot number" style="width: 47%" [(ngModel)]="lotNumber">
       &nbsp; &nbsp;
-      <button type="submit" class="btn btn-primary btn-lg" style="background-color: #999; color:black"
-              (click)="searchReservation()">Search Reservation
+      <button type="submit" class="btn btn-primary btn-lg" style="background-color: #999; color:black" (click)="searchLot()" [disabled]="!lotNumber">Search Lot
       </button>
     </div>
 
-    <br>
+    <br><br>
 
-    <button type="submit" class="btn btn-primary btn-lg" style="background-color: #999; color:black"
+    <p *ngIf="searchLotTrigger && foundLot==null" style="color:#999;">No lot with this number was found.</p>
+    <div class="card mb-3" *ngIf="searchLotTrigger && foundLot!=null"
+         style="background-color: #343a40 !important; color: #999;">
+
+      <div class="card-header" style="background-color: #343a40 !important; color: #999; text-align: center">Parking Lot</div>
+      <table class="card-body table table-hover">
+        <thead>
+        <tr>
+          <th>Number</th>
+          <th>Reserved</th>
+          <th>Vacant</th>
+          <th>Reservations</th>
+          <th></th>
+          <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+          <th scope="row">{{foundLot.number}}</th>
+          <td>{{foundLot.reserved ? "Yes" : "No"}}</td>
+          <td>{{foundLot.vacant ? "Yes" : "No"}}</td>
+          <td>
+            <div *ngFor="let reservation of foundLotReservations">
+              <p>{{reservation.user}}</p>
+            </div>
+          </td>
+          <td>
+            <button class="btn btn-secondary" style="color:#999; background-color: black" [disabled]="!foundLot.vacant"
+                    (click)="setLotOccupied(foundLot.id)">Set occupied
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-secondary" style="color:#999; background-color: black" [disabled]="foundLot.vacant"
+                    (click)="setLotVacant(foundLot.id)">Set vacant
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  <br><br>
+
+
+
+    <div class="row" style="text-align: center; margin: auto">
+      <input class="form-control" placeholder="Name" style="width: 47%" [(ngModel)]="username">
+      &nbsp; &nbsp;
+      <button type="submit" class="btn btn-primary btn-lg" style="background-color: #999; color:black"
+              (click)="searchReservation()" [disabled]="!username">Search Reservation
+      </button>
+    </div>
+
+    <br><br>
+    <button class="btn btn-primary btn-lg" style="background-color: #999; color:black"
             (click)="showTodayReservations()">Show Today's Reservations
     </button>
 
+
+
+
     <br><br>
+
 
     <div class="page-header" *ngIf="todayResTrigger">
       <h1 style="font-size: xx-large; color:#999">Today's Reservations</h1>

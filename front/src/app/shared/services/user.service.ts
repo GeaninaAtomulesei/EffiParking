@@ -1,9 +1,6 @@
 import {Injectable} from "@angular/core";
 import {ApiService} from "./api.service";
 import {ConfigService} from "./config.service";
-import {HttpHeaders} from "@angular/common/http";
-import {Response} from "@angular/http";
-import {HttpResponse} from "@angular/common/http";
 
 @Injectable()
 export class UserService {

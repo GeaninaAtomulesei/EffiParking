@@ -10,13 +10,15 @@ import {LayoutRoutingModule} from "./layout-routing.module";
 import {APP_INITIALIZER} from "@angular/core";
 import {initUserFactory} from "../app.module";
 import {UserService} from "../shared/services/user.service";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
     imports: [
         CommonModule,
         LayoutRoutingModule,
         TranslateModule,
-        NgbDropdownModule.forRoot()
+        NgbDropdownModule.forRoot(),
+        FormsModule
     ],
     declarations: [LayoutComponent, SidebarComponent, HeaderComponent],
     providers: [

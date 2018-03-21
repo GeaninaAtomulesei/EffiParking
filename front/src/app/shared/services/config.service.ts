@@ -54,9 +54,11 @@ export class ConfigService {
   private _cancel_reservation_url = this._reservations_url + '/cancel';
   private _get_reservation_by_name_url = this._reservations_url + '/findByUserNames';
   private _get_today_reservations_emp_url = this._reservations_url + '/getForParking';
+  private _get_reservations_by_parking_and_lot_url = this.reservations_url + '/getByLotAndParking';
 
   private _set_lot_vacant_url = this._lots_url + '/setVacant';
   private _set_lot_occupied_url = this._lots_url + '/setOccupied';
+  private _get_lot_by_parking_and_number_url = this.lots_url + '/findByParkingAndNumber';
 
   get api_url(): string {
     return this._api_url;
@@ -252,5 +254,13 @@ export class ConfigService {
 
   get set_lot_occupied_url(): string {
     return this._set_lot_occupied_url;
+  }
+
+  get get_lot_by_parking_and_number_url(): string {
+    return this._get_lot_by_parking_and_number_url;
+  }
+
+  get get_reservations_by_parking_and_lot_url(): string {
+    return this._get_reservations_by_parking_and_lot_url;
   }
 }

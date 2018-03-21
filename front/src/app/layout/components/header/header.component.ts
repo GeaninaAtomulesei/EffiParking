@@ -4,6 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {UserService} from "../../../shared/services/user.service";
 import {AuthService} from "../../../shared/services/auth.service";
 import {AppConstants} from "../../../shared/constants";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-header',

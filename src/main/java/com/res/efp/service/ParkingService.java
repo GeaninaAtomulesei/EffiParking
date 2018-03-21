@@ -15,7 +15,6 @@ public interface ParkingService {
     List<Parking> getAllParkingAreas();
     Parking getParkingArea(Long id);
     Parking findByName(String name);
-    List<Parking> findByCity(String city);
     List<Parking> findByStreet(String street);
     List<Parking> findByStreetAndNumber(String street, String number);
     Parking updateParkingArea(Parking parking, Long parkingId);
@@ -26,4 +25,5 @@ public interface ParkingService {
     Map<String, Double> getClosestParkingAreas(double latitude, double longitude);
     List<Parking> findByTerm(String term);
     List<Parking> findByTermAndOwner(String term, Long ownerId);
+    Parking findById(Long parkingId);
 }

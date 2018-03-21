@@ -18,7 +18,8 @@ const routes: Routes = [
       { path: 'admin-requests', loadChildren: './admin-requests/admin-requests.module#AdminRequestsModule'},
       { path: 'parking-page/:id', loadChildren: './parking-page/parking-page.module#ParkingPageModule'},
       { path: 'user-profile/:id', loadChildren: './user-profile/user-profile.module#UserProfileModule'},
-      { path: 'emp-parking-page/:id', loadChildren: './emp-parking-page/emp-parking-page.module#EmployeeParkingPageModule'}
+      { path: 'emp-parking-page/:id', loadChildren: './emp-parking-page/emp-parking-page.module#EmployeeParkingPageModule'},
+      { path: 'all-notifications/:id', loadChildren: './all-notifications/all-notifications.module#AllNotificationsModule'}
     ]
   }
 ];

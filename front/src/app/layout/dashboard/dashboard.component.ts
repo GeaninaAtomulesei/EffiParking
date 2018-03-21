@@ -149,7 +149,9 @@ export class DashboardComponent implements OnInit {
   open(content) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(content).result.then((result) => {
+      return;
     }, (reason) => {
+      return;
     });
   }
 

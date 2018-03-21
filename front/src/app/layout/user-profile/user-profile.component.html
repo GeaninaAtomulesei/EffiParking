@@ -194,7 +194,7 @@
 
 
   <div id="modalCont" (click)="open(content)"></div>
-  <ng-template #content let-c="close" let-d="dismiss" id="content">
+  <ng-template #content let-c="close" let-d="dismiss" id="content" style="background-color:#222; color:#999;">
     <div class="modal-header">
       <h4 class="modal-title">{{title}}</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">

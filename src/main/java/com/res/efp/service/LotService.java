@@ -17,4 +17,5 @@ public interface LotService {
     Lot setVacant(Lot lot);
     List<Lot> getAvailable(Parking parking);
     List<Lot> getAvailableToday(Parking parking);
+    Lot findByParkingAndNumber(Long parkingId, int number);
 }

@@ -23,4 +23,7 @@ public interface LotRepository extends JpaRepository<Lot, Long> {
     List<Lot> findByParkingId(Long parkingId);
 
     Lot findByNumber(int number);
+
+    @Query(value = "select l from Lot as l where parking.id = :parkingId and l.number = :lotNumber")
+    Lot findByNumberAndParking(@Param("parkingId") Long parkingId, @Param("lotNumber") int lotNumber);
 }
