@@ -13,6 +13,7 @@ export class ConfigService {
   private _login_url = this._api_url + '/login';
   private _logout_url = this._api_url + '/logout';
   private _signup_url = this._api_url + '/signup';
+  private _change_password_url = this.api_url + '/changePassword';
 
   private _whoami_url = this._users_url + '/whoami';
   private _get_notifications_url = this._users_url + '/getNotifications';
@@ -62,6 +63,10 @@ export class ConfigService {
 
   get api_url(): string {
     return this._api_url;
+  }
+
+  get change_password_url(): string {
+    return this._change_password_url;
   }
 
   get users_url(): string {

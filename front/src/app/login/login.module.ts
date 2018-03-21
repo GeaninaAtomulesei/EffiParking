@@ -5,7 +5,6 @@ import {FormsModule} from "@angular/forms";
 import {ReactiveFormsModule} from "@angular/forms";
 import {AuthService} from "../shared/services/auth.service";
 import {UserService} from "../shared/services/user.service";
-import {AppRoutingModule} from "../app-routing.module";
 import {LoginRoutingModule} from "./login-routing.module";
 
 @NgModule({

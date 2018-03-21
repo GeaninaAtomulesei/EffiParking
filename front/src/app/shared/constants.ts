@@ -60,4 +60,5 @@ export class AppConstants {
   public static readonly LOGIN_FAIL = 'Incorrect username or password.';
   public static readonly SIGNUP_TEXT = "You have successfully signed up! You can now log in with your credentials.";
   public static readonly DELETE_NOTIF_SUCCESS_TEXT = "You have successfully deleted the notification!";
+  public static readonly CHANGE_PASSWORD_SUCCESS_TEXT = "You have successfully changed your password! You can now log in with your new credentials."
 }

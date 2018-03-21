@@ -46,4 +46,11 @@ export class AuthService {
         localStorage.clear();
       });
   }
+
+  changePassword(passwordChanger) {
+    return this.apiService.post(this.config.change_password_url, passwordChanger)
+      .map(response => {
+        return response;
+      });
+  }
 }

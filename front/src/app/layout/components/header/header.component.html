@@ -18,7 +18,7 @@
               <!--<a class="dropdown-item" href="javascript:void(0)">-->
               <!--<i class="fa fa-fw fa-envelope"></i> {{ 'Inbox' | translate }}-->
               <!--</a>-->
-              <a class="dropdown-item" href="javascript:void(0)">
+              <a class="dropdown-item" href="javascript:void(0)" [routerLink]="['/change-password']">
                 <i class="fa fa-fw fa-gear"></i> {{ 'Change Password' | translate }}
               </a>
               <a class="dropdown-item" (click)="onLoggedOut()" href="javascript:void(0)">

@@ -7,7 +7,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,26 +34,36 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        if(user == null) {
+        if (user == null) {
             throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
         } else {
             return user;
         }
     }
 
-    public void changePassword(String oldPassword, String newPassword) {
-        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-        String username = currentUser.getName();
-        if(authenticationManager != null) {
-            LOGGER.debug("Re-authenticating user '" + username + "' for password change request.");
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, oldPassword));
-        } else {
-            LOGGER.debug("No authentication manager set. Cannot change password.");
-            return;
+    public boolean changePassword(String newPassword) {
+        try {
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            LOGGER.debug("Changing password for user '" + username + "'");
+            User user = (User) loadUserByUsername(username);
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-        LOGGER.debug("Changing password for user '" + username + "'");
-        User user = (User) loadUserByUsername(username);
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
+    }
+
+    public boolean validateOldPassword(String oldPassword) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (authenticationManager != null) {
+            LOGGER.debug("Re-authenticating user '" + username + "' for password change request.");
+            try {
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, oldPassword));
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return true;
     }
 }

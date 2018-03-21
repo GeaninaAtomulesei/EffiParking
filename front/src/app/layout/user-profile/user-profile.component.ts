@@ -9,11 +9,9 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {Router} from "@angular/router";
 import {FormGroup} from "@angular/forms";
 import {FormBuilder} from "@angular/forms";
-import {Validators} from "@angular/forms";
 import {UploadService} from "../../shared/services/upload.service";
 import {HttpEventType} from "@angular/common/http";
 import {HttpResponse} from "@angular/common/http";
-import {Observable} from "rxjs";
 import {AppConstants} from "../../shared/constants";
 
 @Component({
@@ -125,8 +123,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       firstName: [''],
       lastName: [''],
       email: [''],
-      username: [''],
-      password: ['']
+      username: ['']
     });
   }
 
