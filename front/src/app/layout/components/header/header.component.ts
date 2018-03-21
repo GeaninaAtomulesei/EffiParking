@@ -16,6 +16,7 @@ export class HeaderComponent implements OnInit {
   pushRightClass: string = 'push-right';
   currentUser: any;
   notifications: any = [];
+  isLoggedIn: boolean = false;
 
   constructor(private translate: TranslateService,
               public router: Router,
@@ -44,6 +45,9 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(localStorage.getItem(AppConstants.LOGGED_IN)) {
+      this.isLoggedIn = true;
+    }
     this.currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
     this.getNotifications();
   }
@@ -81,6 +85,7 @@ export class HeaderComponent implements OnInit {
     localStorage.clear();
     sessionStorage.clear();
     this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
   onLogIn() {

@@ -6,6 +6,27 @@
     </button>
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
+
+          <li class="nav-item dropdown" ngbDropdown *ngIf="currentUser">
+            <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
+              <i class="fa fa-user"></i> {{currentUser.firstName}} {{currentUser.lastName}}<b class="caret"></b>
+            </a>
+            <div class="dropdown-menu-right" ngbDropdownMenu style="min-width: 16rem">
+              <a *ngIf="isLoggedIn" class="dropdown-item" [routerLink]="['/user-profile', currentUser.id]">
+                <i class="fa fa-fw fa-user"></i> {{ 'Profile' | translate }}
+              </a>
+              <!--<a class="dropdown-item" href="javascript:void(0)">-->
+              <!--<i class="fa fa-fw fa-envelope"></i> {{ 'Inbox' | translate }}-->
+              <!--</a>-->
+              <a class="dropdown-item" href="javascript:void(0)">
+                <i class="fa fa-fw fa-gear"></i> {{ 'Change Password' | translate }}
+              </a>
+              <a class="dropdown-item" (click)="onLoggedOut()" href="javascript:void(0)">
+                <i class="fa fa-fw fa-power-off"></i> {{ 'Log Out' | translate }}
+              </a>
+            </div>
+          </li>
+
             <li class="nav-item d-none d-xl-block" *ngIf="!currentUser">
                 <a
                     class="nav-link btn mt-1" role="button"
@@ -13,14 +34,6 @@
                     (click)="onLogIn()"
                 >
                     {{ 'Log In' | translate }}
-                </a>
-            </li> &nbsp;
-            <li class="nav-item">
-                <a href="javascript:void(0)" class="nav-link mt-1"
-                    style="padding: 0.375rem 1rem !important; border-color: #999;"
-                    (click)="rltAndLtr()"
-                >
-                    RTL/LTR
                 </a>
             </li> &nbsp;
 
@@ -71,26 +84,17 @@
                         {{ 'German' | translate }}
                     </a>
                 </div>
-            </li>
-            <li class="nav-item dropdown" ngbDropdown *ngIf="currentUser">
-                <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
-                    <i class="fa fa-user"></i> {{currentUser.firstName}} {{currentUser.lastName}}<b class="caret"></b>
-                </a>
-                <div class="dropdown-menu-right" ngbDropdownMenu>
-                    <a class="dropdown-item" href="javascript:void(0)">
-                        <i class="fa fa-fw fa-user"></i> {{ 'Profile' | translate }}
-                    </a>
-                    <a class="dropdown-item" href="javascript:void(0)">
-                        <i class="fa fa-fw fa-envelope"></i> {{ 'Inbox' | translate }}
-                    </a>
-                    <a class="dropdown-item" href="javascript:void(0)">
-                        <i class="fa fa-fw fa-gear"></i> {{ 'Settings' | translate }}
-                    </a>
-                    <a class="dropdown-item" [routerLink]="['/login']" (click)="onLoggedOut()">
-                        <i class="fa fa-fw fa-power-off"></i> {{ 'Log Out' | translate }}
-                    </a>
-                </div>
-            </li>
+            </li> &nbsp;
+
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link mt-1"
+               style="padding: 0.375rem 1rem !important; border-color: #999;"
+               (click)="rltAndLtr()"
+            >
+              RTL/LTR
+            </a>
+          </li>
+
         </ul>
     </div>
 </nav>
