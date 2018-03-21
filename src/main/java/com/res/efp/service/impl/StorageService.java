@@ -41,7 +41,7 @@ public class StorageService {
     public void store(MultipartFile file, Long userId) {
         User user = userRepository.findOne(userId);
         try {
-            if(this.rootLocation.resolve(file.getOriginalFilename()) == null) {
+            if(!Files.exists(Paths.get(rootLocation + "/" + file.getOriginalFilename()))) {
                 Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
             }
             user.setPhoto(file.getOriginalFilename());
