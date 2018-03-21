@@ -28,9 +28,9 @@
           <th>Number</th>
           <th>Reserved</th>
           <th>Vacant</th>
+          <th></th>
+          <th></th>
           <th>Reservations</th>
-          <th></th>
-          <th></th>
         </tr>
         </thead>
 
@@ -40,11 +40,6 @@
           <td>{{foundLot.reserved ? "Yes" : "No"}}</td>
           <td>{{foundLot.vacant ? "Yes" : "No"}}</td>
           <td>
-            <div *ngFor="let reservation of foundLotReservations">
-              <p>{{reservation.user}}</p>
-            </div>
-          </td>
-          <td>
             <button class="btn btn-secondary" style="color:#999; background-color: black" [disabled]="!foundLot.vacant"
                     (click)="setLotOccupied(foundLot.id)">Set occupied
             </button>
@@ -53,6 +48,11 @@
             <button class="btn btn-secondary" style="color:#999; background-color: black" [disabled]="foundLot.vacant"
                     (click)="setLotVacant(foundLot.id)">Set vacant
             </button>
+          </td>
+          <td>
+            <div *ngFor="let reservation of foundLotReservations">
+              <p>{{reservation.startDate.replace("T", "; ")}} : {{reservation.user.firstName}} {{reservation.user.lastName}}</p>
+            </div>
           </td>
         </tr>
         </tbody>

@@ -46,24 +46,23 @@ public class ReservationServiceImpl implements ReservationService {
             return null;
         }
         List<Lot> availableLots = lotRepository.findNotReservedLotsPerParking(parking.getId());
-        if ((availableLots != null) || (!availableLots.isEmpty())) {
+        if ((availableLots != null) && (!availableLots.isEmpty())) {
             Lot lot = availableLots.get(0);
             reservation.setLot(lot);
             lot.getReservations().add(reservation);
             lot.setReserved(true);
             lotRepository.save(lot);
         } else {
-            List<Lot> allLots = lotRepository.findAll();
+            List<Lot> allLots = parking.getLots();
             for (Lot lot : allLots) {
                 List<Reservation> reservations = lot.getReservations();
                 for (Reservation res : reservations) {
-                    if (reservation.getStartDate().isBefore(res.getEndDate()) && (reservation.getEndDate()
-                            .isAfter(res.getStartDate()))) {
+                    if (((reservation.getStartDate().isBefore(res.getStartDate())) && (reservation.getEndDate().isBefore(res.getEndDate()))) ||
+                            ((reservation.getStartDate().isAfter(res.getStartDate())) && (reservation.getEndDate().isAfter(res.getEndDate())))) {
                         reservation.setLot(lot);
                         lot.getReservations().add(reservation);
                         lotRepository.save(lot);
-                    } else {
-                        return null;
+                        break;
                     }
                 }
             }
