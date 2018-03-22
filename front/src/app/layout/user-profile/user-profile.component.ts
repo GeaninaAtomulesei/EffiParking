@@ -13,6 +13,8 @@ import {UploadService} from "../../shared/services/upload.service";
 import {HttpEventType} from "@angular/common/http";
 import {HttpResponse} from "@angular/common/http";
 import {AppConstants} from "../../shared/constants";
+import {Validators} from "@angular/forms";
+import {DisplayMessage} from "../../shared/models/display-message";
 
 @Component({
   selector: 'app-user-profile',
@@ -47,6 +49,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   private progress: {percentage: number} = {percentage: 0};
   private photo: any;
   private addPhotoTrigger: boolean = false;
+  private notification: DisplayMessage;
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
@@ -112,18 +115,18 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       });
 
     this.editEmployeeForm = this.formBuilder.group({
-      firstName: [''],
-      lastName: [''],
-      email: [''],
-      username: [''],
-      password: ['']
+      firstName: ['', Validators.compose([Validators.minLength(3), Validators.maxLength(64)])],
+      lastName: ['', Validators.compose([Validators.minLength(3), Validators.maxLength(64)])],
+      email: ['', Validators.compose([Validators.minLength(3), Validators.email, Validators.maxLength(64)])],
+      username: ['', Validators.compose([Validators.minLength(3), Validators.maxLength(64)])],
+      password: ['', Validators.compose([Validators.minLength(3), Validators.maxLength(64)])]
     });
 
     this.editMyProfileForm = this.formBuilder.group({
-      firstName: [''],
-      lastName: [''],
-      email: [''],
-      username: ['']
+      firstName: ['', Validators.compose([Validators.minLength(3), Validators.maxLength(64)])],
+      lastName: ['', Validators.compose([Validators.minLength(3), Validators.maxLength(64)])],
+      email: ['', Validators.compose([Validators.minLength(3), Validators.maxLength(64), Validators.email])],
+      username: ['', Validators.compose([Validators.minLength(3), Validators.maxLength(64)])]
     });
   }
 
@@ -132,6 +135,27 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   onSubmitEditMyProfileForm() {
+    this.notification = undefined;
+    if(this.editMyProfileForm.pristine) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.PRISTINE_FORM};
+      return;
+    }
+    if(this.editMyProfileForm.get('firstName').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_FIRST_NAME};
+      return;
+    }
+    if(this.editMyProfileForm.get('lastName').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LAST_NAME};
+      return;
+    }
+    if(this.editMyProfileForm.get('email').value && this.editMyProfileForm.get('email').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_EMAIL};
+      return;
+    }
+    if(this.editMyProfileForm.get('username').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_USERNAME};
+      return;
+    }
     //noinspection TypeScriptUnresolvedFunction
     this.userService.updateUser(this.editMyProfileForm.value, this.id)
       .subscribe(response => {
@@ -153,6 +177,31 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   onSubmitEditEmployeeForm() {
+    this.notification = undefined;
+    if(this.editEmployeeForm.pristine) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.PRISTINE_FORM};
+      return;
+    }
+    if(this.editEmployeeForm.get('firstName').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_FIRST_NAME};
+      return;
+    }
+    if(this.editEmployeeForm.get('lastName').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LAST_NAME};
+      return;
+    }
+    if(this.editEmployeeForm.get('email').value && this.editMyProfileForm.get('email').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_EMAIL};
+      return;
+    }
+    if(this.editEmployeeForm.get('username').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_USERNAME};
+      return;
+    }
+    if(this.editEmployeeForm.get('password').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PASSWORD};
+      return;
+    }
     //noinspection TypeScriptUnresolvedFunction
     this.userService.updateEmployee(this.editEmployeeForm.value, this.id)
       .subscribe(response => {

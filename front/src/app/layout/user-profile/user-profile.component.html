@@ -131,6 +131,8 @@
           </div>
           <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black">Submit</button>
         </form>
+        <br>
+        <p [class]="notification.msgType" *ngIf="notification" style="color:#DC143C; align-self: center">{{notification.msgBody}}</p>
       </div>
     </div>
 
@@ -179,6 +181,8 @@
             </div>
           </div>
           <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black">Submit</button>
+          <br> <br>
+          <p [class]="notification.msgType" *ngIf="notification" style="color:#DC143C">{{notification.msgBody}}</p>
         </form>
       </div>
     </div>

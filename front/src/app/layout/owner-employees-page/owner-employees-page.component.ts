@@ -38,11 +38,11 @@ export class OwnerEmployeesPageComponent implements OnInit {
     this.currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
 
     this.addEmployeeForm = this.formBuilder.group({
-      firstName: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
-      lastName: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
-      email: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64), Validators.email])],
-      username: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
+      firstName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(64)])],
+      lastName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(64)])],
+      email: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(64), Validators.email])],
+      username: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(64)])],
+      password: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(64)])],
     });
 
     //noinspection TypeScriptUnresolvedFunction
@@ -80,7 +80,30 @@ export class OwnerEmployeesPageComponent implements OnInit {
 
   onSubmitNewEmployee() {
     this.notification = undefined;
-
+    if(this.addEmployeeForm.pristine) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.PRISTINE_FORM};
+      return;
+    }
+    if(this.addEmployeeForm.get('firstName').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_FIRST_NAME};
+      return;
+    }
+    if(this.addEmployeeForm.get('lastName').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LAST_NAME};
+      return;
+    }
+    if(this.addEmployeeForm.get('email').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_EMAIL};
+      return;
+    }
+    if(this.addEmployeeForm.get('username').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_USERNAME};
+      return;
+    }
+    if(this.addEmployeeForm.get('password').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PASSWORD};
+      return;
+    }
     //noinspection TypeScriptUnresolvedFunction
     this.userService.addNewEmployee(this.addEmployeeForm.value, this.currentUser.id)
       .delay(1000)

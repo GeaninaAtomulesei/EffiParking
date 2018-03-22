@@ -34,7 +34,6 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
   private startTime: any;
   private endDate: any;
   private endTime: any;
-  private reservation: any;
   private showReservationForm: boolean = false;
   private reservedLotId: number;
   private notification: DisplayMessage;
@@ -93,13 +92,13 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
     }
 
     this.editParkingAreaForm = this.formBuilder.group({
-      name: [''],
-      locationName: [''],
-      city: [''],
-      street: [''],
-      number: [''],
-      latitude: [''],
-      longitude: ['']
+      name: ['', Validators.compose([Validators.minLength(1), Validators.maxLength(64)])],
+      locationName: ['', Validators.compose([Validators.minLength(1), Validators.maxLength(64)])],
+      city: ['', Validators.compose([Validators.minLength(1), Validators.maxLength(64)])],
+      street: ['', Validators.compose([Validators.minLength(1), Validators.maxLength(64)])],
+      number: ['', Validators.compose([Validators.minLength(1), Validators.maxLength(64)])],
+      latitude: ['', Validators.compose([Validators.minLength(1), Validators.maxLength(500)])],
+      longitude: ['', Validators.compose([Validators.minLength(1), Validators.maxLength(500)])]
     });
 
     this.addLotsForm = this.formBuilder.group({
@@ -252,6 +251,39 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
   }
 
   onSubmitEditForm() {
+    this.notification = undefined;
+    if(this.editParkingAreaForm.pristine) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.PRISTINE_FORM};
+      return;
+    }
+    if(this.editParkingAreaForm.get('name').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_NAME};
+      return;
+    }
+    if(this.editParkingAreaForm.get('locationName').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_LOCATION};
+      return;
+    }
+    if(this.editParkingAreaForm.get('city').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_CITY};
+      return;
+    }
+    if(this.editParkingAreaForm.get('street').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_STREET};
+      return;
+    }
+    if(this.editParkingAreaForm.get('number').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_NUMBER};
+      return;
+    }
+    if(this.editParkingAreaForm.get('latitude').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LATITUDE};
+      return;
+    }
+    if(this.editParkingAreaForm.get('longitude').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LONGITUDE};
+      return;
+    }
     this.submitted = true;
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.editParkingArea(this.id, this.editParkingAreaForm.value)

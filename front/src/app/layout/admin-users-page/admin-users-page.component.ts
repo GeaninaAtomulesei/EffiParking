@@ -7,6 +7,7 @@ import {FormGroup} from "@angular/forms";
 import {FormBuilder} from "@angular/forms";
 import {Validators} from "@angular/forms";
 import {AppConstants} from "../../shared/constants";
+import {DisplayMessage} from "../../shared/models/display-message";
 
 @Component({
   selector: 'app-admin-users-page',
@@ -32,6 +33,7 @@ export class AdminUsersPageComponent implements OnInit {
   private searchUsersTrigger: boolean = false;
   private addAdminTrigger: boolean = false;
   private addAdminForm: FormGroup;
+  private notification: DisplayMessage;
 
   constructor(private userService: UserService,
               private formBuilder: FormBuilder,
@@ -39,6 +41,7 @@ export class AdminUsersPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    //noinspection TypeScriptUnresolvedFunction
     this.userService.getAll().subscribe(response => {
       response.forEach(user => {
         if (user.authorities) {
@@ -60,15 +63,40 @@ export class AdminUsersPageComponent implements OnInit {
     this.adminsTrigger = true;
 
     this.addAdminForm = this.formBuilder.group({
-      firstName: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
-      lastName: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
-      email: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64), Validators.email])],
-      username: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
+      firstName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(64)])],
+      lastName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(64)])],
+      email: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(64), Validators.email])],
+      username: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(64)])],
+      password: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(64)])],
     });
   }
 
   onSubmitNewAdmin() {
+    this.notification = undefined;
+    if(this.addAdminForm.pristine) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.PRISTINE_FORM};
+      return;
+    }
+    if(this.addAdminForm.get('firstName').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_FIRST_NAME};
+      return;
+    }
+    if(this.addAdminForm.get('lastName').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LAST_NAME};
+      return;
+    }
+    if(this.addAdminForm.get('email').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_EMAIL};
+      return;
+    }
+    if(this.addAdminForm.get('username').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_USERNAME};
+      return;
+    }
+    if(this.addAdminForm.get('password').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PASSWORD};
+      return;
+    }
     //noinspection TypeScriptUnresolvedFunction
     this.userService.createNewAdmin(this.addAdminForm.value)
       .delay(1000)

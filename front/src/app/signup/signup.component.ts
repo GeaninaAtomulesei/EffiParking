@@ -47,9 +47,9 @@ export class SignUpComponent implements OnInit, OnDestroy {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
     this.signUpForm = this.formBuilder.group({
       username:  ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(64)])],
-      password:  ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(32)])],
-      firstName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(32)])],
-      lastName:  ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(32)])],
+      password:  ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(64)])],
+      firstName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(64)])],
+      lastName:  ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(64)])],
       email:     ['', Validators.compose([Validators.required, Validators.email])]
     });
   }
@@ -61,6 +61,27 @@ export class SignUpComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.notification = undefined;
+    if(this.signUpForm.get('firstName').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_FIRST_NAME};
+      return;
+    }
+    if(this.signUpForm.get('lastName').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LAST_NAME};
+      return;
+    }
+    if(this.signUpForm.get('username').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_USERNAME};
+      return;
+    }
+    if(this.signUpForm.get('password').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PASSWORD};
+      return;
+    }
+    if(this.signUpForm.get('email').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_EMAIL};
+      return;
+    }
+
     this.submitted = true;
     //noinspection TypeScriptUnresolvedFunction
     this.authService.signUp(this.signUpForm.value)

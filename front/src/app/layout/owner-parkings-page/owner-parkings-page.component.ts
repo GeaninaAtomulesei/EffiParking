@@ -29,6 +29,7 @@ export class OwnerParkingsPageComponent implements OnInit {
   private searchTerm: string;
   private foundParkings: any = [];
   private returnTrigger: boolean = false;
+  private notification: DisplayMessage;
 
   constructor(private parkingService: ParkingService,
               private formBuilder: FormBuilder,
@@ -45,8 +46,8 @@ export class OwnerParkingsPageComponent implements OnInit {
       city: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
       street: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
       number: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
-      latitude: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])],
-      longitude: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(64)])]
+      latitude: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(500)])],
+      longitude: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(500)])]
     });
 
     //noinspection TypeScriptUnresolvedFunction
@@ -91,6 +92,42 @@ export class OwnerParkingsPageComponent implements OnInit {
 
   onSubmit() {
     this.notification = undefined;
+    if(this.addParkingAreaForm.pristine) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.PRISTINE_FORM};
+      return;
+    }
+    if(this.addParkingAreaForm.get('name').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_NAME};
+      return;
+    }
+    if(this.addParkingAreaForm.get('totalLots').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_LOTS};
+      return;
+    }
+    if(this.addParkingAreaForm.get('locationName').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_LOCATION};
+      return;
+    }
+    if(this.addParkingAreaForm.get('city').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_CITY};
+      return;
+    }
+    if(this.addParkingAreaForm.get('street').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_STREET};
+      return;
+    }
+    if(this.addParkingAreaForm.get('number').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_NUMBER};
+      return;
+    }
+    if(this.addParkingAreaForm.get('latitude').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LATITUDE};
+      return;
+    }
+    if(this.addParkingAreaForm.get('longitude').invalid) {
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LONGITUDE};
+      return;
+    }
     this.submitted = true;
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.addNewParkingArea(this.addParkingAreaForm.value, this.currentUser.username)

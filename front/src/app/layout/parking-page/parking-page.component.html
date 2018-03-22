@@ -125,7 +125,7 @@
               </fieldset>
             </div>
           </div>
-          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black">Add
+          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black" [disabled]="!addLotsForm.valid">Add
           </button>
         </form>
       </div>
@@ -144,7 +144,7 @@
               </fieldset>
             </div>
           </div>
-          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black">Remove</button>
+          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black" [disabled]="!removeLotsForm.valid">Remove</button>
         </form>
       </div>
     </div>
@@ -204,10 +204,13 @@
                 <input class="form-control" formControlName="longitude" placeholder="{{parking.longitude}}">
               </fieldset>
             </div>
-
           </div>
           <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black">Submit</button>
         </form>
+        <br>
+        <div style="text-align: center">
+          <p [class]="notification.msgType" *ngIf="notification" style="color:#DC143C; align-self: center">{{notification.msgBody}}</p>
+        </div>
       </div>
     </div>
 
