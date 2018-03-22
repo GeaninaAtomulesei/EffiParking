@@ -12,14 +12,14 @@
     <div class="row" *ngIf="todaysReservations && todaysReservations.length > 0">
       <div class="col-sm-4" *ngFor="let res of todaysReservations">
         <div class="card text-white bg-dark mb-3">
-          <div class="card-header">Reservation</div>
-          <div class="card-body">
-            <p class="card-text">Parking Area Name: {{res.parking.name}}</p>
-            <p class="card-text">Parking Area Location: {{res.parking.locationName}} - {{res.parking.street}}
+          <div class="card-header" style="text-align: center; color:#999">Reservation</div>
+          <div class="card-body" style="color: #999">
+            <p class="card-text">Parking Area Name: <br> {{res.parking.name}}</p>
+            <p class="card-text">Parking Area Location: <br> {{res.parking.locationName}} - {{res.parking.street}}
               {{res.parking.number}}, {{res.parking.city}}</p>
-            <p class="card-text">Arrive Time: {{res.startDate.replace("T", " -- ")}}</p>
-            <p class="card-text">Leave Time: {{res.endDate.replace("T", " -- ")}}</p>
-            <p class="card-text">Lot number: {{res.lot.number}}</p>
+            <p class="card-text">Arrive Time: <br> {{res.startDate.replace("T", ";  ")}}</p>
+            <p class="card-text">Leave Time: <br> {{res.endDate.replace("T", ";  ")}}</p>
+            <p class="card-text">Lot number: <br> {{res.lot.number}}</p>
             <button type="button" class="btn btn-danger" style="color:black" (click)="onCancelReservation(res.id)">
               Cancel reservation
             </button>
@@ -44,8 +44,8 @@
     <div class="row" *ngIf="upcomingReservations && upcomingReservations.length > 0">
       <div class="col-sm-4" *ngFor="let res of upcomingReservations">
         <div class="card text-white bg-dark mb-3">
-          <div class="card-header">Reservation</div>
-          <div class="card-body">
+          <div class="card-header" style="text-align: center; color:#999">Reservation</div>
+          <div class="card-body" style="color:#999">
             <p class="card-text">Parking Area Name: {{res.parking.name}}</p>
             <p class="card-text">Parking Area Location: {{res.parking.locationName}} - {{res.parking.street}}
               {{res.parking.number}}, {{res.parking.city}}</p>

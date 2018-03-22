@@ -28,14 +28,14 @@
     <div class="row" *ngIf="closestParkingAreas">
       <div class="col-sm-4" *ngFor="let parking of closestParkingAreas">
         <div class="card text-white bg-dark mb-3">
-          <div class="card-header" style="color: #999">EffiParking</div>
-          <div class="card-body">
-            <a [routerLink]="['/parking-page', parking.id]">
+          <div class="card-header" style="color: #999; text-align: center">EffiParking</div>
+          <div class="card-body" style="text-align: center; color: #999">
               <h4 class="card-title">{{parking.name}}</h4>
               <p class="card-text">{{parking.locationName}}, {{parking.street}} {{parking.number}}, {{parking.city}}</p>
-              <p class="card-text">Total lots: {{parking.totalLots}}</p>
               <p class="card-text">Available lots: {{parking.availableLots}}</p>
-            </a>
+              <button [routerLink]="['/parking-page', parking.id]" type="button" class="btn btn-primary" style="color:black; background-color: #999">
+                View
+              </button>
           </div>
         </div>
       </div>
@@ -65,14 +65,14 @@
     <div class="row" *ngIf="foundParkingAreas && foundParkingAreas.length > 0">
       <div class="col-sm-4" *ngFor="let parking of foundParkingAreas">
         <div class="card text-white bg-dark mb-3">
-          <div class="card-header" style="color: #999">EffiParking</div>
-          <div class="card-body">
-            <a [routerLink]="['/parking-page', parking.id]">
-              <h4 class="card-title">{{parking.name}}</h4>
-              <p class="card-text">{{parking.locationName}}, {{parking.street}} {{parking.number}}, {{parking.city}}</p>
-              <p class="card-text">Total lots: {{parking.totalLots}}</p>
-              <p class="card-text">Available lots: {{parking.availableLots}}</p>
-            </a>
+          <div class="card-header" style="color: #999; text-align: center">EffiParking</div>
+          <div class="card-body" style="text-align: center; color: #999">
+            <h4 class="card-title">{{parking.name}}</h4>
+            <p class="card-text">{{parking.locationName}}, {{parking.street}} {{parking.number}}, {{parking.city}}</p>
+            <p class="card-text">Available lots: {{parking.availableLots}}</p>
+            <button [routerLink]="['/parking-page', parking.id]" type="button" class="btn btn-primary" style="color:black; background-color: #999">
+              View
+            </button>
           </div>
         </div>
       </div>

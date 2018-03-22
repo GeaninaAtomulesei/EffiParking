@@ -42,65 +42,65 @@
     </p>
 
     <div *ngIf="showReservationForm">
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="card bg-dark">
-            <div class="card-header" style="color: #999"><b>Start Date</b></div>
-            <div class="card-body">
-              <form class="form-inline mb-3">
-                <div class="form-group">
-                  <div class="input-group datepicker-input">
-                    <input class="form-control" placeholder="yyyy-mm-dd"
-                           name="dp" [(ngModel)]="startDate" ngbDatepicker #d1="ngbDatepicker" [minDate]="minDate">
-                    <button class="input-group-addon" (click)="d1.toggle()" type="button">
-                      <span class="fa fa-calendar"></span>
-                    </button>
+      <div style="text-align: center">
+        <div class="row" style="margin: auto">
+          <div class="col-sm-3" style="margin-left: auto">
+            <div class="card bg-dark">
+              <div class="card-header" style="color: #999"><b>Start Date</b></div>
+              <div class="card-body" style="text-align: center">
+                <form class="form-inline mb-3" style="display: inline-block">
+                  <div class="form-group">
+                    <div class="input-group datepicker-input">
+                      <input class="form-control" placeholder="yyyy-mm-dd"
+                             name="dp" [(ngModel)]="startDate" ngbDatepicker #d1="ngbDatepicker" [minDate]="minDate">
+                      <button class="input-group-addon" (click)="d1.toggle()" type="button">
+                        <span class="fa fa-calendar"></span>
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
           </div>
 
-        </div>
 
-
-
-        <div class="col-sm-6">
-          <div class="card bg-dark">
-            <div class="card-header" style="color: #999"><b>Leave Date</b></div>
-            <div class="card-body">
-              <form class="form-inline mb-3">
-                <div class="form-group">
-                  <div class="input-group datepicker-input">
-                    <input class="form-control" placeholder="yyyy-mm-dd"
-                           name="dp" [(ngModel)]="endDate" ngbDatepicker #d2="ngbDatepicker" [minDate]="minDate">
-                    <button class="input-group-addon" (click)="d2.toggle()" type="button">
-                      <span class="fa fa-calendar"></span>
-                    </button>
+          <div class="col-sm-3" style="margin-right: auto">
+            <div class="card bg-dark">
+              <div class="card-header" style="color: #999"><b>Leave Date</b></div>
+              <div class="card-body" style="text-align: center">
+                <form class="form-inline mb-3" style="display: inline-block">
+                  <div class="form-group">
+                    <div class="input-group datepicker-input">
+                      <input class="form-control" placeholder="yyyy-mm-dd"
+                             name="dp" [(ngModel)]="endDate" ngbDatepicker #d2="ngbDatepicker" [minDate]="minDate">
+                      <button class="input-group-addon" (click)="d2.toggle()" type="button">
+                        <span class="fa fa-calendar"></span>
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="card bg-dark">
-            <div class="card-header" style="color: #999"><b>Start Time</b></div>
-            <div class="card-body">
-              <ngb-timepicker [(ngModel)]="startTime"></ngb-timepicker>
+                </form>
+              </div>
             </div>
           </div>
         </div>
 
+        <div class="row" style="margin: auto">
+          <div class="col-sm-3" style="margin-left: auto; text-align: center">
+            <div class="card bg-dark">
+              <div class="card-header" style="color: #999"><b>Start Time</b></div>
+              <div class="card-body">
+                <ngb-timepicker [(ngModel)]="startTime" style="margin: auto;display: inline-flex"></ngb-timepicker>
+              </div>
+            </div>
+          </div>
 
-        <div class="col-sm-6">
-          <div class="card bg-dark">
-            <div class="card-header" style="color: #999"><b>Leave Time</b></div>
-            <div class="card-body">
-              <ngb-timepicker [(ngModel)]="endTime"></ngb-timepicker>
+
+          <div class="col-sm-3" style="margin-right:auto; text-align: center">
+            <div class="card bg-dark">
+              <div class="card-header" style="color: #999"><b>Leave Time</b></div>
+              <div class="card-body">
+                <ngb-timepicker [(ngModel)]="endTime" style="margin: auto;display: inline-flex"></ngb-timepicker>
+              </div>
             </div>
           </div>
         </div>
@@ -110,6 +110,10 @@
         <a class="btn btn-primary btn-lg" role="button" style="background-color: #999" (click)="submitReservation()">Submit
           Reservation</a>
       </p>
+      <br>
+      <div style="text-align: center">
+        <p [class]="notification.msgType" *ngIf="notification" style="color:#DC143C; align-self: center">{{notification.msgBody}}</p>
+      </div>
     </div>
 
 
@@ -125,7 +129,8 @@
               </fieldset>
             </div>
           </div>
-          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black" [disabled]="!addLotsForm.valid">Add
+          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black"
+                  [disabled]="!addLotsForm.valid">Add
           </button>
         </form>
       </div>
@@ -144,7 +149,9 @@
               </fieldset>
             </div>
           </div>
-          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black" [disabled]="!removeLotsForm.valid">Remove</button>
+          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black"
+                  [disabled]="!removeLotsForm.valid">Remove
+          </button>
         </form>
       </div>
     </div>
@@ -209,7 +216,8 @@
         </form>
         <br>
         <div style="text-align: center">
-          <p [class]="notification.msgType" *ngIf="notification" style="color:#DC143C; align-self: center">{{notification.msgBody}}</p>
+          <p [class]="notification.msgType" *ngIf="notification" style="color:#DC143C; align-self: center">
+            {{notification.msgBody}}</p>
         </div>
       </div>
     </div>

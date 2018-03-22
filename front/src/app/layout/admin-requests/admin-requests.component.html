@@ -12,8 +12,8 @@
     <div class="row" *ngIf="newRequests && newRequests.length > 0">
       <div class="col-sm-4" *ngFor="let req of newRequests">
         <div class="card text-white bg-dark mb-3">
-          <div class="card-header">Owner Request</div>
-          <div class="card-body">
+          <div class="card-header" style="text-align: center; color:#999">Owner Request</div>
+          <div class="card-body" style="color: #999">
             <p class="card-text">{{req.date.replace("T", "; ").slice(0, -7)}}</p>
             <p class="card-text">Name: {{req.userRequest.firstName}} {{req.userRequest.lastName}}</p>
             <p class="card-text">Email: {{req.userRequest.email}}</p>
@@ -48,8 +48,8 @@
     <div class="row" *ngIf="pastRequests && pastRequests.length > 0">
       <div class="col-sm-4" *ngFor="let req of pastRequests">
         <div class="card text-white bg-dark mb-3">
-          <div class="card-header">Owner Request</div>
-          <div class="card-body">
+          <div class="card-header" style="text-align: center; color: #999">Owner Request</div>
+          <div class="card-body" style="color: #999">
             <p class="card-text">{{req.date.replace("T", "; ").slice(0, -7)}}</p>
             <p class="card-text">Name: {{req.userRequest.firstName}} {{req.userRequest.lastName}}</p>
             <p class="card-text">Email: {{req.userRequest.email}}</p>

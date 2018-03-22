@@ -136,36 +136,22 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
     let currentTime = new Date();
     if (this.startDate.year == this.minDate.year && this.startDate.month == this.minDate.month && this.startDate.day == this.minDate.day) {
       if (currentTime.getHours() > this.startTime.hour) {
-        this.title = AppConstants.INVALID_TIME_TITLE;
-        this.text = AppConstants.INVALID_PAST_TIME_TEXT;
-        this.returnTrigger = true;
-        this.closeButton = false;
-        this.okButton = true;
-        document.getElementById(AppConstants.MODAL_CONTENT).click();
+        this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PAST_TIME_TEXT};
         return;
       } else if (currentTime.getHours() == this.startTime.hour) {
         if (currentTime.getMinutes() > this.startTime.minute) {
-          this.title = AppConstants.INVALID_TIME_TITLE;
-          this.text = AppConstants.INVALID_PAST_TIME_TEXT;
-          this.returnTrigger = true;
-          document.getElementById(AppConstants.MODAL_CONTENT).click();
+          this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PAST_TIME_TEXT};
           return;
         }
       }
     }
 
     if (this.startTime.hour > this.endTime.hour) {
-      this.title = AppConstants.INVALID_TIME_TITLE;
-      this.text = AppConstants.INVALID_LEAVE_TIME_TEXT;
-      this.returnTrigger = true;
-      document.getElementById(AppConstants.MODAL_CONTENT).click();
+      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LEAVE_TIME_TEXT};
       return;
     } else if (this.startTime.hour == this.endTime.hour) {
       if (this.startTime.minute > this.endTime.minute) {
-        this.title = AppConstants.INVALID_TIME_TITLE;
-        this.text = AppConstants.INVALID_LEAVE_TIME_TEXT;
-        this.returnTrigger = true;
-        document.getElementById(AppConstants.MODAL_CONTENT).click();
+        this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LEAVE_TIME_TEXT};
         return;
       }
     }

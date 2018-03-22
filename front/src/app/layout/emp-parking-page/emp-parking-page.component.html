@@ -88,8 +88,8 @@
     <div class="row" *ngIf="todayResTrigger && todayReservations && todayReservations.length > 0">
       <div class="col-sm-4" *ngFor="let reservation of todayReservations">
         <div class="card text-white bg-dark mb-3">
-          <div class="card-header">Reservation</div>
-          <div class="card-body">
+          <div class="card-header" style="text-align: center; color: #999">Reservation</div>
+          <div class="card-body" style="color: #999">
             <p class="card-text">Name : {{reservation.user.firstName}} {{reservation.user.lastName}}</p>
             <p class="card-text">Arrive : {{reservation.startDate.replace("T", " : ")}}</p>
             <p class="card-text">Leave : {{reservation.endDate.replace("T", " : ")}}</p>
@@ -111,8 +111,8 @@
     <div class="row" *ngIf="foundReservations && foundReservations.length > 0 && foundReservationsTrigger">
       <div class="col-sm-4" *ngFor="let reservation of foundReservations">
         <div class="card text-white bg-dark mb-3">
-          <div class="card-header">Reservation</div>
-          <div class="card-body">
+          <div class="card-header" style="text-align: center; color: #999">Reservation</div>
+          <div class="card-body" style="color: #999">
             <p class="card-text">Name : {{reservation.user.firstName}} {{reservation.user.lastName}}</p>
             <p class="card-text">Arrive : {{reservation.startDate.replace("T", " : ")}}</p>
             <p class="card-text">Leave : {{reservation.endDate.replace("T", " : ")}}</p>

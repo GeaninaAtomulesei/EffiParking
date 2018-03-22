@@ -12,8 +12,8 @@
     <div class="row" *ngIf="newMessages && newMessages.length > 0">
       <div class="col-sm-12" *ngFor="let msg of newMessages">
         <div class="card text-white bg-dark mb-3">
-          <div class="card-header">{{msg.date.replace("T", "; ").slice(0, -7)}}</div>
-          <div class="card-body">
+          <div class="card-header" style="color: #999">{{msg.date.replace("T", "; ").slice(0, -7)}}</div>
+          <div class="card-body" style="color: #999">
             <p class="card-text">Name: <br> {{msg.name}}</p>
             <p class="card-text">Email: <br> {{msg.email}}</p>
             <p class="card-text">Contact Reason: <br> {{msg.reason}}</p>
@@ -42,8 +42,8 @@
     <div class="row" *ngIf="pastMessages && pastMessages.length > 0">
       <div class="col-sm-12" *ngFor="let msg of pastMessages">
         <div class="card text-white bg-dark mb-3">
-          <div class="card-header">Message</div>
-          <div class="card-body">
+          <div class="card-header" style="color: #999">Message</div>
+          <div class="card-body" style="color: #999">
             <p class="card-text">{{msg.date.replace("T", "; ").slice(0, -7)}}</p>
             <p class="card-text">Name:</p>
             <p class="card-text">Email:</p>

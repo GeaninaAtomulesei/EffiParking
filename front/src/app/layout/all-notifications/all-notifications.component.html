@@ -12,8 +12,8 @@
     <div class="row" *ngIf="newNotifications && newNotifications.length > 0">
       <div class="col-sm-4" *ngFor="let notification of newNotifications">
         <div class="card text-white bg-dark mb-3">
-          <div class="card-header">{{notification.date.replace("T", "; ").slice(0, -7)}}</div>
-          <div class="card-body">
+          <div class="card-header" style="color:#999;">{{notification.date.replace("T", "; ").slice(0, -7)}}</div>
+          <div class="card-body" style="color: #999">
             <p class="card-text">{{notification.message}}</p>
             <p>
               <button type="button" class="btn btn-danger" style="color:black" (click)="onDeleteNotification(notification.id)">
@@ -40,8 +40,8 @@
     <div class="row" *ngIf="pastNotifications && pastNotifications.length > 0">
       <div class="col-sm-4" *ngFor="let notification of pastNotifications">
         <div class="card text-white bg-dark mb-3">
-          <div class="card-header">{{notification.date.replace("T", "; ").slice(0, -7)}}</div>
-          <div class="card-body">
+          <div class="card-header" style="color: #999">{{notification.date.replace("T", "; ").slice(0, -7)}}</div>
+          <div class="card-body" style="color:#999;">
             <p class="card-text">{{notification.message}}</p>
             <p>
               <button type="button" class="btn btn-danger" style="color:black" (click)="onDeleteNotification(notification.id)">
