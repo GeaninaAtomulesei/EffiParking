@@ -21,7 +21,6 @@ export class AdminMessagesComponent implements OnInit {
   private text: string;
   private messageId: number;
   private reloadTrigger: boolean = false;
-  private approvalTrigger: boolean = false;
 
   constructor(private userService: UserService,
               private modalService: NgbModal) {

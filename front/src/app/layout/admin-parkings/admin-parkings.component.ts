@@ -29,7 +29,6 @@ export class AdminParkingsComponent implements OnInit {
   }
 
   onSearchParkingAreas() {
-    this.searchParkingTrigger = true;
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.searchByTerm(this.searchTerm).subscribe(response => {
       if (response) {
@@ -41,10 +40,10 @@ export class AdminParkingsComponent implements OnInit {
       this.text = AppConstants.ERROR_TEXT;
       document.getElementById(AppConstants.MODAL_CONTENT).click();
     });
+    this.searchParkingTrigger = true;
   }
 
   onShowAll() {
-    this.showAllTrigger = true;
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.getAll().subscribe(response => {
       if(response) {
@@ -56,6 +55,7 @@ export class AdminParkingsComponent implements OnInit {
       this.text = AppConstants.ERROR_TEXT;
       document.getElementById(AppConstants.MODAL_CONTENT).click();
     });
+    this.showAllTrigger = true;
   }
 
   open(content) {

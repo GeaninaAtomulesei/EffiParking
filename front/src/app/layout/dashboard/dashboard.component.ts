@@ -105,7 +105,6 @@ export class DashboardComponent implements OnInit {
   }
 
   searchByTerm() {
-    this.searchByTermTrigger = true;
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.searchByTerm(this.searchForm.value.term)
       .delay(1000)
@@ -118,6 +117,7 @@ export class DashboardComponent implements OnInit {
         console.log(error);
         this.error = error;
       });
+    this.searchByTermTrigger = true;
   }
 
   ownerReqSubmit() {

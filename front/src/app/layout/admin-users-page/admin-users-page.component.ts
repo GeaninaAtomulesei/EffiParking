@@ -117,7 +117,6 @@ export class AdminUsersPageComponent implements OnInit {
   }
 
   onSearchUsers() {
-    this.searchUsersTrigger = true;
     //noinspection TypeScriptUnresolvedFunction
     this.userService.searchByTerm(this.searchTerm).subscribe(response => {
       if(response) {
@@ -126,6 +125,7 @@ export class AdminUsersPageComponent implements OnInit {
     }, error => {
       console.log(error);
     });
+    this.searchUsersTrigger = true;
   }
 
   onShowAdmins() {
