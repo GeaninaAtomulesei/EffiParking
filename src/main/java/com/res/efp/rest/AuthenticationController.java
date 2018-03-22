@@ -39,6 +39,9 @@ public class AuthenticationController {
     @Value("${app.jwt.cookie}")
     private String TOKEN_COOKIE;
 
+    @Value("${app.jwt.header}")
+    private String AUTH_HEADER;
+
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
     public ResponseEntity<?> refreshAuthToken(HttpServletRequest request, HttpServletResponse response) {
         String authToken = tokenHelper.getToken(request);
@@ -49,6 +52,7 @@ public class AuthenticationController {
             authCookie.setHttpOnly(true);
             authCookie.setMaxAge(EXPIRES_IN);
             response.addCookie(authCookie);
+            response.addHeader(AUTH_HEADER, "Bearer " + refreshedToken);
             UserTokenState userTokenState = new UserTokenState(refreshedToken, EXPIRES_IN);
             return ResponseEntity.ok(userTokenState);
         } else {

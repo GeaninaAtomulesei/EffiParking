@@ -16,10 +16,12 @@ const routes: Routes = [
       { path: 'admin-users-page', loadChildren: './admin-users-page/admin-users-page.module#AdminUsersPageModule'},
       { path: 'admin-parkings', loadChildren: './admin-parkings/admin-parkings.module#AdminParkingsModule'},
       { path: 'admin-requests', loadChildren: './admin-requests/admin-requests.module#AdminRequestsModule'},
+      { path: 'admin-messages', loadChildren: './admin-messages/admin-messages.module#AdminMessagesModule'},
       { path: 'parking-page/:id', loadChildren: './parking-page/parking-page.module#ParkingPageModule'},
       { path: 'user-profile/:id', loadChildren: './user-profile/user-profile.module#UserProfileModule'},
       { path: 'emp-parking-page/:id', loadChildren: './emp-parking-page/emp-parking-page.module#EmployeeParkingPageModule'},
-      { path: 'all-notifications/:id', loadChildren: './all-notifications/all-notifications.module#AllNotificationsModule'}
+      { path: 'all-notifications/:id', loadChildren: './all-notifications/all-notifications.module#AllNotificationsModule'},
+      { path: 'contact', loadChildren: './contact/contact.module#ContactModule'}
     ]
   }
 ];

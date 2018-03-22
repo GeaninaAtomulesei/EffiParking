@@ -27,6 +27,9 @@ export class ConfigService {
   private _get_history_url = this._users_url + '/getHistory';
   private _update_user_url = this._users_url + '/update';
   private _get_all_users_url = this.users_url + '/all';
+  private _save_message_url = this.users_url + '/sendMessage';
+  private _get_all_messages_url = this.users_url + '/getAllMessages';
+  private _delete_message_url = this.users_url + '/deleteMessage';
 
   private _closest_areas_url = this._parkings_url + '/getClosest';
   private _add_parking_url = this._parkings_url + '/add';
@@ -267,5 +270,17 @@ export class ConfigService {
 
   get get_reservations_by_parking_and_lot_url(): string {
     return this._get_reservations_by_parking_and_lot_url;
+  }
+
+  get save_message_url(): string {
+    return this._save_message_url;
+  }
+
+  get get_all_messages_url(): string {
+    return this._get_all_messages_url;
+  }
+
+  get delete_message_url(): string {
+    return this._delete_message_url;
   }
 }

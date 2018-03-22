@@ -7,9 +7,7 @@ import {FormBuilder} from "@angular/forms";
 import {Validators} from "@angular/forms";
 import {UserService} from "../../shared/services/user.service";
 import 'rxjs/add/operator/delay';
-import {ModalDismissReasons} from "@ng-bootstrap/ng-bootstrap";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {AuthService} from "../../shared/services/auth.service";
 import {AppConstants} from "../../shared/constants";
 
 @Component({

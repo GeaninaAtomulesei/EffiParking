@@ -14,7 +14,7 @@ export class SidebarComponent {
   isActive: boolean = false;
   showMenu: string = '';
   pushRightClass: string = 'push-right';
-  currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
+  currentUser: any;
   isOwner: boolean = false;
   isEmployee: boolean = false;
   assignedParkingAreas = [];
@@ -37,6 +37,8 @@ export class SidebarComponent {
         this.toggleSidebar();
       }
     });
+
+    this.currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
 
     if (this.currentUser) {
       if (this.currentUser.authorities) {

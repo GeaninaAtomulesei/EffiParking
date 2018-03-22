@@ -1,6 +1,5 @@
 {
   "Dashboard": "Dashboard",
-  "My Profile": "My Profile",
   "Reservations": "Reservations",
   "History": "History",
   "Users": "Users",
@@ -9,6 +8,8 @@
   "Owned Parking Areas": "Owned Parking Areas",
   "Employees": "Employees",
   "Employee Menu": "Employee Menu",
+  "Contact": "Contact",
+  "Messages": "Messages",
   "Language": "Language",
   "English": "English",
   "French": "French",

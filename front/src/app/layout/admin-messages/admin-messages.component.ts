@@ -6,20 +6,20 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AppConstants} from "../../shared/constants";
 
 @Component({
-  selector: 'app-admin-requests',
-  templateUrl: './admin-requests.component.html',
-  styleUrls: ['./admin-requests.component.scss'],
+  selector: 'app-admin-messages',
+  templateUrl: './admin-messages.component.html',
+  styleUrls: ['./admin-messages.component.scss'],
   animations: [routerTransition()]
 })
-export class AdminRequestsComponent implements OnInit {
+export class AdminMessagesComponent implements OnInit {
 
   private currentUser: any;
   private requests: any = [];
-  private newRequests: any = [];
-  private pastRequests: any = [];
+  private newMessages: any = [];
+  private pastMessages: any = [];
   private title: string;
   private text: string;
-  private notificationId: number;
+  private messageId: number;
   private reloadTrigger: boolean = false;
   private approvalTrigger: boolean = false;
 
@@ -35,20 +35,19 @@ export class AdminRequestsComponent implements OnInit {
 
     if (this.currentUser && this.currentUser.authorities[0].authority == AppConstants.ADMIN_ROLE) {
       //noinspection TypeScriptUnresolvedFunction
-      this.userService.getNotifications(this.currentUser.id).subscribe(res => {
+      this.userService.getAllMessages().subscribe(res => {
         if (res) {
           this.requests = res;
-
-          this.requests.forEach(request => {
-            let reqDate: string = request.date;
+          this.requests.forEach(message => {
+            let reqDate: string = message.date;
             let currentDate: Date = new Date;
             let requestDate: Date = new Date(reqDate.replace("T", " "));
             if (requestDate.getDay() == currentDate.getDay()
               && requestDate.getMonth() == currentDate.getMonth()
               && requestDate.getFullYear() == currentDate.getFullYear()) {
-              this.newRequests.push(request);
+              this.newMessages.push(message);
             } else {
-              this.pastRequests.push(request);
+              this.pastMessages.push(message);
             }
           });
         }
@@ -58,20 +57,20 @@ export class AdminRequestsComponent implements OnInit {
     }
   }
 
-  onDeleteRequest(notificationId) {
-    this.notificationId = notificationId;
+  onDeleteMessage(messageId) {
+    this.messageId = messageId;
     this.title = AppConstants.CONFIRM_TITLE;
-    this.text = AppConstants.DELETE_REQ_CONFIRM_TEXT;
+    this.text = AppConstants.DELETE_MSG_CONFIRM_TEXT;
     document.getElementById(AppConstants.MODAL_CONTENT_DEL).click();
   }
 
-  onDeleteRequestApproval() {
+  onDeleteMessageApproval() {
     //noinspection TypeScriptUnresolvedFunction
-    this.userService.deleteNotification(this.notificationId)
+    this.userService.deleteMessage(this.messageId)
       .subscribe(response => {
         if(response) {
           this.title = AppConstants.CONFIRM_TITLE;
-          this.text = AppConstants.DELETE_REQ_TEXT;
+          this.text = AppConstants.DELETE_MSG_TEXT;
           this.reloadTrigger = true;
           document.getElementById(AppConstants.MODAL_CONTENT).click();
         }
@@ -83,38 +82,11 @@ export class AdminRequestsComponent implements OnInit {
       });
   }
 
-  onApproveRequest(userId, organisation, requestId) {
-    //noinspection TypeScriptUnresolvedFunction
-    this.userService.activateOwner(userId, organisation)
-      .subscribe(response => {
-        if(response) {
-          this.title = AppConstants.SUCCESS_TITLE;
-          this.text = AppConstants.OWNER_ACTIV_TEXT;
-          this.reloadTrigger = false;
-          this.approvalTrigger = true;
-          this.notificationId = requestId;
-          document.getElementById(AppConstants.MODAL_CONTENT).click();
-        }
-      }, error => {
-        this.title = AppConstants.ERROR_TITLE;
-        this.text = AppConstants.ERROR_TEXT;
-        this.reloadTrigger = false;
-        this.approvalTrigger = false;
-        document.getElementById(AppConstants.MODAL_CONTENT).click();
-      });
-  }
-
   open(content) {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(content).result.then((result) => {
       if(result == AppConstants.OK) {
         if(this.reloadTrigger) {
-          window.location.reload();
-        } else if(this.approvalTrigger) {
-          //noinspection TypeScriptUnresolvedFunction
-          this.userService.deleteNotification(this.notificationId).subscribe(response => {
-            console.log(response);
-          });
           window.location.reload();
         } else {
           return;
@@ -129,7 +101,7 @@ export class AdminRequestsComponent implements OnInit {
     //noinspection TypeScriptUnresolvedFunction
     this.modalService.open(contentDel).result.then((result) => {
       if (result == AppConstants.YES) {
-        this.onDeleteRequestApproval();
+        this.onDeleteMessageApproval();
       } else {
         return;
       }

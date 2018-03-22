@@ -1,6 +1,5 @@
 {
   "Dashboard": "Principale",
-  "My Profile": "Il Mio Profilo",
   "Reservations": "Prenotazioni",
   "History": "Storia",
   "Users": "Utenti",
@@ -9,6 +8,8 @@
   "Owned Parking Areas": "Parcheggios Di Proprietà",
   "Employees": "Dipendenti",
   "Employee Menu": "Dipendente Menu",
+  "Contact": "Contatto",
+  "Messages": "Messaggi",
   "Language": "Lingua",
   "English": "Inglese",
   "French": "Francese",

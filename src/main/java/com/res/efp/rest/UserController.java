@@ -2,6 +2,7 @@ package com.res.efp.rest;
 
 import com.res.efp.domain.model.*;
 import com.res.efp.exception.ResourceConflictException;
+import com.res.efp.service.ContactMessageService;
 import com.res.efp.service.NotificationService;
 import com.res.efp.service.OwnerService;
 import com.res.efp.service.UserService;
@@ -41,6 +42,9 @@ public class UserController {
 
     @Autowired
     private StorageService storageService;
+
+    @Autowired
+    private ContactMessageService contactMessageService;
 
     @PostConstruct
     public void initAdmin() {
@@ -247,6 +251,37 @@ public class UserController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file);
+    }
+
+    @RequestMapping(value = "/users/sendMessage", method = RequestMethod.POST)
+    public ResponseEntity<?> sendMessage(@RequestBody ContactMessage contactMessage) {
+        contactMessageService.saveMessage(contactMessage);
+        return ResponseEntity.ok(contactMessage.getId());
+    }
+
+    @RequestMapping(value = "/users/getAllMessages", method = RequestMethod.GET)
+    public ResponseEntity<?> getMessages() {
+        List<ContactMessage> messages = contactMessageService.getAllMessages();
+        return ResponseEntity.ok(messages);
+    }
+
+    @RequestMapping(value = "/users/getMessage", method = RequestMethod.GET)
+    public ResponseEntity<?> getMessage(@RequestParam(value = "messageId") Long messageId) {
+        ContactMessage message = contactMessageService.getById(messageId);
+        return ResponseEntity.ok(message);
+    }
+
+    @RequestMapping(value = "/users/deleteMessage", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteMessage(@RequestParam(value = "messageId") Long messageId) {
+        if(contactMessageService.getById(messageId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Message not found.");
+        }
+        boolean deleted = contactMessageService.deleteMessage(messageId);
+        if(deleted) {
+            return ResponseEntity.ok(messageId);
+        } else {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Server error");
+        }
     }
 }
 

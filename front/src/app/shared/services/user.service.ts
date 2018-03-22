@@ -140,4 +140,25 @@ export class UserService {
         return res;
       });
   }
+
+  sendMessage(contactMessage) {
+    return this.apiService.post(this.config.save_message_url, contactMessage)
+      .map(res => {
+        return res;
+      });
+  }
+
+  getAllMessages() {
+    return this.apiService.get(this.config.get_all_messages_url)
+      .map(res => {
+        return res;
+      });
+  }
+
+  deleteMessage(messageId) {
+    return this.apiService.delete(this.config.delete_message_url + "?messageId=" + messageId)
+      .map(res => {
+        return res;
+      });
+  }
 }

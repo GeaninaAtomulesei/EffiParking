@@ -47,6 +47,15 @@
       <i class="fa fa-th-list"></i>&nbsp;{{ 'Owner Requests' | translate }}
     </a>
 
+    <a [routerLink]="['/admin-messages']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isAdmin">
+      <i class="fa fa-th-list"></i>&nbsp;{{ 'Messages' | translate }}
+    </a>
+
+    <a [routerLink]="['/contact']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+      <i class="fa fa-th-list"></i>&nbsp;{{ 'Contact' | translate }}
+    </a>
+
+
     <div class="header-fields">
       <a (click)="rltAndLtr()" class="list-group-item">
         <span><i class="fa fa-arrows-h"></i>&nbsp; RTL/LTR</span>

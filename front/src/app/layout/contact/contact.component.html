@@ -1,0 +1,83 @@
+<div [@routerTransition]>
+  <app-page-header [heading]="'Contact Us'" [icon]="'fa-desktop'"></app-page-header>
+
+  <div class="jumbotron" style="background-color: #222">
+
+    <div class="row" style="text-align: left; color: #999">
+      <div class="col-lg-6">
+
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+          <br>
+          <div class="form-content" style="text-align: left">
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Name</label>
+                <input class="form-control" formControlName="name">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Email</label>
+                <input class="form-control" formControlName="email">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Contact Reason</label>
+                <input class="form-control" formControlName="reason">
+              </fieldset>
+            </div>
+
+            <div class="form-group">
+              <fieldset class="form-group">
+                <label>Message</label>
+                <textarea class="form-control" formControlName="message" style="height: 150px"></textarea>
+              </fieldset>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-secondary" style="background-color: #999; color:black">Submit</button>
+        </form>
+        <br>
+        <p [class]="notification.msgType" *ngIf="notification" style="color:#DC143C; align-self: center">{{notification.msgBody}}</p>
+      </div>
+
+
+      <div class="col-lg-6" style="text-align: center; margin-top: 55px;">
+
+        <div class="card text-white bg-dark mb-3" style="height: 84%">
+          <div class="card-header" style="color: #999; font-weight: bolder">Get In Touch</div>
+          <div class="card-body" style="text-align: left;color: #999">
+            <p class="card-text">PHONE <br> 0751461483</p>
+            <br><br>
+            <p class="card-text">E-MAIL <br> effiparking@gmail.com</p>
+            <br><br>
+            <p class="card-text">ADDRESS <br> Bvd. Vasile Milea No. 4G, AFI Park 3 <br> 6th District, Bucharest</p>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+  <div id="modalCont" (click)="open(content)"></div>
+  <ng-template #content let-c="close" let-d="dismiss" id="content">
+    <div class="modal-header">
+      <h4 class="modal-title">{{title}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{text}}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+
+</div>

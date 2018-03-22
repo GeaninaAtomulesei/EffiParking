@@ -23,7 +23,9 @@ export class AppConstants {
   public static readonly CONFIRM_TITLE = "Confirmation";
   public static readonly SUCCESS_TITLE = "Success";
   public static readonly DELETE_REQ_CONFIRM_TEXT = "Are you sure you want to delete this owner request?";
+  public static readonly DELETE_MSG_CONFIRM_TEXT = "Are you sure you want to delete this user message?";
   public static readonly DELETE_REQ_TEXT = "You have successfully deleted this owner request!";
+  public static readonly DELETE_MSG_TEXT = "You have successfully deleted this user message!";
   public static readonly OWNER_ACTIV_TEXT = "You have successfully approved this owner request!";
   public static readonly ADMIN_CREATE_TEXT = "You have successfully added a new Administrator!";
   public static readonly DELETE_USER_CONFIRM_TEXT = "Are you sure you want to permanently delete this user's account?";
@@ -60,5 +62,10 @@ export class AppConstants {
   public static readonly LOGIN_FAIL = 'Incorrect username or password.';
   public static readonly SIGNUP_TEXT = "You have successfully signed up! You can now log in with your credentials.";
   public static readonly DELETE_NOTIF_SUCCESS_TEXT = "You have successfully deleted the notification!";
-  public static readonly CHANGE_PASSWORD_SUCCESS_TEXT = "You have successfully changed your password! You can now log in with your new credentials."
+  public static readonly CHANGE_PASSWORD_SUCCESS_TEXT = "You have successfully changed your password! You can now log in with your new credentials.";
+  public static readonly SEND_MESSAGE_SUCCESS_TEXT = "You have successfully sent your message! As soon as your message is acknowledged you will receive an e-mail regarding your concerns!";
+  public static readonly INVALID_NAME = "Your name should have at least 3 characters!";
+  public static readonly INVALID_EMAIL = "Your e-mail address is invalid!";
+  public static readonly INVALID_REASON = "Your contact reason should have at least 3 characters!";
+  public static readonly INVALID_MESSAGE = "Your message should have at least 10 characters!";
 }

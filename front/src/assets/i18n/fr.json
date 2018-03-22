@@ -1,6 +1,5 @@
 {
   "Dashboard": "Tableau De Bord",
-  "My Profile": "Mon Profil",
   "Reservations": "Réservations",
   "History": "Histoire",
   "Users": "Utilisateurs",
@@ -9,6 +8,8 @@
   "Owned Parking Areas": "Stationnements Détenue",
   "Employees": "Employés",
   "Employee Menu": "Employé Menu",
+  "Contact": "Contact",
+  "Messages": "Messages",
   "Language": "Langue",
   "English": "Anglais",
   "French": "Français",
