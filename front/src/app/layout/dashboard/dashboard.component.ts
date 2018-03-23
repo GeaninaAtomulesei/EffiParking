@@ -102,13 +102,13 @@ export class DashboardComponent implements OnInit {
     this.parkingService.getClosest(this.currentLatitude, this.currentLongitude)
       .subscribe(parkings => {
           this.closestParkingAreas = parkings;
+          this.searchTrigger = true;
           localStorage.setItem(AppConstants.CLOSEST_PARKINGS, JSON.stringify(this.closestParkingAreas));
         },
         error => {
           console.log(error);
           this.error = error.error;
         });
-    this.searchTrigger = true;
   }
 
   searchByTerm() {
@@ -118,13 +118,13 @@ export class DashboardComponent implements OnInit {
       .subscribe(response => {
         if (response) {
           this.foundParkingAreas = response;
+          this.searchByTermTrigger = true;
           localStorage.setItem(AppConstants.FOUND_PARKINGS, JSON.stringify(this.foundParkingAreas));
         }
       }, error => {
         console.log(error);
         this.error = error;
       });
-    this.searchByTermTrigger = true;
   }
 
   ownerReqSubmit() {

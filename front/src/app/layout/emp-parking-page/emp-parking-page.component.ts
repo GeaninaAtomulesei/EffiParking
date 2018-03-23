@@ -113,12 +113,12 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
   }
 
   searchLot() {
-    this.searchLotTrigger = true;
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.getLotByParkingAndNumber(this.parking.id, this.lotNumber)
       .subscribe(response => {
         if(response) {
           this.foundLot = response;
+          //noinspection TypeScriptUnresolvedFunction
           this.parkingService.getReservationsByParkingAndLot(this.parking.id, this.foundLot.number).subscribe(response => {
             if(response) {
               this.foundLotReservations = response;
@@ -131,12 +131,13 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
         }
         this.todayResTrigger = false;
         this.foundReservationsTrigger = false;
+        this.searchLotTrigger = true;
       }, error => {
         this.title = AppConstants.ERROR_TITLE;
         this.text = AppConstants.ERROR_TEXT;
         this.reloadTrigger = false;
         document.getElementById(AppConstants.MODAL_CONTENT).click();
-      })
+      });
   }
 
   open(content) {

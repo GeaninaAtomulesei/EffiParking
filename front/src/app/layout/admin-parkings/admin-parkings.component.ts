@@ -33,6 +33,7 @@ export class AdminParkingsComponent implements OnInit {
     this.parkingService.searchByTerm(this.searchTerm).subscribe(response => {
       if (response) {
         this.foundParkings = response;
+        this.searchParkingTrigger = true;
       }
     }, error => {
       console.log(error);
@@ -40,7 +41,6 @@ export class AdminParkingsComponent implements OnInit {
       this.text = AppConstants.ERROR_TEXT;
       document.getElementById(AppConstants.MODAL_CONTENT).click();
     });
-    this.searchParkingTrigger = true;
   }
 
   onShowAll() {
@@ -48,6 +48,7 @@ export class AdminParkingsComponent implements OnInit {
     this.parkingService.getAll().subscribe(response => {
       if(response) {
         this.allParkings = response;
+        this.showAllTrigger = true;
       }
     }, error => {
       console.log(error);
@@ -55,7 +56,6 @@ export class AdminParkingsComponent implements OnInit {
       this.text = AppConstants.ERROR_TEXT;
       document.getElementById(AppConstants.MODAL_CONTENT).click();
     });
-    this.showAllTrigger = true;
   }
 
   open(content) {

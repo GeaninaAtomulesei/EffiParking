@@ -46,8 +46,11 @@ export class AdminUsersPageComponent implements OnInit {
       response.forEach(user => {
         if (user.authorities) {
           user.authorities.forEach(auth => {
+            let currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
             if (auth.authority == AppConstants.ADMIN_ROLE) {
-              this.admins.push(user);
+              if(user.id !== currentUser.id) {
+                this.admins.push(user);
+              }
             } else if (auth.authority == AppConstants.OWNER_ROLE) {
               this.owners.push(user);
             } else if (auth.authority == AppConstants.USER_ROLE) {
@@ -121,11 +124,11 @@ export class AdminUsersPageComponent implements OnInit {
     this.userService.searchByTerm(this.searchTerm).subscribe(response => {
       if(response) {
         this.foundUsers = response;
+        this.searchUsersTrigger = true;
       }
     }, error => {
       console.log(error);
     });
-    this.searchUsersTrigger = true;
   }
 
   onShowAdmins() {
