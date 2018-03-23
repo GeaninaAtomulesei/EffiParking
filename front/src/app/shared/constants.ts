@@ -37,7 +37,7 @@ export class AppConstants {
   public static readonly ADD_PARKING_TEXT = "You have successfully added a new parking area!";
   public static readonly NOT_PERMITTED_TITLE = "Not Permitted";
   public static readonly NOT_PERMITTED_TEXT = "You have to be logged in to make a reservation!";
-  public static readonly INVALID_TIME_TITLE = "Incorrect Time Value";
+  public static readonly INVALID_EQUAL_TIME = "Your arrival time cannot be the same as your leaving time!";
   public static readonly INVALID_PAST_TIME_TEXT = "You cannot set a time in the past for your reservation!";
   public static readonly INVALID_LEAVE_TIME_TEXT = "Your leaving time cannot be before your start time!";
   public static readonly RESERVATION_TEXT = "You have successfully reserved lot number ";

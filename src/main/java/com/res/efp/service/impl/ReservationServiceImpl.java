@@ -105,7 +105,7 @@ public class ReservationServiceImpl implements ReservationService {
         List<Reservation> actualReservations = new ArrayList<>();
 
         for (Reservation reservation : reservations) {
-            LocalDateTime reservationDate = reservation.getEndDate();
+            LocalDateTime reservationDate = reservation.getStartDate();
             LocalDateTime currentDate = LocalDateTime.now();
 
             if (reservationDate.getDayOfYear() == currentDate.getDayOfYear()) {

@@ -79,7 +79,7 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
       if (this.currentUser.id == this.parking.owner.id) {
         this.isOwner = true;
       }
-      if(this.currentUser.authorities[0].authority == AppConstants.ADMIN_ROLE) {
+      if (this.currentUser.authorities[0].authority == AppConstants.ADMIN_ROLE) {
         this.isAdmin = true;
       }
     });
@@ -115,7 +115,7 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
   }
 
   showForm() {
-    if(localStorage.getItem(AppConstants.LOGGED_IN)) {
+    if (localStorage.getItem(AppConstants.LOGGED_IN)) {
       this.showReservationForm = !this.showReservationForm;
     } else {
       this.title = AppConstants.NOT_PERMITTED_TITLE;
@@ -146,12 +146,18 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (this.startTime.hour > this.endTime.hour) {
-      this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LEAVE_TIME_TEXT};
-      return;
-    } else if (this.startTime.hour == this.endTime.hour) {
-      if (this.startTime.minute > this.endTime.minute) {
+    if (this.startDate.year == this.endDate.year && this.startDate.month == this.endDate.month && this.startDate.day == this.endDate.day) {
+      if (this.startTime.hour > this.endTime.hour) {
         this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LEAVE_TIME_TEXT};
+        return;
+      } else if (this.startTime.hour == this.endTime.hour) {
+        if (this.startTime.minute > this.endTime.minute) {
+          this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LEAVE_TIME_TEXT};
+          return;
+        }
+      }
+      if(this.startTime.hour == this.endTime.hour && this.startTime.minute == this.endTime.minute) {
+        this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_EQUAL_TIME};
         return;
       }
     }
@@ -238,35 +244,35 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
 
   onSubmitEditForm() {
     this.notification = undefined;
-    if(this.editParkingAreaForm.pristine) {
+    if (this.editParkingAreaForm.pristine) {
       this.notification = {msgType: 'error', msgBody: AppConstants.PRISTINE_FORM};
       return;
     }
-    if(this.editParkingAreaForm.get('name').invalid) {
+    if (this.editParkingAreaForm.get('name').invalid) {
       this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_NAME};
       return;
     }
-    if(this.editParkingAreaForm.get('locationName').invalid) {
+    if (this.editParkingAreaForm.get('locationName').invalid) {
       this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_LOCATION};
       return;
     }
-    if(this.editParkingAreaForm.get('city').invalid) {
+    if (this.editParkingAreaForm.get('city').invalid) {
       this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_CITY};
       return;
     }
-    if(this.editParkingAreaForm.get('street').invalid) {
+    if (this.editParkingAreaForm.get('street').invalid) {
       this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_STREET};
       return;
     }
-    if(this.editParkingAreaForm.get('number').invalid) {
+    if (this.editParkingAreaForm.get('number').invalid) {
       this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_PARKING_NUMBER};
       return;
     }
-    if(this.editParkingAreaForm.get('latitude').invalid) {
+    if (this.editParkingAreaForm.get('latitude').invalid) {
       this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LATITUDE};
       return;
     }
-    if(this.editParkingAreaForm.get('longitude').invalid) {
+    if (this.editParkingAreaForm.get('longitude').invalid) {
       this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_LONGITUDE};
       return;
     }
@@ -300,20 +306,20 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
     //noinspection TypeScriptUnresolvedFunction
     this.userService.getEmployeeByTerm(this.currentUser.id, this.searchEmployeeForm.value.term)
       .subscribe(res => {
-        if(res) {
-          this.searchEmployeeForm.reset();
-          this.searchEmployeesResult = res;
-          this.searchTrigger = true;
-        }
-      },
-      error => {
-        this.submitted = false;
-        this.title = AppConstants.ERROR_TITLE;
-        this.text = AppConstants.ERROR_TEXT;
-        this.returnTrigger = true;
-        this.okButton = true;
-        document.getElementById(AppConstants.MODAL_CONTENT).click();
-      });
+          if (res) {
+            this.searchEmployeeForm.reset();
+            this.searchEmployeesResult = res;
+            this.searchTrigger = true;
+          }
+        },
+        error => {
+          this.submitted = false;
+          this.title = AppConstants.ERROR_TITLE;
+          this.text = AppConstants.ERROR_TEXT;
+          this.returnTrigger = true;
+          this.okButton = true;
+          document.getElementById(AppConstants.MODAL_CONTENT).click();
+        });
   }
 
   onSubmitAddLots() {
@@ -344,22 +350,22 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.removeLots(this.id, this.removeLotsForm.value.numberOfRemovedLots)
       .subscribe(res => {
-          if (res) {
-            this.title = AppConstants.SUCCESS_TITLE;
-            this.text = AppConstants.REMOVE_LOTS_TEXT + this.removeLotsForm.value.numberOfRemovedLots + " lots!";
-            this.okButton = false;
-            this.closeButton = true;
-            this.returnTrigger = false;
-            document.getElementById(AppConstants.MODAL_CONTENT).click();
-          }
-        }, error => {
-          this.submitted = false;
-          this.title = AppConstants.ERROR_TITLE;
-          this.text = AppConstants.ERROR_TEXT;
-          this.returnTrigger = true;
-          this.okButton = true;
+        if (res) {
+          this.title = AppConstants.SUCCESS_TITLE;
+          this.text = AppConstants.REMOVE_LOTS_TEXT + this.removeLotsForm.value.numberOfRemovedLots + " lots!";
+          this.okButton = false;
+          this.closeButton = true;
+          this.returnTrigger = false;
           document.getElementById(AppConstants.MODAL_CONTENT).click();
-        });
+        }
+      }, error => {
+        this.submitted = false;
+        this.title = AppConstants.ERROR_TITLE;
+        this.text = AppConstants.ERROR_TEXT;
+        this.returnTrigger = true;
+        this.okButton = true;
+        document.getElementById(AppConstants.MODAL_CONTENT).click();
+      });
   }
 
   onDeleteParking() {
@@ -392,7 +398,7 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
   assignEmployee(employeeId) {
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.addEmployee(this.id, employeeId).subscribe(res => {
-      if(res) {
+      if (res) {
         this.title = AppConstants.SUCCESS_TITLE;
         this.text = AppConstants.ASSIGN_EMPLOYEE_TEXT;
         this.closeButton = true;
@@ -413,7 +419,7 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
   removeEmployee(employeeId) {
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.removeEmployee(this.id, employeeId).subscribe(res => {
-      if(res) {
+      if (res) {
         this.title = AppConstants.SUCCESS_TITLE;
         this.text = AppConstants.REMOVE_EMPLOYEE_TEXT;
         this.closeButton = true;
@@ -437,9 +443,9 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
       if (result == AppConstants.CLOSE) {
         window.location.reload();
       } else if (result == AppConstants.OK) {
-        if(this.returnTrigger == true) {
+        if (this.returnTrigger == true) {
           return;
-        } else if(this.resSuccessTrigger == true) {
+        } else if (this.resSuccessTrigger == true) {
           this.router.navigate(['/reservations-page']);
         } else {
           this.router.navigate(['/owner-page']);
