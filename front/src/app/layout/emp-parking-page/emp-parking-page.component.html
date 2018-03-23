@@ -2,10 +2,28 @@
   <app-page-header *ngIf="parking" [heading]="parking.name" [icon]="'fa-desktop'"></app-page-header>
 
   <div class="jumbotron" style="background-color: #222" *ngIf="parking">
-    <p style="color: #999; font-size: large">Total lots : {{parking.totalLots}} </p>
-    <p style="color: #999; font-size: large"> Available lots : {{parking.availableLots}}</p>
-    <p style="color: #999; font-size: large"> Owner : {{parking.owner.firstName}} {{parking.owner.lastName}}</p>
-
+    <div class="card mb-3" style="background-color: #343a40 !important; color: #999; border-color:white">
+      <div class="card-header"
+           style="background-color: #343a40 !important; color: #999; text-align: center;font-size: larger;font-weight: 900;">
+        Information
+      </div>
+      <table class="card-body table table-bordered" style="margin-bottom: 0">
+        <thead>
+        <tr>
+          <th>Total lots</th>
+          <th style="width: 70%">{{parking.totalLots}}</th>
+        </tr>
+        <tr>
+          <th>Available lots</th>
+          <th>{{parking.availableLots}}</th>
+        </tr>
+        <tr>
+          <th>Owner</th>
+          <th>{{parking.owner.firstName}} {{parking.owner.lastName}}</th>
+        </tr>
+        </thead>
+      </table>
+    </div>
     <br>
 
     <div class="row" style="text-align: center; margin: auto">
@@ -82,6 +100,7 @@
 
 
     <div class="page-header" *ngIf="todayResTrigger">
+      <br>
       <h1 style="font-size: xx-large; color:#999">Today's Reservations</h1>
       <hr>
     </div>
@@ -104,6 +123,7 @@
     <br>
 
     <div class="page-header" *ngIf="foundReservations && foundReservations.length > 0 && foundReservationsTrigger">
+      <br>
       <h1 style="font-size: xx-large; color:#999">Found Reservations</h1>
       <hr>
     </div>

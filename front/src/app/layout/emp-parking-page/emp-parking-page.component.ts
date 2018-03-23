@@ -53,11 +53,11 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.findReservationsByParking(this.id).subscribe(reservations => {
       this.todayReservations = reservations;
+      this.foundReservationsTrigger = false;
+      this.todayResTrigger = !this.todayResTrigger;
     }, error => {
       console.log(error);
     });
-    this.foundReservationsTrigger = false;
-    this.todayResTrigger = !this.todayResTrigger;
   }
 
   setLotVacant(lotId) {
