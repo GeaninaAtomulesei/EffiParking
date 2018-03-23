@@ -58,8 +58,7 @@ public class ReservationServiceImpl implements ReservationService {
                 List<Reservation> reservations = lot.getReservations();
                 if((reservations != null) && (reservations.size() != 0)) {
                     for (Reservation res : reservations) {
-                        if (((reservation.getStartDate().isBefore(res.getStartDate())) && (reservation.getEndDate().isBefore(res.getEndDate()))) ||
-                                ((reservation.getStartDate().isAfter(res.getStartDate())) && (reservation.getEndDate().isAfter(res.getEndDate())))) {
+                        if(!isOverlapping(res.getStartDate(), res.getEndDate(), reservation.getStartDate(), reservation.getEndDate())) {
                             reservation.setLot(lot);
                             lot.getReservations().add(reservation);
                             lotRepository.save(lot);
@@ -73,6 +72,9 @@ public class ReservationServiceImpl implements ReservationService {
                     break;
                 }
             }
+        }
+        if(reservation.getLot() == null) {
+            return null;
         }
         reservation.setUser(user);
         user.getReservations().add(reservation);
@@ -99,6 +101,10 @@ public class ReservationServiceImpl implements ReservationService {
         user.getHistory().add(historyObject);
         userRepository.save(user);
         return reservation;
+    }
+
+    private static boolean isOverlapping(LocalDateTime start1, LocalDateTime end1, LocalDateTime start2, LocalDateTime end2) {
+        return !start1.isAfter(end2) && !start2.isAfter(end1);
     }
 
     @Override
@@ -153,6 +159,9 @@ public class ReservationServiceImpl implements ReservationService {
         parking.getReservations().remove(reservation);
         reservation.setLot(null);
         lot.getReservations().remove(reservation);
+        if(lot.getReservations() == null || lot.getReservations().isEmpty()) {
+            lot.setReserved(false);
+        }
         lotRepository.save(lot);
         reservationRepository.delete(reservation);
 

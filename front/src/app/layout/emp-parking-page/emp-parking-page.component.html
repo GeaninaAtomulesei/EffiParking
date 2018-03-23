@@ -47,7 +47,6 @@
           <th>Reserved</th>
           <th>Vacant</th>
           <th></th>
-          <th></th>
           <th>Reservations</th>
         </tr>
         </thead>
@@ -60,18 +59,17 @@
           <td>
             <button class="btn btn-secondary" style="color:#999; background-color: black" [disabled]="!foundLot.vacant"
                     (click)="setLotOccupied(foundLot.id)">Set occupied
-            </button>
-          </td>
-          <td>
+            </button> &nbsp;
             <button class="btn btn-secondary" style="color:#999; background-color: black" [disabled]="foundLot.vacant"
                     (click)="setLotVacant(foundLot.id)">Set vacant
             </button>
           </td>
-          <td>
+          <td style="width: 600px">
             <div *ngFor="let reservation of foundLotReservations">
-              <p>{{reservation.startDate.replace("T", "; ")}} : {{reservation.user.firstName}} {{reservation.user.lastName}}</p>
+              <p>{{reservation.startDate.replace("T", "; ")}} -> {{reservation.endDate.replace("T", "; ")}} : {{reservation.user.firstName}} {{reservation.user.lastName}}</p>
             </div>
           </td>
+
         </tr>
         </tbody>
       </table>
@@ -161,7 +159,6 @@
           <th>Reserved</th>
           <th>Vacant</th>
           <th></th>
-          <th></th>
         </tr>
         </thead>
 
@@ -173,9 +170,7 @@
           <td>
             <button class="btn btn-secondary" style="color:#999; background-color: black" [disabled]="!lot.vacant"
                     (click)="setLotOccupied(lot.id)">Set occupied
-            </button>
-          </td>
-          <td>
+            </button> &nbsp;
             <button class="btn btn-secondary" style="color:#999; background-color: black" [disabled]="lot.vacant"
                     (click)="setLotVacant(lot.id)">Set vacant
             </button>
