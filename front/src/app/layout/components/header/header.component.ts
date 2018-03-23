@@ -4,7 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {UserService} from "../../../shared/services/user.service";
 import {AuthService} from "../../../shared/services/auth.service";
 import {AppConstants} from "../../../shared/constants";
-import {FormsModule} from "@angular/forms";
+import {EventEmitter} from "@angular/core";
 
 @Component({
   selector: 'app-header',
@@ -17,6 +17,7 @@ export class HeaderComponent implements OnInit {
   currentUser: any;
   notifications: any = [];
   isLoggedIn: boolean = false;
+  triggerNotifications: boolean = false;
 
   constructor(private translate: TranslateService,
               public router: Router,
@@ -39,7 +40,7 @@ export class HeaderComponent implements OnInit {
     });
 
     setInterval(() => {
-      this.getNotifications();
+      this.getNotifications(true);
     }, 60000);
 
   }
@@ -49,21 +50,38 @@ export class HeaderComponent implements OnInit {
       this.isLoggedIn = true;
     }
     this.currentUser = JSON.parse(localStorage.getItem(AppConstants.CURRENT_USER));
-    this.getNotifications();
+    this.getNotifications(false);
   }
 
-  getNotifications() {
+  getNotifications(x? : boolean) {
     if(this.currentUser) {
       //noinspection TypeScriptUnresolvedFunction
       this.userService.getNotifications(this.currentUser.id)
         .subscribe(notifications => {
           if (notifications) {
+            if(x) {
+              if(this.notifications.toString() !== notifications.toString()) {
+                this.triggerNotifications = true;
+              }
+            }
             this.notifications = notifications;
           }
         }, error => {
           console.log(error);
         });
     }
+  }
+
+  getStyle() {
+    if(this.triggerNotifications) {
+      return "red";
+    } else {
+      return "";
+    }
+  }
+
+  changeToDefault() {
+    this.triggerNotifications = false;
   }
 
   isToggled(): boolean {

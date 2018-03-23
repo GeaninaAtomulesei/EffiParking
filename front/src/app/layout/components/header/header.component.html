@@ -39,8 +39,8 @@
 
 
             <li class="nav-item dropdown" ngbDropdown *ngIf="currentUser">
-                <a class="nav-link" ngbDropdownToggle>
-                    <i class="fa fa-bell"></i> <b class="caret"></b><span class="sr-only">(current)</span>
+                <a class="nav-link" ngbDropdownToggle  (click)="changeToDefault()">
+                    <i class="fa fa-bell"  [style.color]="getStyle()"></i> <b class="caret"></b><span class="sr-only">(current)</span>
                 </a>
                 <ul class="dropdown-menu-right messages" ngbDropdownMenu>
                     <li class="media" *ngFor="let notification of notifications.slice(0, 3)">
