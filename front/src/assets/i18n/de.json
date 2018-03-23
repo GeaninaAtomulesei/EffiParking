@@ -16,10 +16,21 @@
   "Spanish": "Spanisch",
   "Italian": "Italienisch",
   "German": "Deutsch",
-  "Change Password" : "Passwort ändern",
-  "Profile" : "Profil",
-  "Inbox" : "Posteingang",
-  "Log Out" : "Ausloggen",
-  "View All" : "Alle Anzeigen"
+  "Change Password": "Passwort ändern",
+  "Profile": "Profil",
+  "Inbox": "Posteingang",
+  "Log Out": "Ausloggen",
+  "View All": "Alle Anzeigen",
+  "Search for a parking area nearby": "Suchen Sie nach einem Parkplatz in der Nähe",
+  "Press Search in order to see all the parking areas with available parking lots found near your location! They will be shown in the order of the closest one to your current coordinates.": "Drücken Sie Suchen, um alle Parkplätze mit verfügbaren Parkplätzen in Ihrer Nähe zu sehen! Sie werden in der Reihenfolge ihrer nächsten Koordinaten angezeigt.",
+  "Search »": "Suche »",
+  "Search for a parking area by name or address": "Suchen Sie nach einem Parkplatz nach Name oder Adresse",
+  "Enter your search term and press Search in order to see all the matching parking areas.": "Geben Sie Ihren Suchbegriff ein und drücken Sie Suchen, um alle passenden Parkplätze zu sehen.",
+  "Available lots: ": "Verfügbare Lose: ",
+  "View": "Aussicht",
+  "Name, Location, City...": "Name, Ort, Stadt ...",
+  "No parking areas found by this criteria. Please try again!": "Keine Parkplätze nach diesen Kriterien gefunden. Bitte versuche es erneut!",
+  "Register as an owner": "Registrieren Sie sich als Eigentümer",
+  "Enter your organisation and press Submit in order to make a request to register as an Owner. As soon as one of our administrators receives your request and approves it, you will receive an e-mail of confirmation and you will be able to access the owners menu.": "Geben Sie Ihre Organisation ein und drücken Sie Senden, um eine Registrierung als Eigentümer zu beantragen. Sobald einer unserer Administratoren Ihre Anfrage erhält und genehmigt, erhalten Sie eine Bestätigungs-E-Mail und Sie können auf das Besitzermenü zugreifen."
 }
 

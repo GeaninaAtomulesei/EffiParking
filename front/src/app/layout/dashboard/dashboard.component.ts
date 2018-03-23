@@ -9,6 +9,7 @@ import {UserService} from "../../shared/services/user.service";
 import 'rxjs/add/operator/delay';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AppConstants} from "../../shared/constants";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-dashboard',
@@ -36,7 +37,13 @@ export class DashboardComponent implements OnInit {
   constructor(private parkingService: ParkingService,
               private formBuilder: FormBuilder,
               private userService: UserService,
+              private translate: TranslateService,
               private modalService: NgbModal) {
+
+    this.translate.addLangs(['en', 'fr', 'es', 'it', 'de']);
+    this.translate.setDefaultLang('en');
+    const browserLang = this.translate.getBrowserLang();
+    this.translate.use(browserLang.match(/en|fr|es|it|de/) ? browserLang : 'en');
 
     this.sliders.push(
       {

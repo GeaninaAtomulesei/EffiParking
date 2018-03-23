@@ -23,10 +23,10 @@ export class SidebarComponent {
 
   constructor(private translate: TranslateService, public router: Router,
               private parkingService: ParkingService) {
-    this.translate.addLangs(['en', 'fr', 'ur', 'es', 'it', 'fa', 'de']);
+    this.translate.addLangs(['en', 'fr', 'es', 'it', 'de']);
     this.translate.setDefaultLang('en');
     const browserLang = this.translate.getBrowserLang();
-    this.translate.use(browserLang.match(/en|fr|ur|es|it|fa|de/) ? browserLang : 'en');
+    this.translate.use(browserLang.match(/en|fr|es|it|de/) ? browserLang : 'en');
 
     this.router.events.subscribe(val => {
       if (

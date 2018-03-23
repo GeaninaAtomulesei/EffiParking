@@ -15,13 +15,12 @@
   <hr>
 
   <div class="jumbotron" style="background-color: #222">
-    <h1 style="color: #999">Search for a parking area nearby</h1>
+    <h1 style="color: #999">{{'Search for a parking area nearby' | translate}}</h1>
     <p style="color: #999">
-      Press Search in order to see all the parking areas with available parking lots found near your location! They will
-      be shown in the order of the closest one to your current coordinates.
+      {{'Press Search in order to see all the parking areas with available parking lots found near your location! They will be shown in the order of the closest one to your current coordinates.' | translate}}
     </p>
     <p>
-      <a (click)="search()" class="btn btn-primary btn-lg" role="button" style="background-color: #999">Search »</a>
+      <a (click)="search()" class="btn btn-primary btn-lg" role="button" style="background-color: #999">{{'Search »' | translate}}</a>
     </p>
     <br>
     <br>
@@ -32,9 +31,9 @@
           <div class="card-body" style="text-align: center; color: #999">
               <h4 class="card-title">{{parking.name}}</h4>
               <p class="card-text">{{parking.locationName}}, {{parking.street}} {{parking.number}}, {{parking.city}}</p>
-              <p class="card-text">Available lots: {{parking.availableLots}}</p>
+              <p class="card-text">{{'Available lots: ' | translate}} {{parking.availableLots}}</p>
               <button [routerLink]="['/parking-page', parking.id]" type="button" class="btn btn-primary" style="color:black; background-color: #999">
-                View
+                {{'View' | translate}}
               </button>
           </div>
         </div>
@@ -44,24 +43,24 @@
   </div>
 
   <div class="jumbotron" style="background-color: #222">
-    <h1 style="color: #999">Search for a parking area by name or address</h1>
+    <h1 style="color: #999">{{'Search for a parking area by name or address' | translate}}</h1>
     <p style="color: #999">
-      Enter your search term and press Search in order to see all the matching parking areas.
+      {{'Enter your search term and press Search in order to see all the matching parking areas.' | translate}}
     </p>
     <form [formGroup]="searchForm" (ngSubmit)="searchByTerm()">
       <div class="form-content">
         <div class="form-group">
           <fieldset class="form-group">
-            <input class="form-control" formControlName="term" placeholder="Name, Location, City..." style="width: 35%">
+            <input class="form-control" formControlName="term" placeholder="{{'Name, Location, City...' | translate}}" style="width: 35%">
           </fieldset>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary btn-lg" style="background-color: #999; color:black" [disabled]="!searchForm.valid">Search »</button>
+      <button type="submit" class="btn btn-primary btn-lg" style="background-color: #999; color:black" [disabled]="!searchForm.valid">{{'Search »' | translate}}</button>
     </form>
     <br>
     <br>
 
-    <p style="color: #999" *ngIf="searchByTermTrigger && foundParkingAreas && foundParkingAreas.length < 1">No parking areas found by this criteria. Please try again!</p>
+    <p style="color: #999" *ngIf="searchByTermTrigger && foundParkingAreas && foundParkingAreas.length < 1">{{'No parking areas found by this criteria. Please try again!' | translate}}</p>
     <div class="row" *ngIf="foundParkingAreas && foundParkingAreas.length > 0">
       <div class="col-sm-4" *ngFor="let parking of foundParkingAreas">
         <div class="card text-white bg-dark mb-3">
@@ -69,9 +68,9 @@
           <div class="card-body" style="text-align: center; color: #999">
             <h4 class="card-title">{{parking.name}}</h4>
             <p class="card-text">{{parking.locationName}}, {{parking.street}} {{parking.number}}, {{parking.city}}</p>
-            <p class="card-text">Available lots: {{parking.availableLots}}</p>
+            <p class="card-text">{{'Available lots: ' | translate}} {{parking.availableLots}}</p>
             <button [routerLink]="['/parking-page', parking.id]" type="button" class="btn btn-primary" style="color:black; background-color: #999">
-              View
+              {{'View' | translate}}
             </button>
           </div>
         </div>
@@ -81,11 +80,9 @@
   </div>
 
   <div class="jumbotron" style="background-color: #222">
-    <h1 style="color: #999">Register as an owner</h1>
+    <h1 style="color: #999">{{'Register as an owner' | translate}}</h1>
     <p style="color: #999">
-      Enter your organisation and press Submit in order to make a request to register as an Owner. As soon as one of our
-      administrators receives your request and approves it, you will receive an e-mail of confirmation and you will be
-      able to access the owners menu.
+      {{'Enter your organisation and press Submit in order to make a request to register as an Owner. As soon as one of our administrators receives your request and approves it, you will receive an e-mail of confirmation and you will be able to access the owners menu.' | translate}}
     </p>
 
     <form [formGroup]="ownerForm" (ngSubmit)="ownerReqSubmit()">

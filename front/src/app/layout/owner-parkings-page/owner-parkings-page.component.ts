@@ -29,7 +29,6 @@ export class OwnerParkingsPageComponent implements OnInit {
   private searchTerm: string;
   private foundParkings: any = [];
   private returnTrigger: boolean = false;
-  private notification: DisplayMessage;
 
   constructor(private parkingService: ParkingService,
               private formBuilder: FormBuilder,

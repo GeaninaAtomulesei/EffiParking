@@ -20,5 +20,16 @@
   "Profile": "Profile",
   "Inbox": "Inbox",
   "Log Out": "Log Out",
-  "View All": "View All"
+  "View All": "View All",
+  "Search for a parking area nearby": "Search for a parking area nearby",
+  "Press Search in order to see all the parking areas with available parking lots found near your location! They will be shown in the order of the closest one to your current coordinates." : "Press Search in order to see all the parking areas with available parking lots found near your location! They will be shown in the order of the closest one to your current coordinates.",
+  "Search »": "Search »",
+  "Search for a parking area by name or address": "Search for a parking area by name or address",
+  "Enter your search term and press Search in order to see all the matching parking areas.": "Enter your search term and press Search in order to see all the matching parking areas.",
+  "Available lots: ": "Available lots: ",
+  "View": "View",
+  "Name, Location, City...": "Name, Location, City...",
+  "No parking areas found by this criteria. Please try again!": "No parking areas found by this criteria. Please try again!",
+  "Register as an owner": "Register as an owner",
+  "Enter your organisation and press Submit in order to make a request to register as an Owner. As soon as one of our administrators receives your request and approves it, you will receive an e-mail of confirmation and you will be able to access the owners menu.": "Enter your organisation and press Submit in order to make a request to register as an Owner. As soon as one of our administrators receives your request and approves it, you will receive an e-mail of confirmation and you will be able to access the owners menu."
 }

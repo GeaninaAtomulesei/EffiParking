@@ -19,6 +19,8 @@ import {ParkingPageModule} from "../parking-page/parking-page.module";
 import {initUserFactory} from "../../app.module";
 import {APP_INITIALIZER} from "@angular/core";
 import {AuthService} from "../../shared/services/auth.service";
+import {TranslateService} from "@ngx-translate/core";
+import {TranslateModule} from "@ngx-translate/core";
 
 @NgModule({
   imports: [
@@ -28,6 +30,7 @@ import {AuthService} from "../../shared/services/auth.service";
     DashboardRoutingModule,
     StatModule,
     FormsModule,
+    TranslateModule,
     ReactiveFormsModule,
     NgbModule.forRoot(),
     ParkingPageModule
@@ -42,6 +45,7 @@ import {AuthService} from "../../shared/services/auth.service";
     ParkingService,
     UserService,
     AuthService,
+    TranslateService,
     {
       'provide': APP_INITIALIZER,
       'useFactory': initUserFactory,

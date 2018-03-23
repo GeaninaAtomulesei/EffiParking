@@ -20,5 +20,16 @@
   "Profile": "Paramètres",
   "Inbox": "Inbox",
   "Log Out": "Connectez-Out",
-  "View All": "Voir Tout"
+  "View All": "Voir Tout",
+  "Search for a parking area nearby": "Rechercher un stationnement à proximité",
+  "Press Search in order to see all the parking areas with available parking lots found near your location! They will be shown in the order of the closest one to your current coordinates." : "Appuyez sur Chercher afin de voir toutes les aires de stationnement avec des stationnements disponibles près de chez vous! Ils seront affichés dans l'ordre du plus proche de vos coordonnées actuelles.",
+  "Search »": "Chercher »",
+  "Search for a parking area by name or address": "Rechercher une aire de stationnement par nom ou adresse",
+  "Enter your search term and press Search in order to see all the matching parking areas.": "Entrez votre terme de recherche et appuyez sur Rechercher pour voir toutes les aires de stationnement correspondantes.",
+  "Available lots: ": "Lots disponibles: ",
+  "View": "Vue",
+  "Name, Location, City...": "Nom, lieu, ville ...",
+  "No parking areas found by this criteria. Please try again!": "Aucune zone de stationnement trouvée par ce critère. Veuillez réessayer!",
+  "Register as an owner": "Inscrivez-vous en tant que propriétaire",
+  "Enter your organisation and press Submit in order to make a request to register as an Owner. As soon as one of our administrators receives your request and approves it, you will receive an e-mail of confirmation and you will be able to access the owners menu.": "Entrez votre organisation et appuyez sur Envoyer pour faire une demande d'inscription en tant que propriétaire. Dès qu'un de nos administrateurs reçoit votre demande et l'approuve, vous recevrez un e-mail de confirmation et vous pourrez accéder au menu des propriétaires."
 }
