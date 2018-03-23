@@ -41,7 +41,8 @@ export class AuthService {
 
   logout() {
     return this.apiService.post(this.config.logout_url, {})
-      .map(() => {
+      .subscribe(response => {
+        console.log(response);
         this.userService.currentUser = null;
         localStorage.clear();
       });

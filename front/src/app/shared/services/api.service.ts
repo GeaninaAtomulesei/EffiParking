@@ -22,13 +22,21 @@ export enum RequestMethod {
 @Injectable()
 export class ApiService {
 
-  headers = new HttpHeaders({
-    'Accept' : 'application/json',
-    'Content-Type' : 'application/json',
-    'Authorization' : 'Bearer ' + localStorage.getItem("access_token")
-  });
+  headers = new HttpHeaders();
 
-  constructor(private http : HttpClient) {}
+  constructor(private http : HttpClient) {
+    setInterval(() => {
+      this.setHeaders();
+    }, 10000)
+  }
+
+  setHeaders() {
+    this.headers = new HttpHeaders({
+      'Accept' : 'application/json',
+      'Content-Type' : 'application/json',
+      'Authorization' : 'Bearer ' + localStorage.getItem("access_token")
+    });
+  }
 
   get(path: string, args?: any) : Observable<any> {
     const options = {
