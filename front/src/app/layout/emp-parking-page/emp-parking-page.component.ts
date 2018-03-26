@@ -33,7 +33,6 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
   private foundLotReservations: any = [];
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
               private modalService: NgbModal,
               private parkingService: ParkingService) {
   }

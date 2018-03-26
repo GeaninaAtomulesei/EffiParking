@@ -9,18 +9,19 @@
       <hr style="border-top: 1px solid #999">
     </div>
 
-    <div class="form-group">
-      <fieldset class="form-group">
-        <input class="form-control" id="searchField" placeholder="Name or username..." [(ngModel)]="searchTerm" style="width: 35%">
-      </fieldset>
+    <div style="text-align: center">
+      <div style="margin: auto">
+        <div class="form-group" style="text-align: center">
+          <fieldset class="form-group" style="text-align: center">
+            <input class="form-control" id="searchField" placeholder="Name or username..." [(ngModel)]="searchTerm" style="width: 35%; margin: auto">
+          </fieldset>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" style="background-color: #999; color:black" (click)="onSearchEmployee()">Search</button>
     </div>
-    <button type="button" class="btn btn-primary" style="background-color: #999; color:black" (click)="onSearchEmployee()">Search</button>
-    <br>
-    <br>
-    <br>
-    <br>
+    <br><br><br><br>
 
-    <p *ngIf="foundEmployeesTrigger && foundEmployees && foundEmployees.length < 1" style="color:#999">No employees found by this term. Please try again.</p>
+    <p *ngIf="foundEmployeesTrigger && foundEmployees && foundEmployees.length < 1" style="color:#999; text-align: center">No employees found by this term. Please try again.</p>
     <div class="card mb-3" style="background-color: #343a40 !important; color: #999;" *ngIf="foundEmployeesTrigger && foundEmployees && foundEmployees.length > 0">
       <div class="card-header" style="background-color: #343a40 !important; color: #999; text-align: center;font-size: larger;font-weight: 900;">
         Found employees
@@ -55,51 +56,54 @@
 
   </div>
 
-  <div class="jumbotron" style="background-color: #222">
-    <div class="row" style="display: table-cell">
-      <button type="button" class="btn btn-primary btn-lg" style="background-color: #999; color:black" (click)="onAddEmployee()">Add New
-        Employee
-      </button>
+  <div class="jumbotron" style="background-color: #222; text-align: center">
+
+    <div style="margin: auto">
+      <div class="row" style="margin: auto">
+        <button type="button" class="btn btn-primary btn-lg" style="background-color: #999; color:black; margin: auto" (click)="onAddEmployee()">Add New
+          Employee
+        </button>
+      </div>
     </div>
 
-    <div class="row" *ngIf="addNewEmployeeTrigger" style="color: #999">
-      <div class="col-lg-6">
 
-        <p [class]="notification.msgType" *ngIf="notification">{{notification.msgBody}}</p>
 
-        <form [formGroup]="addEmployeeForm" (ngSubmit)="onSubmitNewEmployee()">
+    <div class="row" *ngIf="addNewEmployeeTrigger" style="color: #999; text-align: center">
+      <div class="col-lg-6" style="margin: auto">
+
+        <form [formGroup]="addEmployeeForm" (ngSubmit)="onSubmitNewEmployee()" style="margin: auto;">
           <br>
           <div class="form-content">
             <div class="form-group">
-              <fieldset class="form-group">
+              <fieldset class="form-group" style="text-align: left">
                 <label>First Name</label>
                 <input class="form-control" formControlName="firstName">
               </fieldset>
             </div>
 
             <div class="form-group">
-              <fieldset class="form-group">
+              <fieldset class="form-group" style="text-align: left">
                 <label>Last Name</label>
                 <input class="form-control" formControlName="lastName">
               </fieldset>
             </div>
 
             <div class="form-group">
-              <fieldset class="form-group">
+              <fieldset class="form-group" style="text-align: left">
                 <label>Email</label>
                 <input class="form-control" formControlName="email">
               </fieldset>
             </div>
 
             <div class="form-group">
-              <fieldset class="form-group">
+              <fieldset class="form-group" style="text-align: left">
                 <label>Username</label>
                 <input class="form-control" formControlName="username">
               </fieldset>
             </div>
 
             <div class="form-group">
-              <fieldset class="form-group">
+              <fieldset class="form-group" style="text-align: left">
                 <label>Password</label>
                 <input class="form-control" formControlName="password">
               </fieldset>
