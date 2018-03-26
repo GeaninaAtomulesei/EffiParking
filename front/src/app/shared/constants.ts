@@ -81,4 +81,7 @@ export class AppConstants {
   public static readonly INVALID_LATITUDE = "The latitude cannot be empty!";
   public static readonly INVALID_LONGITUDE = "The longitude cannot be empty!";
   public static readonly PRISTINE_FORM = "You have not completed any fields!";
+  public static readonly NO_RESERVATION_SERVER_MESSAGE = "Reservation not possible!";
+  public static readonly NO_RESERVATION_TITLE = "Reservation Not Possible";
+  public static readonly NO_RESERVATION_TEXT = "No lots are available in your chosen time period. Please try another parking area!";
 }

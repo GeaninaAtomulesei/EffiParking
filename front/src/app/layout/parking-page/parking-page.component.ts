@@ -209,12 +209,17 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
           }
         },
         error => {
+        if(error.error.defaultMessage = AppConstants.NO_RESERVATION_SERVER_MESSAGE) {
+          this.title = AppConstants.NO_RESERVATION_TITLE;
+          this.text = AppConstants.NO_RESERVATION_TEXT;
+        } else {
           this.title = AppConstants.ERROR_TITLE;
           this.text = AppConstants.ERROR_TEXT;
+        }
           this.returnTrigger = true;
           this.okButton = true;
           document.getElementById(AppConstants.MODAL_CONTENT).click();
-        })
+        });
   }
 
   onEdit() {
