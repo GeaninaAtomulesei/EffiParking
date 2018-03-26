@@ -66,15 +66,22 @@ public class ScheduledTasks {
         System.out.println("++++++++++++++++++++ Finished updating reserved lots +++++++++++++++++++++++");
     }
 
-    @Scheduled(cron = "0 1 0 * * ?")
+    @Scheduled(fixedRate = 30000)
     public void deleteOldReservations() {
         System.out.println("++++++++++++++++++++++++++ Started to delete old reservations +++++++++++++++++++++++++");
         List<Reservation> reservationList = reservationRepository.findAll();
         List<Reservation> oldReservations = new ArrayList<>();
         LocalDateTime currentDate = LocalDateTime.now();
         for(Reservation reservation : reservationList) {
-            if((reservation.getEndDate().getYear() == currentDate.getYear()) && (reservation.getEndDate().getDayOfYear() < currentDate.getDayOfYear())) {
-                oldReservations.add(reservation);
+            if(reservation.getEndDate().getYear() == currentDate.getYear()) {
+                if(reservation.getEndDate().getDayOfYear() < currentDate.getDayOfYear()) {
+                    oldReservations.add(reservation);
+                }
+                if(reservation.getEndDate().getDayOfYear() == currentDate.getDayOfYear()) {
+                    if(reservation.getEndDate().isBefore(currentDate)) {
+                        oldReservations.add(reservation);
+                    }
+                }
             }
         }
         reservationRepository.delete(oldReservations);
@@ -82,9 +89,27 @@ public class ScheduledTasks {
     }
 
     private void setAvailableLotsPerParking(Parking parking) {
-        List<Lot> vacantLots = lotRepository.findVacantLotsPerParking(parking.getId());
-        parking.setAvailableLots(vacantLots.size());
+        List<Lot> parkingLots = lotRepository.findByParkingId(parking.getId());
+        List<Lot> availableLots = new ArrayList<>();
+
+        for(Lot lot : parkingLots) {
+            List<Reservation> reservationList = lot.getReservations();
+            if(reservationList == null || reservationList.isEmpty()) {
+                availableLots.add(lot);
+            } else {
+                for(Reservation reservation : reservationList) {
+                    if(!isOverlapping(reservation.getStartDate(), reservation.getEndDate(), LocalDateTime.now().minusHours(1), LocalDateTime.now().plusHours(1))) {
+                        availableLots.add(lot);
+                    }
+                }
+            }
+        }
+        parking.setAvailableLots(availableLots.size());
         parkingRepository.save(parking);
-        System.out.println("------------   Updating vacant lots for parking area " + parking.getName() + " --------------------");
+        System.out.println("------------   Finished updating vacant lots for parking area " + parking.getName() + " --------------------");
+    }
+
+    private static boolean isOverlapping(LocalDateTime start1, LocalDateTime end1, LocalDateTime start2, LocalDateTime end2) {
+        return !start1.isAfter(end2) && !start2.isAfter(end1);
     }
 }

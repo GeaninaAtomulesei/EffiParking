@@ -14,9 +14,6 @@ import java.util.List;
 @Repository
 public interface LotRepository extends JpaRepository<Lot, Long> {
 
-    @Query(value = "select distinct l from Lot as l where parking.id = :parkingId and l.vacant = true")
-    List<Lot> findVacantLotsPerParking(@Param("parkingId") Long parkingId);
-
     @Query(value = "select distinct l from Lot as l where parking.id = :parkingId and l.reserved = false")
     List<Lot> findNotReservedLotsPerParking(@Param("parkingId") Long parkingId);
 
