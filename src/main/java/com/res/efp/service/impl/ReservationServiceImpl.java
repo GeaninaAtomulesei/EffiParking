@@ -57,13 +57,17 @@ public class ReservationServiceImpl implements ReservationService {
             for (Lot lot : allLots) {
                 List<Reservation> reservations = lot.getReservations();
                 if((reservations != null) && (reservations.size() != 0)) {
+                    List<Reservation> overlappingReservations = new ArrayList<>();
                     for (Reservation res : reservations) {
-                        if(!isOverlapping(res.getStartDate(), res.getEndDate(), reservation.getStartDate(), reservation.getEndDate())) {
-                            reservation.setLot(lot);
-                            lot.getReservations().add(reservation);
-                            lotRepository.save(lot);
-                            break;
+                        if(isOverlapping(res.getStartDate(), res.getEndDate(), reservation.getStartDate(), reservation.getEndDate())) {
+                            overlappingReservations.add(reservation);
                         }
+                    }
+                    if(overlappingReservations.isEmpty()) {
+                        reservation.setLot(lot);
+                        lot.getReservations().add(reservation);
+                        lotRepository.save(lot);
+                        break;
                     }
                 } else {
                     reservation.setLot(lot);

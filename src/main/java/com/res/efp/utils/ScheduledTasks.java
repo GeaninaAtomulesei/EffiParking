@@ -97,10 +97,14 @@ public class ScheduledTasks {
             if(reservationList == null || reservationList.isEmpty()) {
                 availableLots.add(lot);
             } else {
+                List<Reservation> overlappingReservations = new ArrayList<>();
                 for(Reservation reservation : reservationList) {
-                    if(!isOverlapping(reservation.getStartDate(), reservation.getEndDate(), LocalDateTime.now().minusHours(1), LocalDateTime.now().plusHours(1))) {
-                        availableLots.add(lot);
+                    if(isOverlapping(reservation.getStartDate(), reservation.getEndDate(), LocalDateTime.now().minusHours(1), LocalDateTime.now().plusHours(1))) {
+                        overlappingReservations.add(reservation);
                     }
+                }
+                if(overlappingReservations.isEmpty()) {
+                    availableLots.add(lot);
                 }
             }
         }
