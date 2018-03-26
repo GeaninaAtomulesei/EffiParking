@@ -129,11 +129,12 @@
       <br>
       <p style="text-align: center" id="reservationForm">
         <a class="btn btn-primary btn-lg" role="button" style="background-color: #999" (click)="submitReservation()">Submit
-          Reservation</a>
+          Reservation</a> &nbsp; &nbsp;
+        <a class="btn btn-primary btn-lg" role="button" style="background-color: #999" (click)="checkAvailability()">Check availability</a>
       </p>
       <br>
       <div style="text-align: center">
-        <p [class]="notification.msgType" *ngIf="notification" style="color:#DC143C; align-self: center">{{notification.msgBody}}</p>
+        <p [class]="notification.msgType" *ngIf="notification" [style.color]="getColor()">{{notification.msgBody}}</p>
       </div>
     </div>
 

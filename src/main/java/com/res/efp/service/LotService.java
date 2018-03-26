@@ -3,6 +3,7 @@ package com.res.efp.service;
 import com.res.efp.domain.model.Lot;
 import com.res.efp.domain.model.Parking;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -18,4 +19,5 @@ public interface LotService {
     List<Lot> getAvailable(Parking parking);
     List<Lot> getAvailableToday(Parking parking);
     Lot findByParkingAndNumber(Long parkingId, int number);
+    Integer getAvailableForSpecificPeriod(Long parkingId, LocalDateTime startDate, LocalDateTime endDate);
 }

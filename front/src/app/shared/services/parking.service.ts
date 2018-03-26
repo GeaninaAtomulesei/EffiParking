@@ -169,4 +169,11 @@ export class ParkingService {
         return res;
       });
   }
+
+  checkAvailable(parkingId, start, end) {
+    return this.apiService.get(this.config.check_available_lots_url + "?parkingId=" + parkingId + "&start=" + start + "&end=" + end)
+      .map(res => {
+        return res;
+      });
+  }
 }

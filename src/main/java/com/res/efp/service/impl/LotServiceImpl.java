@@ -167,4 +167,32 @@ public class LotServiceImpl implements LotService {
     public Lot findByParkingAndNumber(Long parkingId, int number) {
         return lotRepository.findByNumberAndParking(parkingId, number);
     }
+
+    @Override
+    public Integer getAvailableForSpecificPeriod(Long parkingId, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Lot> lots = lotRepository.findByParkingId(parkingId);
+        List<Lot> availableLots = new ArrayList<>();
+
+        for(Lot lot : lots) {
+            List<Reservation> reservations = lot.getReservations();
+            if(reservations == null || reservations.isEmpty()) {
+                availableLots.add(lot);
+            } else {
+                List<Reservation> overlappingReservations = new ArrayList<>();
+                for(Reservation reservation : reservations) {
+                    if(isOverlapping(reservation.getStartDate(), reservation.getEndDate(), startDate, endDate)) {
+                        overlappingReservations.add(reservation);
+                    }
+                }
+                if(overlappingReservations.isEmpty()) {
+                    availableLots.add(lot);
+                }
+            }
+        }
+        return availableLots.size();
+    }
+
+    private static boolean isOverlapping(LocalDateTime start1, LocalDateTime end1, LocalDateTime start2, LocalDateTime end2) {
+        return !start1.isAfter(end2) && !start2.isAfter(end1);
+    }
 }

@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +59,7 @@ public class ParkingController {
     public ResponseEntity<?> getById(@RequestParam(value = "id") Long parkingAreaId) {
         Parking parking = parkingService.getParkingArea(parkingAreaId);
 
-        if(parking == null) {
+        if (parking == null) {
             return ResponseEntity.badRequest().body("No parking area found.");
         }
 
@@ -69,7 +71,7 @@ public class ParkingController {
     public ResponseEntity<?> getByName(@PathVariable("name") String parkingAreaName) {
         Parking parking = parkingService.findByName(parkingAreaName);
 
-        if(parking == null) {
+        if (parking == null) {
             return ResponseEntity.badRequest().body("No parking areas found by this name.");
         }
 
@@ -80,7 +82,7 @@ public class ParkingController {
     public ResponseEntity<?> getByStreet(@PathVariable("name") String streetName) {
         List<Parking> parkings = parkingService.findByStreet(streetName);
 
-        if((parkings == null) || (parkings.isEmpty())) {
+        if ((parkings == null) || (parkings.isEmpty())) {
             return ResponseEntity.badRequest().body("No parking areas found by this street name.");
         }
 
@@ -93,7 +95,7 @@ public class ParkingController {
 
         List<Parking> parkings = parkingService.findByStreetAndNumber(street, number);
 
-        if((parkings == null) || (parkings.isEmpty())) {
+        if ((parkings == null) || (parkings.isEmpty())) {
             return ResponseEntity.badRequest().body("No parking areas found.");
         }
 
@@ -104,7 +106,7 @@ public class ParkingController {
     public ResponseEntity<?> updateParkingArea(@RequestBody Parking parking,
                                                @RequestParam(value = "id") Long parkingId) {
 
-        if(parkingService.getParkingArea(parkingId) == null) {
+        if (parkingService.getParkingArea(parkingId) == null) {
             return ResponseEntity.badRequest().body(new ObjectError("parking", "Parking not found."));
         }
 
@@ -115,7 +117,7 @@ public class ParkingController {
     @RequestMapping(value = "/deleteParking", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteParkingArea(@RequestParam(value = "id") Long parkingId) {
 
-        if(parkingService.getParkingArea(parkingId) == null) {
+        if (parkingService.getParkingArea(parkingId) == null) {
             return ResponseEntity.badRequest().body(new ObjectError("parking", "Parking not found."));
         }
 
@@ -128,7 +130,7 @@ public class ParkingController {
     public ResponseEntity<?> getByOwner(@RequestParam(value = "name") String ownerName) {
         List<Parking> parkings = parkingService.findByOwner(ownerName);
 
-        if((parkings == null) || (parkings.isEmpty())) {
+        if ((parkings == null) || (parkings.isEmpty())) {
             return ResponseEntity.badRequest().body("No parking areas found for this owner.");
         }
 
@@ -139,18 +141,19 @@ public class ParkingController {
     public ResponseEntity<?> getClosestParkingAreas(@RequestParam(value = "lat") String latitude,
                                                     @RequestParam(value = "long") String longitude) {
 
-        Map<String, Double> closestParkingAreas = parkingService.getClosestParkingAreas(Double.parseDouble(latitude), Double.parseDouble(longitude));
+        Map<String, Double> closestParkingAreas = parkingService.getClosestParkingAreas(Double.parseDouble(latitude),
+                Double.parseDouble(longitude));
 
         Set<String> parkingSet = closestParkingAreas.keySet();
         List<String> parkingsNameList = new ArrayList<>(parkingSet);
         List<Parking> parkings = new ArrayList<>();
 
-        for(String s : parkingsNameList) {
+        for (String s : parkingsNameList) {
             Parking p = parkingService.findByName(s);
             parkings.add(p);
         }
 
-        if((parkings == null) || (parkings.isEmpty())) {
+        if ((parkings == null) || (parkings.isEmpty())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No parking areas found!");
         }
 
@@ -162,7 +165,7 @@ public class ParkingController {
                                      @RequestParam("numberOfLots") int numberOfLots) {
 
         Parking parking = parkingService.getParkingArea(parkingId);
-        if(parking == null) {
+        if (parking == null) {
             return ResponseEntity.badRequest().body(new ObjectError("parking", "Parking not found."));
         }
 
@@ -174,7 +177,7 @@ public class ParkingController {
     public ResponseEntity<?> removeLots(@RequestParam("parkingId") Long parkingId,
                                         @RequestParam("numberOfLots") int numberOfLots) {
         Parking parking = parkingService.getParkingArea(parkingId);
-        if(parking == null) {
+        if (parking == null) {
             return ResponseEntity.badRequest().body(new ObjectError("parking", "Parking not found."));
         }
 
@@ -188,17 +191,17 @@ public class ParkingController {
                                             @RequestParam(value = "username") String username) {
 
         User user = userService.findByUsername(username);
-        if(user == null) {
+        if (user == null) {
             return ResponseEntity.badRequest().body(new ObjectError("user", "User not found."));
         }
 
         Parking parking = parkingService.getParkingArea(parkingId);
-        if(parking == null) {
+        if (parking == null) {
             return ResponseEntity.badRequest().body(new ObjectError("parking", "Parking area not found."));
         }
 
         Reservation currentReservation = reservationService.addReservation(reservation, user, parking);
-        if(currentReservation == null) {
+        if (currentReservation == null) {
             return ResponseEntity.badRequest().body(new ObjectError("reservation", "Reservation not possible!"));
         }
 
@@ -210,7 +213,7 @@ public class ParkingController {
 
         Reservation reservation = reservationService.getReservation(reservationId);
 
-        if(reservation == null) {
+        if (reservation == null) {
             return ResponseEntity.badRequest().body(new ObjectError("reservation", "Reservation not found."));
         }
 
@@ -222,16 +225,16 @@ public class ParkingController {
     public ResponseEntity<?> addEmployee(@RequestParam("parkingId") Long parkingId,
                                          @RequestParam("employeeId") Long employeeId) {
         Parking parking = parkingService.getParkingArea(parkingId);
-        if(parking == null) {
+        if (parking == null) {
             return ResponseEntity.badRequest().body(new ObjectError("parking", "Parking area not found."));
         }
 
         Employee employee = employeeService.findById(employeeId);
-        if(employee == null) {
+        if (employee == null) {
             return ResponseEntity.badRequest().body(new ObjectError("user", "Employee not found."));
         }
 
-        if(parking.getEmployees().contains(employee)) {
+        if (parking.getEmployees().contains(employee)) {
             return ResponseEntity.badRequest().body(new ObjectError("user", "Parking already contains user!"));
         }
 
@@ -262,7 +265,7 @@ public class ParkingController {
     public ResponseEntity<?> getByEmployee(@RequestParam(value = "employeeId") Long employeeId) {
         Employee employeeObject = employeeService.findById(employeeId);
 
-        if(employeeObject == null) {
+        if (employeeObject == null) {
             return ResponseEntity.badRequest().body(new ObjectError("user", "Employee not found."));
         }
 
@@ -273,7 +276,7 @@ public class ParkingController {
     @RequestMapping(value = "/getLots/{parkingId}", method = RequestMethod.GET)
     public ResponseEntity<?> getLots(@PathVariable("parkingId") Long parkingId) {
         Parking parking = parkingService.getParkingArea(parkingId);
-        if(parking == null) {
+        if (parking == null) {
             return ResponseEntity.badRequest().body(new ObjectError("parking", "Parking area not found."));
         }
 
@@ -284,16 +287,16 @@ public class ParkingController {
     @RequestMapping(value = "/getAvailableLots/{parkingId}", method = RequestMethod.GET)
     public ResponseEntity<?> getAvailableLots(@PathVariable("parkingId") Long parkingId) {
         Parking parking = parkingService.getParkingArea(parkingId);
-        if(parking == null) {
+        if (parking == null) {
             return ResponseEntity.badRequest().body(new ObjectError("parking", "Parking area not found."));
         }
 
         List<Lot> lots = lotService.getAvailable(parking);
-        if(lots != null) {
+        if (lots != null) {
             return ResponseEntity.ok(lots);
         } else {
             List<Lot> availableLotsToday = lotService.getAvailableToday(parking);
-            if(availableLotsToday != null) {
+            if (availableLotsToday != null) {
                 return ResponseEntity.ok(availableLotsToday);
             } else {
                 return ResponseEntity.noContent().build();
@@ -310,10 +313,26 @@ public class ParkingController {
     @RequestMapping(value = "/searchByTermAndOwner", method = RequestMethod.GET)
     public ResponseEntity<?> searchByTermAndOwner(@RequestParam("term") String term,
                                                   @RequestParam("ownerId") Long ownerId) {
-        if(ownerService.findById(ownerId) == null) {
+        if (ownerService.findById(ownerId) == null) {
             return ResponseEntity.badRequest().body(new ObjectError("owner", "Owner not found!"));
         }
         List<Parking> foundParkings = parkingService.findByTermAndOwner(term, ownerId);
         return ResponseEntity.ok(foundParkings);
     }
+
+    @RequestMapping(value = "/checkAvailable", method = RequestMethod.GET)
+    public ResponseEntity<?> checkAvailable(@RequestParam(value = "parkingId") Long parkingId,
+                                            @RequestParam(value = "start") String startDate,
+                                            @RequestParam(value = "end") String endDate) {
+        if (parkingService.findById(parkingId) == null) {
+            return ResponseEntity.badRequest().body(new ObjectError("parking", "Parking not found!"));
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime start = LocalDateTime.parse(startDate, formatter);
+        LocalDateTime end = LocalDateTime.parse(endDate, formatter);
+
+        Integer availableLots = lotService.getAvailableForSpecificPeriod(parkingId, start, end);
+        return ResponseEntity.ok(availableLots.toString());
+    }
+
 }

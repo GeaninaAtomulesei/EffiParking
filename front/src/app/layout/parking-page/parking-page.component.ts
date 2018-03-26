@@ -55,6 +55,7 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
   private searchTrigger = false;
   private returnTrigger = false;
   private resSuccessTrigger = false;
+  private foundAvailable: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -127,7 +128,33 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  submitReservation() {
+  checkAvailability() {
+    let reservation = this.checkValidDates();
+    if (reservation == undefined) {
+      return;
+    }
+
+    let start = reservation.startDate.replace("T", " ");
+    let end = reservation.endDate.replace("T", " ");
+    this.notification = undefined;
+    //noinspection TypeScriptUnresolvedFunction
+    this.parkingService.checkAvailable(this.parking.id, start, end)
+      .subscribe(response => {
+        this.foundAvailable = response !== 0;
+        this.notification = {
+          msgType: 'info',
+          msgBody: response.toString() + " lot/s available in the specified time period!"
+        };
+      }, error => {
+        console.log(error);
+      });
+  }
+
+  public getColor() : string {
+    return this.foundAvailable == true ? "#007bff" : "#DC143C";
+  }
+
+  private checkValidDates(): any {
     this.notification = undefined;
     let sd = this.ngbDateFormatter.format(this.startDate);
     let ed = this.ngbDateFormatter.format(this.endDate);
@@ -156,7 +183,7 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
           return;
         }
       }
-      if(this.startTime.hour == this.endTime.hour && this.startTime.minute == this.endTime.minute) {
+      if (this.startTime.hour == this.endTime.hour && this.startTime.minute == this.endTime.minute) {
         this.notification = {msgType: 'error', msgBody: AppConstants.INVALID_EQUAL_TIME};
         return;
       }
@@ -188,12 +215,17 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
 
     let resStartTime = sd + "T" + sth + ":" + stm;
     let resEndTime = ed + "T" + eth + ":" + etm;
-
-    let reservation = {
+    return {
       "startDate": resStartTime,
       "endDate": resEndTime
     };
+  }
 
+  submitReservation() {
+    let reservation = this.checkValidDates();
+    if (reservation == undefined) {
+      return;
+    }
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.makeReservation(reservation, this.id, this.currentUser.username)
       .subscribe(res => {
@@ -209,13 +241,13 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
           }
         },
         error => {
-        if(error.error.defaultMessage = AppConstants.NO_RESERVATION_SERVER_MESSAGE) {
-          this.title = AppConstants.NO_RESERVATION_TITLE;
-          this.text = AppConstants.NO_RESERVATION_TEXT;
-        } else {
-          this.title = AppConstants.ERROR_TITLE;
-          this.text = AppConstants.ERROR_TEXT;
-        }
+          if (error.error.defaultMessage = AppConstants.NO_RESERVATION_SERVER_MESSAGE) {
+            this.title = AppConstants.NO_RESERVATION_TITLE;
+            this.text = AppConstants.NO_RESERVATION_TEXT;
+          } else {
+            this.title = AppConstants.ERROR_TITLE;
+            this.text = AppConstants.ERROR_TEXT;
+          }
           this.returnTrigger = true;
           this.okButton = true;
           document.getElementById(AppConstants.MODAL_CONTENT).click();
