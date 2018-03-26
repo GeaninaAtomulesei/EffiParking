@@ -40,17 +40,18 @@ export class AdminRequestsComponent implements OnInit {
           this.requests = res;
 
           this.requests.forEach(request => {
-            let reqDate: string = request.date;
-            let currentDate: Date = new Date;
-            let requestDate: Date = new Date(reqDate.replace("T", " "));
-            if (requestDate.getDay() == currentDate.getDay()
-              && requestDate.getMonth() == currentDate.getMonth()
-              && requestDate.getFullYear() == currentDate.getFullYear()) {
-              this.newRequests.push(request);
-            } else {
-              this.pastRequests.push(request);
-            }
-          });
+            if(request.type == "OWNER_REQUEST") {
+              let reqDate: string = request.date;
+              let currentDate: Date = new Date;
+              let requestDate: Date = new Date(reqDate.replace("T", " "));
+              if (requestDate.getDay() == currentDate.getDay()
+                && requestDate.getMonth() == currentDate.getMonth()
+                && requestDate.getFullYear() == currentDate.getFullYear()) {
+                this.newRequests.push(request);
+              } else {
+                this.pastRequests.push(request);
+              }
+            }});
         }
       }, error => {
         console.log(error);

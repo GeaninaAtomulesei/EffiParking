@@ -147,6 +147,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         List<Employee> employees = parking.getEmployees();
         Notification notification = new Notification();
+        notification.setType(Notification.Type.CANCELLED_RESERVATION);
         notification.setDate(LocalDateTime.now());
         notification.setMessage(
                 "User " + user.getFirstName() + " " + user.getLastName() + " cancelled their reservation " +

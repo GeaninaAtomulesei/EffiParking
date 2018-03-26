@@ -23,9 +23,7 @@ export class AllNotificationsComponent implements OnInit, OnDestroy {
   private pastNotifications: any = [];
   private title: string;
   private text: string;
-  private notificationId: number;
   private reloadTrigger: boolean = false;
-  private approvalTrigger: boolean = false;
 
   constructor(private userService: UserService,
               private route: ActivatedRoute,
@@ -70,6 +68,7 @@ export class AllNotificationsComponent implements OnInit, OnDestroy {
   }
 
   onDeleteNotification(notificationId) {
+    //noinspection TypeScriptUnresolvedFunction
     this.userService.deleteNotification(notificationId)
       .subscribe(response => {
         if(response) {

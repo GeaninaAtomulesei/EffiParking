@@ -65,6 +65,7 @@ public class OwnerServiceImpl implements OwnerService {
     public User registerAsOwner(User user, String organisation) {
         List<User> admins = userService.findAllAdmins();
         Notification notification = new Notification();
+        notification.setType(Notification.Type.OWNER_REQUEST);
         notification.setDate(LocalDateTime.now());
         notification.setMessage(organisation);
 

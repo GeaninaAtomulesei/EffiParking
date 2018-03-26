@@ -84,4 +84,7 @@ export class AppConstants {
   public static readonly NO_RESERVATION_SERVER_MESSAGE = "Reservation not possible!";
   public static readonly NO_RESERVATION_TITLE = "Reservation Not Possible";
   public static readonly NO_RESERVATION_TEXT = "No lots are available in your chosen time period. Please try another parking area!";
+  public static readonly TYPE_REQUEST = "OWNER_REQUEST";
+  public static readonly TYPE_MESSAGE = "USER_MESSAGE";
+  public static readonly TYPE_CANCEL = "CANCELLED_RESERVATION";
 }

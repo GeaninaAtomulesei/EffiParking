@@ -30,6 +30,8 @@ public class Notification {
     @Column(length = 100000)
     private UserRequest userRequest;
 
+    private Type type;
+
     @ManyToMany
     private List<User> users = new ArrayList<>();
 
@@ -71,6 +73,20 @@ public class Notification {
 
     public void setUserRequest(UserRequest userRequest) {
         this.userRequest = userRequest;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public enum Type {
+        CANCELLED_RESERVATION,
+        OWNER_REQUEST,
+        USER_MESSAGE
     }
 
 }

@@ -80,6 +80,18 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  goToNotificationPage(notificationType: string) {
+    if(notificationType == AppConstants.TYPE_REQUEST) {
+      this.router.navigate(['/admin-requests']);
+    } else if(notificationType == AppConstants.TYPE_MESSAGE) {
+      this.router.navigate(['/admin-messages']);
+    } else if(notificationType == AppConstants.TYPE_CANCEL) {
+      this.router.navigate(['/all-notifications', this.currentUser.id]);
+    } else {
+      return;
+    }
+  }
+
   changeToDefault() {
     this.triggerNotifications = false;
   }
