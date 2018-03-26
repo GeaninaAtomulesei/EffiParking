@@ -87,4 +87,5 @@ export class AppConstants {
   public static readonly TYPE_REQUEST = "OWNER_REQUEST";
   public static readonly TYPE_MESSAGE = "USER_MESSAGE";
   public static readonly TYPE_CANCEL = "CANCELLED_RESERVATION";
+  public static readonly AVAILABLE_LOTS = " lot/s available in the specified time period!";
 }

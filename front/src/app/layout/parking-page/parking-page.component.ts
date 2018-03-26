@@ -143,7 +143,7 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
         this.foundAvailable = response !== 0;
         this.notification = {
           msgType: 'info',
-          msgBody: response.toString() + " lot/s available in the specified time period!"
+          msgBody: response.toString() + AppConstants.AVAILABLE_LOTS
         };
       }, error => {
         console.log(error);
