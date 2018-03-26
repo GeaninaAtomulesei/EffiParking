@@ -6,6 +6,7 @@ import {ActivatedRoute} from "@angular/router";
 import {ParkingService} from "../../shared/services/parking.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AppConstants} from "../../shared/constants";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-emp-parking-page',
@@ -32,20 +33,21 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
   private foundLotReservations: any = [];
 
   constructor(private route: ActivatedRoute,
+              private router: Router,
               private modalService: NgbModal,
-              private parkingService: ParkingService) {}
+              private parkingService: ParkingService) {
+  }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.id = +params['id'];
       console.log(this.id);
-    });
-
-    //noinspection TypeScriptUnresolvedFunction
-    this.parkingService.getById(this.id).subscribe(parking => {
-      this.parking = parking;
-    }, error => {
-      console.log(error);
+      //noinspection TypeScriptUnresolvedFunction
+      this.parkingService.getById(this.id).subscribe(parking => {
+        this.parking = parking;
+      }, error => {
+        console.log(error);
+      });
     });
   }
 

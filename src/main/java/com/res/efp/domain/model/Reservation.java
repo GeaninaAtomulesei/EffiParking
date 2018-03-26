@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
@@ -33,7 +32,7 @@ public class Reservation extends AbstractPersistable<Long> {
     @ManyToOne
     private Parking parking;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     private Lot lot;
 
     public LocalDateTime getStartDate() {

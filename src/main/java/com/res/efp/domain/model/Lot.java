@@ -3,10 +3,7 @@ package com.res.efp.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -24,7 +21,7 @@ public class Lot extends AbstractPersistable<Long> {
     @JsonIgnore
     private Parking parking;
 
-    @OneToMany(mappedBy = "lot", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "lot", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Reservation> reservations;
 

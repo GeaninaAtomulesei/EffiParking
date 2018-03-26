@@ -24,6 +24,10 @@
           <th>Address</th>
           <th>{{parking.street}} {{parking.number}}, {{parking.city}}</th>
         </tr>
+        <tr *ngIf="isOwner">
+          <th>Total lots</th>
+          <th>{{parking.totalLots}}</th>
+        </tr>
         <tr>
           <th>Available lots</th>
           <th>{{parking.availableLots}}</th>
