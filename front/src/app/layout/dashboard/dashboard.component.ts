@@ -48,21 +48,20 @@ export class DashboardComponent implements OnInit {
     this.sliders.push(
       {
         imagePath: 'assets/images/slider1.jpg',
-        label: 'First slide label',
-        text: 'Nulla vitae elit libero, a pharetra augue mollis interdum.'
+        label: 'Reduce parking search time',
+        text: 'Receive broadcasted real-time parking information based on parking availability in areas nearby.'
       },
       {
         imagePath: 'assets/images/slider2.jpg',
-        label: 'Second slide label',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+        label: 'Make a reservation',
+        text: 'Reserve your desired parking space for and in between any period of time.'
       },
       {
         imagePath: 'assets/images/slider3.jpg',
-        label: 'Third slide label',
-        text: 'Praesent commodo cursus magna, vel scelerisque nisl consectetur.'
+        label: 'Get guided',
+        text: 'Use the GMaps guidance system in order to reach your parking area.'
       }
     );
-
   }
 
   ngOnInit() {
