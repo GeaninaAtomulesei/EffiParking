@@ -13,15 +13,15 @@ import {AppConstants} from "../../shared/constants";
 })
 export class AdminRequestsComponent implements OnInit {
 
-  private currentUser: any;
-  private requests: any = [];
-  private newRequests: any = [];
-  private pastRequests: any = [];
-  private title: string;
-  private text: string;
-  private notificationId: number;
-  private reloadTrigger: boolean = false;
-  private approvalTrigger: boolean = false;
+   currentUser: any;
+   requests: any = [];
+   newRequests: any = [];
+   pastRequests: any = [];
+   title: string;
+   text: string;
+   notificationId: number;
+   reloadTrigger: boolean = false;
+   approvalTrigger: boolean = false;
 
   constructor(private userService: UserService,
               private modalService: NgbModal) {

@@ -19,20 +19,20 @@ import {TranslateService} from "@ngx-translate/core";
 })
 export class DashboardComponent implements OnInit {
   public sliders: Array<any> = [];
-  private currentUser;
-  private currentLatitude;
-  private currentLongitude;
-  private closestParkingAreas = [];
-  private foundParkingAreas = [];
-  private error: string;
-  private submitted = false;
-  private notification: DisplayMessage;
-  private ownerForm: FormGroup;
-  private searchForm: FormGroup;
-  private title: string;
-  private text: string;
-  private searchTrigger = false;
-  private searchByTermTrigger = false;
+   currentUser;
+   currentLatitude;
+   currentLongitude;
+   closestParkingAreas = [];
+   foundParkingAreas = [];
+   error: string;
+   submitted = false;
+   notification: DisplayMessage;
+   ownerForm: FormGroup;
+   searchForm: FormGroup;
+   title: string;
+   text: string;
+   searchTrigger = false;
+   searchByTermTrigger = false;
 
   constructor(private parkingService: ParkingService,
               private formBuilder: FormBuilder,

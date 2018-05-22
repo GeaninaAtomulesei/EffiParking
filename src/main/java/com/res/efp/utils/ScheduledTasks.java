@@ -6,13 +6,16 @@ import com.res.efp.domain.model.Reservation;
 import com.res.efp.domain.repository.LotRepository;
 import com.res.efp.domain.repository.ParkingRepository;
 import com.res.efp.domain.repository.ReservationRepository;
+import com.res.efp.service.impl.ArtikCloudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by gatomulesei on 2/6/2018.
@@ -29,10 +32,13 @@ public class ScheduledTasks {
     @Autowired
     private ReservationRepository reservationRepository;
 
+    @Autowired
+    private ArtikCloudService artikCloudService;
+
     @Scheduled(fixedRate = 30000)
     public void updateAvailableLots() {
         List<Parking> allParkingAreas = parkingRepository.findAll();
-        for(Parking parking : allParkingAreas) {
+        for (Parking parking : allParkingAreas) {
             setAvailableLotsPerParking(parking);
         }
         System.out.println("++++++++++++++   Finished updating vacant lots   ++++++++++++++++");
@@ -45,20 +51,20 @@ public class ScheduledTasks {
         List<Lot> reservedLots = new ArrayList<>();
         List<Reservation> actualReservations = new ArrayList<>();
         for (Lot lot : totalLots) {
-            if(lot.isReserved()) {
+            if (lot.isReserved()) {
                 reservedLots.add(lot);
             }
         }
 
-        for(Lot lot : reservedLots) {
+        for (Lot lot : reservedLots) {
             List<Reservation> reservations = lot.getReservations();
-            for(Reservation reservation : reservations) {
-                if(!reservation.getEndDate().isBefore(LocalDateTime.now())) {
+            for (Reservation reservation : reservations) {
+                if (!reservation.getEndDate().isBefore(LocalDateTime.now())) {
                     actualReservations.add(reservation);
                 }
             }
 
-            if(actualReservations.isEmpty()) {
+            if (actualReservations.isEmpty()) {
                 lot.setReserved(false);
                 lotRepository.save(lot);
             }
@@ -72,13 +78,13 @@ public class ScheduledTasks {
         List<Reservation> reservationList = reservationRepository.findAll();
         List<Reservation> oldReservations = new ArrayList<>();
         LocalDateTime currentDate = LocalDateTime.now();
-        for(Reservation reservation : reservationList) {
-            if(reservation.getEndDate().getYear() == currentDate.getYear()) {
-                if(reservation.getEndDate().getDayOfYear() < currentDate.getDayOfYear()) {
+        for (Reservation reservation : reservationList) {
+            if (reservation.getEndDate().getYear() == currentDate.getYear()) {
+                if (reservation.getEndDate().getDayOfYear() < currentDate.getDayOfYear()) {
                     oldReservations.add(reservation);
                 }
-                if(reservation.getEndDate().getDayOfYear() == currentDate.getDayOfYear()) {
-                    if(reservation.getEndDate().isBefore(currentDate)) {
+                if (reservation.getEndDate().getDayOfYear() == currentDate.getDayOfYear()) {
+                    if (reservation.getEndDate().isBefore(currentDate)) {
                         oldReservations.add(reservation);
                     }
                 }
@@ -89,31 +95,45 @@ public class ScheduledTasks {
     }
 
     private void setAvailableLotsPerParking(Parking parking) {
-        List<Lot> parkingLots = lotRepository.findByParkingId(parking.getId());
-        List<Lot> availableLots = new ArrayList<>();
+        Map<Integer, Integer> parkingLots = artikCloudService.getData(parking.getName(), parking.getTotalLots());
 
-        for(Lot lot : parkingLots) {
-            List<Reservation> reservationList = lot.getReservations();
-            if(reservationList == null || reservationList.isEmpty()) {
-                availableLots.add(lot);
-            } else {
-                List<Reservation> overlappingReservations = new ArrayList<>();
-                for(Reservation reservation : reservationList) {
-                    if(isOverlapping(reservation.getStartDate(), reservation.getEndDate(), LocalDateTime.now().minusHours(1), LocalDateTime.now().plusHours(1))) {
-                        overlappingReservations.add(reservation);
+        if (parking.getAvailableLots() == null) {
+            System.out.println(
+                    "------------   ERROR in updating vacant lots for parking area " + parking.getName() + " --------------------");
+            return;
+        }
+
+        Map<Integer, Integer> test = new HashMap<>();
+        test.put(0, 1);
+        test.put(1, 1);
+        test.put(2, 1);
+
+
+        int noAvailableLots = 0;
+
+        for (Map.Entry<Integer, Integer> entry : parkingLots.entrySet()) {
+            if (entry.getValue() == 0) {
+                noAvailableLots++;
+            }
+        }
+        parking.setAvailableLots(noAvailableLots);
+        parkingRepository.save(parking);
+
+        List<Lot> lots = lotRepository.findByParkingId(parking.getId());
+        for (Map.Entry<Integer, Integer> entry : parkingLots.entrySet()) {
+            for (Lot lot : lots) {
+                if (entry.getKey() == lot.getNumber()) {
+                    if (entry.getValue() == 0) {
+                        lot.setVacant(true);
+                        lotRepository.save(lot);
+                    } else {
+                        lot.setVacant(false);
+                        lotRepository.save(lot);
                     }
-                }
-                if(overlappingReservations.isEmpty()) {
-                    availableLots.add(lot);
                 }
             }
         }
-        parking.setAvailableLots(availableLots.size());
-        parkingRepository.save(parking);
-        System.out.println("------------   Finished updating vacant lots for parking area " + parking.getName() + " --------------------");
-    }
-
-    private static boolean isOverlapping(LocalDateTime start1, LocalDateTime end1, LocalDateTime start2, LocalDateTime end2) {
-        return !start1.isAfter(end2) && !start2.isAfter(end1);
+        System.out.println(
+                "------------   Finished updating vacant lots for parking area " + parking.getName() + " --------------------");
     }
 }

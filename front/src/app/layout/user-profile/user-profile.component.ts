@@ -24,32 +24,32 @@ import {DisplayMessage} from "../../shared/models/display-message";
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
 
-  private sub: any;
-  private id: number;
-  private user: any;
-  private role: string;
-  private ownedParkingAreas: any = [];
-  private assignedParkingAreas: any = [];
-  private currentUser: any;
-  private isAdmin: boolean = false;
-  private isOwner: boolean = false;
-  private returnTrigger: boolean = false;
-  private deletedTrigger: boolean = false;
-  private title: string;
-  private text: string;
-  private editEmployeeTrigger: boolean = false;
-  private editEmployeeForm: FormGroup;
-  private reloadTrigger: boolean = false;
-  private isMyProfile: boolean = true;
-  private loginTrigger: boolean = true;
-  private editMyProfileTrigger: boolean = false;
-  private editMyProfileForm: FormGroup;
-  private selectedFile: FileList;
-  private currentFileUpload: File;
-  private progress: {percentage: number} = {percentage: 0};
-  private photo: any;
-  private addPhotoTrigger: boolean = false;
-  private notification: DisplayMessage;
+   sub: any;
+   id: number;
+   user: any;
+   role: string;
+   ownedParkingAreas: any = [];
+   assignedParkingAreas: any = [];
+   currentUser: any;
+   isAdmin: boolean = false;
+   isOwner: boolean = false;
+   returnTrigger: boolean = false;
+   deletedTrigger: boolean = false;
+   title: string;
+   text: string;
+   editEmployeeTrigger: boolean = false;
+   editEmployeeForm: FormGroup;
+   reloadTrigger: boolean = false;
+   isMyProfile: boolean = true;
+   loginTrigger: boolean = true;
+   editMyProfileTrigger: boolean = false;
+   editMyProfileForm: FormGroup;
+   selectedFile: FileList;
+   currentFileUpload: File;
+   progress: {percentage: number} = {percentage: 0};
+   photo: any;
+   addPhotoTrigger: boolean = false;
+   notification: DisplayMessage;
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,

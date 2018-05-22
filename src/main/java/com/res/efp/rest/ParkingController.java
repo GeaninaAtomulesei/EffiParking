@@ -273,8 +273,8 @@ public class ParkingController {
         return ResponseEntity.ok(parkings);
     }
 
-    @RequestMapping(value = "/getLots/{parkingId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getLots(@PathVariable("parkingId") Long parkingId) {
+    @RequestMapping(value = "/getLots", method = RequestMethod.GET)
+    public ResponseEntity<?> getLots(@RequestParam(value = "parkingId") Long parkingId) {
         Parking parking = parkingService.getParkingArea(parkingId);
         if (parking == null) {
             return ResponseEntity.badRequest().body(new ObjectError("parking", "Parking area not found."));
@@ -282,26 +282,6 @@ public class ParkingController {
 
         List<Lot> lots = lotService.findByParkingId(parkingId);
         return ResponseEntity.ok(lots);
-    }
-
-    @RequestMapping(value = "/getAvailableLots/{parkingId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getAvailableLots(@PathVariable("parkingId") Long parkingId) {
-        Parking parking = parkingService.getParkingArea(parkingId);
-        if (parking == null) {
-            return ResponseEntity.badRequest().body(new ObjectError("parking", "Parking area not found."));
-        }
-
-        List<Lot> lots = lotService.getAvailable(parking);
-        if (lots != null) {
-            return ResponseEntity.ok(lots);
-        } else {
-            List<Lot> availableLotsToday = lotService.getAvailableToday(parking);
-            if (availableLotsToday != null) {
-                return ResponseEntity.ok(availableLotsToday);
-            } else {
-                return ResponseEntity.noContent().build();
-            }
-        }
     }
 
     @RequestMapping(value = "/searchByTerm", method = RequestMethod.GET)
@@ -333,6 +313,14 @@ public class ParkingController {
 
         Integer availableLots = lotService.getAvailableForSpecificPeriod(parkingId, start, end);
         return ResponseEntity.ok(availableLots.toString());
+    }
+
+    @RequestMapping(value = "/getAvailableLots", method = RequestMethod.GET)
+    public ResponseEntity<?> getAvailableLots(@RequestParam(value = "parkingId") Long parkingId) {
+        if (parkingService.findById(parkingId) == null) {
+            return ResponseEntity.badRequest().body(new ObjectError("parking", "Parking not found!"));
+        }
+        return ResponseEntity.ok(parkingService.getAvailableLots(parkingId));
     }
 
 }

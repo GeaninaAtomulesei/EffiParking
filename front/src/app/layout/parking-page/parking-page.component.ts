@@ -22,40 +22,41 @@ import {AppConstants} from "../../shared/constants";
   animations: [routerTransition()]
 })
 export class ParkingPageComponent implements OnInit, OnDestroy {
-  private sub: any;
-  private id: number;
-  private parking: any;
-  private currentUser: any;
-  private isOwner: boolean = false;
-  private isAdmin: boolean = false;
-  private currentLat: number;
-  private currentLng: number;
-  private startDate: any;
-  private startTime: any;
-  private endDate: any;
-  private endTime: any;
-  private showReservationForm: boolean = false;
-  private reservedLotId: number;
-  private notification: DisplayMessage;
-  private title: string;
-  private text: string;
-  private minDate: NgbDateStruct;
-  private editTrigger: boolean = false;
-  private editParkingAreaForm: FormGroup;
-  private addLotsForm: FormGroup;
-  private removeLotsForm: FormGroup;
-  private searchEmployeeForm: FormGroup;
-  private submitted = false;
-  private closeButton = false;
-  private okButton = false;
-  private addLotsTrigger = false;
-  private removeLotsTrigger = false;
-  private addEmployeeTrigger = false;
-  private searchEmployeesResult = [];
-  private searchTrigger = false;
-  private returnTrigger = false;
-  private resSuccessTrigger = false;
-  private foundAvailable: boolean = false;
+  sub: any;
+  id: number;
+  parking: any;
+  currentUser: any;
+  isOwner: boolean = false;
+  isAdmin: boolean = false;
+  currentLat: number;
+  currentLng: number;
+  startDate: any;
+  startTime: any;
+  endDate: any;
+  endTime: any;
+  showReservationForm: boolean = false;
+  reservedLotId: number;
+  notification: DisplayMessage;
+  title: string;
+  text: string;
+  minDate: NgbDateStruct;
+  editTrigger: boolean = false;
+  editParkingAreaForm: FormGroup;
+  addLotsForm: FormGroup;
+  removeLotsForm: FormGroup;
+  searchEmployeeForm: FormGroup;
+  submitted = false;
+  closeButton = false;
+  okButton = false;
+  addLotsTrigger = false;
+  removeLotsTrigger = false;
+  addEmployeeTrigger = false;
+  searchEmployeesResult = [];
+  searchTrigger = false;
+  returnTrigger = false;
+  resSuccessTrigger = false;
+  foundAvailable: boolean = false;
+  availableLots: number;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -66,6 +67,10 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
               private modalService: NgbModal) {
     let date = new Date();
     this.minDate = {year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate()};
+
+    setInterval(() => {
+      this.getAvailableLots(true);
+    }, 60000);
   }
 
   ngOnInit() {
@@ -77,6 +82,7 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
     //noinspection TypeScriptUnresolvedFunction
     this.parkingService.getById(this.id).subscribe(parking => {
       this.parking = parking;
+      this.availableLots = parking.availableLots;
       if (this.currentUser.id == this.parking.owner.id) {
         this.isOwner = true;
       }
@@ -115,6 +121,19 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
     });
   }
 
+  getAvailableLots(x?: boolean) {
+    if (this.parking) {
+      this.parkingService.getAvailableLots(this.parking.id)
+        .subscribe(response => {
+          if (x) {
+            this.availableLots = response;
+          }
+        }, error => {
+          console.log(error);
+        });
+    }
+  }
+
   showForm() {
     if (localStorage.getItem(AppConstants.LOGGED_IN)) {
       this.showReservationForm = !this.showReservationForm;
@@ -150,7 +169,7 @@ export class ParkingPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  public getColor() : string {
+  public getColor(): string {
     return this.foundAvailable == true ? "#007bff" : "#DC143C";
   }
 

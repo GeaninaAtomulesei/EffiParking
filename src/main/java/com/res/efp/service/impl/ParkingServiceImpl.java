@@ -38,7 +38,7 @@ public class ParkingServiceImpl implements ParkingService {
         for(int i = 0; i < parking.getTotalLots(); i++) {
             Lot lot = new Lot();
             lotRepository.save(lot);
-            lot.setNumber(i + 1);
+            lot.setNumber(i);
             lot.setParking(parking);
             lot.setVacant(true);
             lot.setReserved(false);
@@ -169,6 +169,18 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public Parking findById(Long parkingId) {
         return parkingRepository.findOne(parkingId);
+    }
+
+    @Override
+    public int getAvailableLots(Long parkingId) {
+        Parking parking = parkingRepository.findOne(parkingId);
+        return parking.getAvailableLots();
+    }
+
+    @Override
+    public List<Lot> getLots(Long parkingId) {
+        Parking parking = parkingRepository.findOne(parkingId);
+        return parking.getLots();
     }
 
     private static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {

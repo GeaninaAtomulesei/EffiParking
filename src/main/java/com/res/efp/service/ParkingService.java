@@ -1,6 +1,7 @@
 package com.res.efp.service;
 
 import com.res.efp.domain.model.Employee;
+import com.res.efp.domain.model.Lot;
 import com.res.efp.domain.model.Owner;
 import com.res.efp.domain.model.Parking;
 
@@ -26,4 +27,6 @@ public interface ParkingService {
     List<Parking> findByTerm(String term);
     List<Parking> findByTermAndOwner(String term, Long ownerId);
     Parking findById(Long parkingId);
+    int getAvailableLots(Long parkingId);
+    List<Lot> getLots(Long parkingId);
 }

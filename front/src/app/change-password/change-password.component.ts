@@ -22,14 +22,13 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
   animations: [routerTransition()]
 })
 export class ChangePasswordComponent implements OnInit, OnDestroy {
-  private changePasswordForm: FormGroup;
-  private submitted = false;
-  private notification: DisplayMessage;
-  private returnUrl: string;
-  private ngUnsubscribe: Subject<void> = new Subject<void>();
-  private title: string;
-  private text: string;
-  private changed : boolean = false;
+   changePasswordForm: FormGroup;
+   notification: DisplayMessage;
+   returnUrl: string;
+   ngUnsubscribe: Subject<void> = new Subject<void>();
+   title: string;
+   text: string;
+   changed : boolean = false;
 
   constructor(public router: Router,
               private userService: UserService,
@@ -61,7 +60,6 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.notification = undefined;
-    this.submitted = true;
     //noinspection TypeScriptUnresolvedFunction
     this.authService.changePassword(this.changePasswordForm.value)
       .delay(1000)
@@ -75,7 +73,6 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
           }
         },
         error => {
-          this.submitted = false;
           this.notification = {msgType: 'error', msgBody: error.error};
         });
   }

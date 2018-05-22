@@ -16,24 +16,24 @@ import {DisplayMessage} from "../../shared/models/display-message";
   animations: [routerTransition()]
 })
 export class AdminUsersPageComponent implements OnInit {
-  private admins: any = [];
-  private owners: any = [];
-  private users: any = [];
-  private employees: any = [];
-  private adminsTrigger: boolean = false;
-  private ownersTrigger: boolean = false;
-  private usersTrigger: boolean = false;
-  private employeesTrigger: boolean = false;
-  private returnTrigger: boolean = false;
-  private title: string;
-  private text: string;
-  private deletedUserId: number;
-  private searchTerm: string;
-  private foundUsers: any = [];
-  private searchUsersTrigger: boolean = false;
-  private addAdminTrigger: boolean = false;
-  private addAdminForm: FormGroup;
-  private notification: DisplayMessage;
+   admins: any = [];
+   owners: any = [];
+   users: any = [];
+   employees: any = [];
+   adminsTrigger: boolean = false;
+   ownersTrigger: boolean = false;
+   usersTrigger: boolean = false;
+   employeesTrigger: boolean = false;
+   returnTrigger: boolean = false;
+   title: string;
+   text: string;
+   deletedUserId: number;
+   searchTerm: string;
+   foundUsers: any = [];
+   searchUsersTrigger: boolean = false;
+   addAdminTrigger: boolean = false;
+   addAdminForm: FormGroup;
+   notification: DisplayMessage;
 
   constructor(private userService: UserService,
               private formBuilder: FormBuilder,

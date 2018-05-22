@@ -15,7 +15,6 @@ import java.util.List;
 public interface ParkingRepository extends JpaRepository<Parking, Long> {
 
     Parking findByName(String name);
-    List<Parking> findByCity(String cityName);
     List<Parking> findByStreet(String streetName);
     List<Parking> findByStreetAndNumber(String streetName, String number);
 
@@ -45,5 +44,4 @@ public interface ParkingRepository extends JpaRepository<Parking, Long> {
             "concat(p.locationName, ' ', p.city) like %:term%) " +
             "and p.owner.id = :ownerId")
     List<Parking> findByTermAndOwner(@Param("term") String term, @Param("ownerId") Long ownerId);
-
 }

@@ -22,14 +22,14 @@ import {AppConstants} from "../shared/constants";
 })
 export class SignUpComponent implements OnInit, OnDestroy {
 
-  private signUpForm: FormGroup;
-  private submitted = false;
-  private notification: DisplayMessage;
-  private returnUrl: string;
-  private ngUnsubscribe: Subject<void> = new Subject<void>();
-  private success: boolean = false;
-  private title: string;
-  private text: string;
+   signUpForm: FormGroup;
+   submitted = false;
+   notification: DisplayMessage;
+   returnUrl: string;
+   ngUnsubscribe: Subject<void> = new Subject<void>();
+   success: boolean = false;
+   title: string;
+   text: string;
 
   constructor(private authService: AuthService,
               public router: Router,

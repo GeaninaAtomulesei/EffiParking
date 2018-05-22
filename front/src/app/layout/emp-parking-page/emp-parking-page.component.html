@@ -15,7 +15,7 @@
         </tr>
         <tr>
           <th>Available lots</th>
-          <th>{{parking.availableLots}}</th>
+          <th>{{availableLots}}</th>
         </tr>
         <tr>
           <th>Owner</th>
@@ -163,7 +163,7 @@
         </thead>
 
         <tbody>
-        <tr *ngFor="let lot of parking.lots">
+        <tr *ngFor="let lot of lots">
           <th scope="row">{{lot.number}}</th>
           <td>{{lot.reserved ? "Yes" : "No"}}</td>
           <td>{{lot.vacant ? "Yes" : "No"}}</td>

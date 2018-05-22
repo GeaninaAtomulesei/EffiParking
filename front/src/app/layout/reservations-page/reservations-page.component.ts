@@ -13,15 +13,15 @@ import {AppConstants} from "../../shared/constants";
 })
 export class ReservationsPageComponent implements OnInit {
 
-  private currentUser: any;
-  private reservations: any;
-  private todaysReservations: any = [];
-  private upcomingReservations: any = [];
-  private reservationId: number;
-  private error: any;
-  private title: string;
-  private text: string;
-  private cancelResTrigger = false;
+   currentUser: any;
+   reservations: any;
+   todaysReservations: any = [];
+   upcomingReservations: any = [];
+   reservationId: number;
+   error: any;
+   title: string;
+   text: string;
+   cancelResTrigger = false;
 
   constructor(private parkingService: ParkingService,
               private modalService: NgbModal) {

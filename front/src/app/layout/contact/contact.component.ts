@@ -17,11 +17,11 @@ import {DisplayMessage} from "../../shared/models/display-message";
 })
 export class ContactComponent implements OnInit {
 
-  private currentUser: any;
-  private contactForm: FormGroup;
-  private title: string;
-  private text: string;
-  private notification: DisplayMessage;
+   currentUser: any;
+   contactForm: FormGroup;
+   title: string;
+   text: string;
+   notification: DisplayMessage;
 
   constructor(private userService: UserService,
               private modalService: NgbModal,

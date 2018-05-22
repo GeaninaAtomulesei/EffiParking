@@ -176,4 +176,18 @@ export class ParkingService {
         return res;
       });
   }
+
+  getAvailableLots(parkingId) {
+    return this.apiService.get(this.config.get_available_lots_url + "?parkingId=" + parkingId)
+      .map(res => {
+        return res;
+      });
+  }
+
+  getLotsPerParking(parkingId) {
+    return this.apiService.get(this.config.get_lots_per_parking_url + "?parkingId=" + parkingId)
+      .map(res => {
+        return res;
+      });
+  }
 }

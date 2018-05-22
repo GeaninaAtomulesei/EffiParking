@@ -13,14 +13,14 @@ import {AppConstants} from "../../shared/constants";
 })
 export class AdminMessagesComponent implements OnInit {
 
-  private currentUser: any;
-  private requests: any = [];
-  private newMessages: any = [];
-  private pastMessages: any = [];
-  private title: string;
-  private text: string;
-  private messageId: number;
-  private reloadTrigger: boolean = false;
+   currentUser: any;
+   requests: any = [];
+   newMessages: any = [];
+   pastMessages: any = [];
+   title: string;
+   text: string;
+   messageId: number;
+   reloadTrigger: boolean = false;
 
   constructor(private userService: UserService,
               private modalService: NgbModal) {

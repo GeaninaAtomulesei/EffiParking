@@ -16,18 +16,18 @@ import {AppConstants} from "../../shared/constants";
 })
 export class OwnerEmployeesPageComponent implements OnInit {
 
-  private registeredEmployees: any[];
-  private addNewEmployeeTrigger: boolean = false;
-  private addEmployeeForm: FormGroup;
-  private submitted = false;
-  private notification: DisplayMessage;
-  private currentUser;
-  private title: string;
-  private text: string;
-  private error: any;
-  private foundEmployeesTrigger: boolean = false;
-  private searchTerm: string;
-  private foundEmployees: any = [];
+   registeredEmployees: any[];
+   addNewEmployeeTrigger: boolean = false;
+   addEmployeeForm: FormGroup;
+   submitted = false;
+   notification: DisplayMessage;
+   currentUser;
+   title: string;
+   text: string;
+   error: any;
+   foundEmployeesTrigger: boolean = false;
+   searchTerm: string;
+   foundEmployees: any = [];
 
   constructor(private userService: UserService,
               private formBuilder: FormBuilder,

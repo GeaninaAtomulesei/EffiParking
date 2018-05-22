@@ -6,7 +6,6 @@ import {ActivatedRoute} from "@angular/router";
 import {ParkingService} from "../../shared/services/parking.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AppConstants} from "../../shared/constants";
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-emp-parking-page',
@@ -16,25 +15,32 @@ import {Router} from "@angular/router";
 })
 export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
 
-  private sub: any;
-  private id: any;
-  private parking: any;
-  private reloadTrigger = false;
-  private title: string;
-  private text: string;
-  private username: string;
-  private lotNumber: number;
-  private foundReservations: any = [];
-  private foundReservationsTrigger: boolean;
-  private todayReservations = [];
-  private todayResTrigger: boolean;
-  private foundLot: any;
-  private searchLotTrigger: boolean;
-  private foundLotReservations: any = [];
+  sub: any;
+  id: any;
+  parking: any;
+  reloadTrigger = false;
+  title: string;
+  text: string;
+  username: string;
+  lotNumber: number;
+  foundReservations: any = [];
+  foundReservationsTrigger: boolean;
+  todayReservations = [];
+  todayResTrigger: boolean;
+  foundLot: any;
+  searchLotTrigger: boolean;
+  foundLotReservations: any = [];
+  availableLots: number;
+  lots: any[];
 
   constructor(private route: ActivatedRoute,
               private modalService: NgbModal,
               private parkingService: ParkingService) {
+
+    setInterval(() => {
+      this.getAvailableLots(true);
+      this.getLots(true);
+    }, 60000);
   }
 
   ngOnInit() {
@@ -44,10 +50,40 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
       //noinspection TypeScriptUnresolvedFunction
       this.parkingService.getById(this.id).subscribe(parking => {
         this.parking = parking;
+        this.availableLots = this.parking.availableLots;
+        this.lots = this.parking.lots;
       }, error => {
         console.log(error);
       });
     });
+    this.getAvailableLots(false);
+    this.getLots(false);
+  }
+
+  getAvailableLots(x? : boolean) {
+    if(this.parking) {
+      this.parkingService.getAvailableLots(this.parking.id)
+        .subscribe(response => {
+          if(x) {
+            this.availableLots = response;
+          }
+        }, error => {
+          console.log(error);
+        });
+    }
+  }
+
+  getLots(x? : boolean) {
+    if(this.parking) {
+      this.parkingService.getLotsPerParking(this.parking.id)
+        .subscribe(response => {
+          if(x) {
+            this.lots = response;
+          }
+        }, error => {
+          console.log(error);
+        });
+    }
   }
 
   showTodayReservations() {
@@ -71,6 +107,7 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
         document.getElementById(AppConstants.MODAL_CONTENT).click();
       }
     }, error => {
+      console.log(error);
       this.title = AppConstants.ERROR_TITLE;
       this.text = AppConstants.ERROR_TEXT;
       this.reloadTrigger = false;
@@ -88,6 +125,7 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
         document.getElementById(AppConstants.MODAL_CONTENT).click();
       }
     }, error => {
+      console.log(error);
       this.title = AppConstants.ERROR_TITLE;
       this.text = AppConstants.ERROR_TEXT;
       this.reloadTrigger = false;
@@ -105,6 +143,7 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
           this.foundReservationsTrigger = true;
         }
       }, error => {
+        console.log(error);
         this.title = AppConstants.ERROR_TITLE;
         this.text = AppConstants.ERROR_TEXT;
         this.reloadTrigger = false;
@@ -133,6 +172,7 @@ export class EmployeeParkingPageComponent implements OnInit, OnDestroy {
         this.foundReservationsTrigger = false;
         this.searchLotTrigger = true;
       }, error => {
+        console.log(error);
         this.title = AppConstants.ERROR_TITLE;
         this.text = AppConstants.ERROR_TEXT;
         this.reloadTrigger = false;

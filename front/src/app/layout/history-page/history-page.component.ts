@@ -12,8 +12,8 @@ import {AppConstants} from "../../shared/constants";
 })
 export class HistoryPageComponent implements OnInit {
 
-  private currentUser: any;
-  private history: any = [];
+  currentUser: any;
+  history: any = [];
 
   constructor(private userService: UserService) {}
 

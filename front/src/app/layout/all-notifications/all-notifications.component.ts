@@ -15,15 +15,15 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class AllNotificationsComponent implements OnInit, OnDestroy {
 
-  private sub: any;
-  private id: any;
-  private notifications: any = [];
-  private currentUser: any;
-  private newNotifications: any = [];
-  private pastNotifications: any = [];
-  private title: string;
-  private text: string;
-  private reloadTrigger: boolean = false;
+   sub: any;
+   id: any;
+   notifications: any = [];
+   currentUser: any;
+   newNotifications: any = [];
+   pastNotifications: any = [];
+   title: string;
+   text: string;
+   reloadTrigger: boolean = false;
 
   constructor(private userService: UserService,
               private route: ActivatedRoute,

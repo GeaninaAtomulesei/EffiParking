@@ -47,6 +47,8 @@ export class ConfigService {
   private _get_all_parkings_url = this._parkings_url + '/all';
   private _get_parkings_by_term_owner_url = this._parkings_url + '/searchByTermAndOwner';
   private _check_available_lots_url = this.parkings_url + '/checkAvailable';
+  private _get_available_lots_url = this._parkings_url + '/getAvailableLots';
+  private _get_lots_per_parking_url = this._parkings_url + '/getLots';
 
   private _save_employee_url = this._employees_url + '/create';
   private _get_employees_by_owner_url = this._employees_url + '/getByOwner';
@@ -287,5 +289,13 @@ export class ConfigService {
 
   get check_available_lots_url(): string {
     return this._check_available_lots_url;
+  }
+
+  get get_available_lots_url(): string {
+    return this._get_available_lots_url;
+  }
+
+  get get_lots_per_parking_url(): string {
+    return this._get_lots_per_parking_url;
   }
 }

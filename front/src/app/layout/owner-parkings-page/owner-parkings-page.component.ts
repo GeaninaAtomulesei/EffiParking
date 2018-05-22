@@ -16,19 +16,19 @@ import {AppConstants} from "../../shared/constants";
 })
 export class OwnerParkingsPageComponent implements OnInit {
 
-  private ownedParkingAreas: any[];
-  private addNewTrigger: boolean = false;
-  private addParkingAreaForm: FormGroup;
-  private submitted = false;
-  private notification: DisplayMessage;
-  private currentUser;
-  private title: string;
-  private text: string;
-  private error: any;
-  private foundParkingsTrigger: boolean = false;
-  private searchTerm: string;
-  private foundParkings: any = [];
-  private returnTrigger: boolean = false;
+   ownedParkingAreas: any[];
+   addNewTrigger: boolean = false;
+   addParkingAreaForm: FormGroup;
+   submitted = false;
+   notification: DisplayMessage;
+   currentUser;
+   title: string;
+   text: string;
+   error: any;
+   foundParkingsTrigger: boolean = false;
+   searchTerm: string;
+   foundParkings: any = [];
+   returnTrigger: boolean = false;
 
   constructor(private parkingService: ParkingService,
               private formBuilder: FormBuilder,

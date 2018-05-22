@@ -21,12 +21,11 @@ import {AppConstants} from "../shared/constants";
   animations: [routerTransition()]
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  private title = 'Login';
-  private loginForm: FormGroup;
-  private submitted = false;
-  private notification: DisplayMessage;
-  private returnUrl: string;
-  private ngUnsubscribe: Subject<void> = new Subject<void>();
+   loginForm: FormGroup;
+   submitted = false;
+   notification: DisplayMessage;
+   returnUrl: string;
+   ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(public router: Router,
               private userService: UserService,

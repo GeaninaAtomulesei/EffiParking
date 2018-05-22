@@ -13,13 +13,13 @@ import {AppConstants} from "../../shared/constants";
 })
 export class AdminParkingsComponent implements OnInit {
 
-  private searchParkingTrigger: boolean = false;
-  private showAllTrigger: boolean = false;
-  private searchTerm: string;
-  private foundParkings: any = [];
-  private allParkings: any = [];
-  private title: string;
-  private text: string;
+   searchParkingTrigger: boolean = false;
+   showAllTrigger: boolean = false;
+   searchTerm: string;
+   foundParkings: any = [];
+   allParkings: any = [];
+   title: string;
+   text: string;
 
   constructor(private parkingService: ParkingService,
               private modalService: NgbModal) {
